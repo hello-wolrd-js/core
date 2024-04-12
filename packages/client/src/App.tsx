@@ -1,10 +1,10 @@
 import type { Component, JSX } from 'solid-js'
 import styles from './App.module.css'
-import Aside from './components/layout/Aside'
+// import Aside from './components/layout/Aside'
 import NavBar from './components/layout/NavBar'
 
 const navHeight = 60
-const asideHeight = document.body.clientHeight - navHeight
+// const asideHeight = document.body.clientHeight - navHeight
 
 const App: Component<{ children?: JSX.Element }> = (props) => {
     return (

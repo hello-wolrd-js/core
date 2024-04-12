@@ -11,7 +11,7 @@ const NavBar: Component<{ height: number }> = (props) => {
                 padding: '10px',
                 'z-index': 100
             }}
-            class="shadow-xl flex items-center backdrop-blur-2xl"
+            class="shadow-xl flex items-center bg-white"
         >
             <div class="text-lg">Hello-World</div>
         </header>
