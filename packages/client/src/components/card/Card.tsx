@@ -1,5 +1,5 @@
 import { Component } from 'solid-js'
-import type { WorldCard } from '../../models/card'
+import type { WorldCard } from '@core/models'
 import { render } from 'solid-js/web'
 import { useNavigate } from '@solidjs/router'
 

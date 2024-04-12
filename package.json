@@ -15,7 +15,9 @@
         "vite-plugin-solid": "^2.8.2"
     },
     "dependencies": {
+        "@core/models": "workspace:^",
         "@solidjs/router": "^0.13.2",
+        "axios": "^1.6.8",
         "nes.css": "^2.3.0",
         "solid-js": "^1.8.11"
     }

@@ -1,5 +1,5 @@
 {
-    "include": ["env.d.ts", "src/**/*"],
+    "include": ["env.d.ts", "src/**/*", "models"],
     "compilerOptions": {
         "strict": true,
         "target": "ESNext",
