@@ -2,7 +2,12 @@
 export default {
     content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
     theme: {
-        extend: {}
+        extend: {
+            fontFamily: {
+                'press-start': ['"PressStart2P"'],
+                zpix: ['Zpix']
+            }
+        }
     },
     plugins: [require('daisyui')],
     daisyui: {
