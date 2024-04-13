@@ -1,6 +1,5 @@
 import { Component } from 'solid-js'
 import type { WorldCard } from '@core/models'
-import { render } from 'solid-js/web'
 import { useNavigate } from '@solidjs/router'
 
 const Card: Component<WorldCard> = (props) => {
@@ -8,10 +7,9 @@ const Card: Component<WorldCard> = (props) => {
     const toWorld = () => {
         navigate('/world')
         import(props.url).then((module) => {
-            render(() => module.default, document.getElementById('world-container')!)
+            module.default(document.getElementById('world-container')!)
         })
     }
-    console.log(props)
     return (
         <div
             class="card w-96 bg-base-100 shadow-lg m-4"

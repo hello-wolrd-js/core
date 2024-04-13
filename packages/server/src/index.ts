@@ -14,7 +14,7 @@ new Elysia()
                 //     width: 200,
                 //     height: 400
                 // },
-                url: '../../__tests__/cards/01.tsx'
+                url: '../../__tests__/cards/test.mjs'
             }
         })
         return cards
