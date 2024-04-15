@@ -38,7 +38,10 @@ const Card: Component<WorldCard> = (props) => {
     return (
         <div
             class="card w-96 bg-base-100 shadow-lg m-4"
-            style={{ width: props.style?.width + 'px', height: props.style?.height + 'px' }}
+            style={{
+                width: props.style?.width + 'px',
+                height: props.style?.height + 'px'
+            }}
         >
             <figure>
                 <img src={props.cover} alt={props.title} />

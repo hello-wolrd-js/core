@@ -9,7 +9,7 @@ const Home: Component = () => {
         setCards(data)
     })
     return (
-        <div id="home-container" class="flex flex-wrap">
+        <div id="home-container" class="flex justify-evenly flex-wrap">
             <For each={cards()}>{(card) => <Card {...card}></Card>}</For>
         </div>
     )
