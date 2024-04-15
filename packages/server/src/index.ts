@@ -14,7 +14,10 @@ new Elysia()
                 //     width: 200,
                 //     height: 400
                 // },
-                url: `./src/__tests__/cards/your-world.mjs`
+                url: `./src/__tests__/cards/your-world.mjs`,
+                total: {
+                    star: 111
+                }
             }
         })
         return cards

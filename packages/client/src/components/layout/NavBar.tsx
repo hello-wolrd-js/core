@@ -13,7 +13,7 @@ const NavBar: Component<{ height: number }> = (props) => {
             }}
             class="shadow-xl flex items-center bg-white"
         >
-            <div class="text-lg font-press-start ml-4">Hello-World</div>
+            <div class="text-lg ml-4">Hello-World</div>
         </header>
     )
 }
