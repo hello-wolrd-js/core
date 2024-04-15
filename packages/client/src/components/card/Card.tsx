@@ -6,8 +6,33 @@ const Card: Component<WorldCard> = (props) => {
     const navigate = useNavigate()
     const toWorld = () => {
         navigate('/world')
-        import(props.url).then((module) => {
-            module.default(document.getElementById('world-container')!)
+        setTimeout(() => {
+            const iframe = document.getElementById('world-container')! as HTMLIFrameElement
+
+            const _dom = iframe.contentDocument!
+            const _window = iframe.contentWindow!
+            Object.defineProperty(_window, 'world', { value: _dom.body })
+
+            //安全措施
+            //禁用部分属性
+            const avoids = ['localStorage', 'sessionStorage']
+            avoids.forEach((item) => {
+                Object.defineProperty(_window, item, {
+                    value: void 0,
+                    writable: false,
+                    configurable: false
+                })
+            })
+
+            const _mount = _dom.createElement('script')
+            _mount.innerHTML = `
+                import("${props.url}").then((module) => {
+                    module.default(window.world);
+                    window.world = void 0;
+                });
+            `
+            _dom.body.appendChild(_mount)
+            _dom.body.removeChild(_mount)
         })
     }
     return (
