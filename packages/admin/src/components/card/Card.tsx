@@ -1,9 +1,9 @@
 import { createSignal, type Component } from 'solid-js'
+
 import type { WorldCard } from '@core/models'
 import { useNavigate } from '@solidjs/router'
-import { Modal } from '@core/components'
 
-const Card: Component<WorldCard> = (props) => {
+const Card: Component<WorldCard & { openModal: () => void }> = (props) => {
     //导航
     //#region
     const navigate = useNavigate()
@@ -40,13 +40,6 @@ const Card: Component<WorldCard> = (props) => {
     }
     //#endregion
 
-    //删除
-    //#region
-    const [showModal, setShowModal] = createSignal(false)
-    const deleteWorld = async () => {
-        setShowModal(!showModal())
-    }
-    //#endregion
     return (
         <div
             class="card w-96 bg-base-100 shadow-lg m-4"
@@ -75,14 +68,10 @@ const Card: Component<WorldCard> = (props) => {
                     <button class="btn btn-outline" onClick={toWorld}>
                         Try
                     </button>
-                    <button class="btn btn-outline btn-error" onClick={deleteWorld}>
+                    <button class="btn btn-outline btn-error" onClick={props.openModal}>
                         Delete
                     </button>
                 </div>
-                {/* 模态框 */}
-                {/* <Modal showSignal={showModal()} title="test">
-                    <p>123</p>
-                </Modal> */}
             </div>
         </div>
     )
