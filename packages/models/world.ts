@@ -1,4 +1,5 @@
 export interface WorldCard {
+    id: string
     title: string
     cover: string
     style?: {
