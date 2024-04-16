@@ -1,12 +1,15 @@
 import { Component, createSignal, For } from 'solid-js'
 import Card from '@/components/card/Card'
-import axios from 'axios'
 import type { WorldCard } from '@core/models'
+import { WORLD_API } from '@core/api'
+import { isSuccessResponse } from '@core/shared'
 
 const Home: Component = () => {
     const [cards, setCards] = createSignal<WorldCard[]>([])
-    axios.get('http://127.0.0.1:4000/cards').then(({ data }: { data: WorldCard[] }) => {
-        setCards(data)
+    WORLD_API.getWorldCard().then((res) => {
+        if (isSuccessResponse(res)) {
+            setCards(res.data)
+        }
     })
     return (
         <div id="home-container" class="flex justify-evenly flex-wrap">

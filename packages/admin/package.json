@@ -1,0 +1,14 @@
+{
+    "name": "@core/admin",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "dev": "vite --host",
+        "build": "vite build",
+        "serve": "vite preview"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+}
