@@ -1,8 +1,11 @@
-import { Component } from 'solid-js'
+import { createSignal, type Component } from 'solid-js'
 import type { WorldCard } from '@core/models'
 import { useNavigate } from '@solidjs/router'
+import { Modal } from '@core/components'
 
 const Card: Component<WorldCard> = (props) => {
+    //导航
+    //#region
     const navigate = useNavigate()
     const toWorld = () => {
         navigate('/world')
@@ -35,6 +38,15 @@ const Card: Component<WorldCard> = (props) => {
             _dom.body.removeChild(_mount)
         })
     }
+    //#endregion
+
+    //删除
+    //#region
+    const [showModal, setShowModal] = createSignal(false)
+    const deleteWorld = async () => {
+        setShowModal(!showModal())
+    }
+    //#endregion
     return (
         <div
             class="card w-96 bg-base-100 shadow-lg m-4"
@@ -60,27 +72,17 @@ const Card: Component<WorldCard> = (props) => {
                 <div class="divider mt-0 mb-0 text-gray-600/50">actions</div>
                 {/* 交互栏 */}
                 <div class="card-actions justify-end mt-4">
-                    <button class="btn btn-outline">
-                        Star
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="h-6 w-6"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                            />
-                        </svg>
-                    </button>
                     <button class="btn btn-outline" onClick={toWorld}>
-                        Go
+                        Try
+                    </button>
+                    <button class="btn btn-outline btn-error" onClick={deleteWorld}>
+                        Delete
                     </button>
                 </div>
+                {/* 模态框 */}
+                {/* <Modal showSignal={showModal()} title="test">
+                    <p>123</p>
+                </Modal> */}
             </div>
         </div>
     )

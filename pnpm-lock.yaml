@@ -11,6 +11,9 @@ importers:
       '@core/api':
         specifier: workspace:^
         version: link:packages/api
+      '@core/components':
+        specifier: workspace:^
+        version: link:packages/components
       '@core/models':
         specifier: workspace:^
         version: link:packages/models
@@ -63,6 +66,8 @@ importers:
   packages/api: {}
 
   packages/client: {}
+
+  packages/components: {}
 
   packages/models: {}
 
