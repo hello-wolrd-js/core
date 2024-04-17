@@ -1,15 +1,15 @@
 import { Component, createSignal, For } from 'solid-js'
 import Card from '@/components/card/Card'
-import type { WorldCard } from '@core/models'
+import type { World } from '@core/models'
 import { WORLD_API } from '@core/api'
 import { isSuccessResponse } from '@core/shared'
 import { Modal } from '@core/components'
 
 const Home: Component = () => {
-    const [cards, setCards] = createSignal<WorldCard[]>([])
-    WORLD_API.getWorldCard().then((res) => {
+    const [worlds, setWorlds] = createSignal<World[]>([])
+    WORLD_API.getWorld().then((res) => {
         if (isSuccessResponse(res)) {
-            setCards(res.data)
+            setWorlds(res.data)
         }
     })
 
@@ -33,7 +33,7 @@ const Home: Component = () => {
     //#endregion
     return (
         <div id="home-container" class="flex justify-evenly flex-wrap">
-            <For each={cards()}>{(card) => <Card {...card} openModal={openModal}></Card>}</For>
+            <For each={worlds()}>{(card) => <Card {...card} openModal={openModal}></Card>}</For>
             {/* 模态框 */}
             <Modal show={showSignal} title="确认删除吗" confirm={confirm} cancel={cancel}>
                 <p>请三思!</p>

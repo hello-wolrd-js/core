@@ -1,12 +1,12 @@
 import { Component, createSignal, For } from 'solid-js'
 import Card from '@/components/card/Card'
-import type { WorldCard } from '@core/models'
+import type { World } from '@core/models'
 import { WORLD_API } from '@core/api'
 import { isSuccessResponse } from '@core/shared'
 
 const Home: Component = () => {
-    const [cards, setCards] = createSignal<WorldCard[]>([])
-    WORLD_API.getWorldCard().then((res) => {
+    const [cards, setCards] = createSignal<World[]>([])
+    WORLD_API.getWorld().then((res) => {
         if (isSuccessResponse(res)) {
             setCards(res.data)
         }

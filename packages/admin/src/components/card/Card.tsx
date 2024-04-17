@@ -1,9 +1,9 @@
 import { createSignal, type Component } from 'solid-js'
 
-import type { WorldCard } from '@core/models'
+import type { World } from '@core/models'
 import { useNavigate } from '@solidjs/router'
 
-const Card: Component<WorldCard & { openModal: () => void }> = (props) => {
+const Card: Component<World & { openModal: () => void }> = (props) => {
     //导航
     //#region
     const navigate = useNavigate()
@@ -44,17 +44,17 @@ const Card: Component<WorldCard & { openModal: () => void }> = (props) => {
         <div
             class="card w-96 bg-base-100 shadow-lg m-4"
             style={{
-                width: props.style?.width + 'px',
-                height: props.style?.height + 'px'
+                width: props.card.style?.width + 'px',
+                height: props.card.style?.height + 'px'
             }}
         >
             <figure>
-                <img src={props.cover} alt={props.title} />
+                <img src={props.card.cover} alt={props.card.title} />
             </figure>
 
             <div class="card-body">
-                <h2 class="card-title">{props.title}</h2>
-                <p>{props.content}</p>
+                <h2 class="card-title">{props.card.title}</h2>
+                <p>{props.card.description}</p>
                 <div class="divider mt-0 mb-0 text-gray-600/50">statistic</div>
                 {/* 统计 */}
                 <div class=" stat p-0">

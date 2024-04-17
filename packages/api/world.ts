@@ -1,12 +1,12 @@
-import { WorldCard } from '@core/models'
+import { World } from '@core/models'
 import { WORLD_API_INSTANCE } from './instance'
 import { handleRequest } from './handle'
 
-export async function getWorldCard() {
-    return await handleRequest<WorldCard[]>(() => WORLD_API_INSTANCE.get('/card'))
+export async function getWorld() {
+    return await handleRequest<World[]>(() => WORLD_API_INSTANCE.get('/card'))
 }
 export async function deleteWorld(id: string) {
-    return await handleRequest<WorldCard>(() =>
+    return await handleRequest<World>(() =>
         WORLD_API_INSTANCE.delete('/', {
             params: {
                 id
@@ -16,5 +16,5 @@ export async function deleteWorld(id: string) {
 }
 
 export default {
-    getWorldCard
+     getWorld
 }

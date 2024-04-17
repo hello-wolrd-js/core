@@ -1,14 +1,18 @@
-export interface WorldCard {
+export interface World {
     id: string
-    title: string
-    cover: string
-    style?: {
-        width: number
-        height: number
+    name: string
+    card: {
+        id: string
+        title: string
+        cover: string
+        description: string
+        style?: {
+            width: number
+            height: number
+        }
     }
     total: {
         star: number
     }
-    content: string
     url: string
 }
