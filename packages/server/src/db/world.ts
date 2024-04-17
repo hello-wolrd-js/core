@@ -15,9 +15,8 @@ export const getWorld = async (name?: string) => {
     return await WorldModel.find(filter)
 }
 
-export const deleteWorld = async (name?: string) => {
-    const filter = name ? { name } : {}
-    return await WorldModel.deleteMany(filter)
+export const deleteWorld = async (id: string) => {
+    return await WorldModel.deleteOne({ _id: id })
 }
 
 export const updateWorld = async (id: string, world: Omit<World, 'id'>) => {

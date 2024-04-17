@@ -37,13 +37,13 @@ export const WorldService = new Elysia()
             .delete(
                 '/',
                 async ({ query }) => {
-                    const res = await db.deleteWorld(query.name)
+                    const res = await db.deleteWorld(query.id)
                     return createSuccessResponse(200, '删除世界成功', res)
                 },
                 {
                     query: t.Object({
-                        name: t.String({
-                            error: '需要name参数'
+                        id: t.String({
+                            error: '需要id参数'
                         })
                     })
                 }
