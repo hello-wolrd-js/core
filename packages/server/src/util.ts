@@ -13,3 +13,9 @@ export function createErrorResponse(code: number, error: string): ErrorResponse 
         error
     }
 }
+
+export function createErrorProvider(msg: string) {
+    return {
+        error: msg
+    }
+}

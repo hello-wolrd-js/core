@@ -44,9 +44,8 @@ const Card: Component<World> = (props) => {
             }}
         >
             <figure>
-                <img src={props.card.cover} alt={props.card.title} />
+                {props.card.cover && <img src={props.card.cover} alt={props.card.title} />}
             </figure>
-
             <div class="card-body">
                 <h2 class="card-title">{props.card.title}</h2>
                 <p>{props.card.description}</p>

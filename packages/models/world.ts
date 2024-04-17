@@ -2,10 +2,9 @@ export interface World {
     id: string
     name: string
     card: {
-        id: string
         title: string
-        cover: string
         description: string
+        cover?: string
         style?: {
             width: number
             height: number
