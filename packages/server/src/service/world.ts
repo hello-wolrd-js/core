@@ -1,6 +1,6 @@
 import Elysia, { t } from 'elysia'
 import { createErrorResponse, createSuccessResponse } from '../util'
-import { createWorld, deleteWorld, getWorld, updateWorld } from '../db'
+import { db } from '../db'
 import { WorldDTO } from '../model'
 export const WorldService = new Elysia()
     .onError(({ code, error }) => {
@@ -11,7 +11,7 @@ export const WorldService = new Elysia()
             .get(
                 '/',
                 async ({ query }) => {
-                    const res = await getWorld(query.name)
+                    const res = await db.getWorld(query.name)
                     return createSuccessResponse(200, '获取世界成功', res)
                 },
                 {
@@ -27,7 +27,7 @@ export const WorldService = new Elysia()
             .post(
                 '/',
                 async ({ body }) => {
-                    const newWorld = await createWorld(body)
+                    const newWorld = await db.createWorld(body)
                     return createSuccessResponse(200, '创建世界成功!', newWorld)
                 },
                 {
@@ -37,7 +37,7 @@ export const WorldService = new Elysia()
             .delete(
                 '/',
                 async ({ query }) => {
-                    const res = await deleteWorld(query.name)
+                    const res = await db.deleteWorld(query.name)
                     return createSuccessResponse(200, '删除世界成功', res)
                 },
                 {
@@ -51,8 +51,8 @@ export const WorldService = new Elysia()
             .put(
                 '/',
                 async ({ query, body }) => {
-                    const res = await updateWorld(query.id, body)
-                    return createSuccessResponse(200, '删除世界成功', res)
+                    const res = await db.updateWorld(query.id, body)
+                    return createSuccessResponse(200, '更新世界成功', res)
                 },
                 {
                     query: t.Object({

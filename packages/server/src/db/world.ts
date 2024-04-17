@@ -23,3 +23,10 @@ export const deleteWorld = async (name?: string) => {
 export const updateWorld = async (id: string, world: Omit<World, 'id'>) => {
     return await WorldModel.findByIdAndUpdate(id, world)
 }
+
+export default {
+    createWorld,
+    getWorld,
+    deleteWorld,
+    updateWorld
+}
