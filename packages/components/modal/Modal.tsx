@@ -2,9 +2,13 @@ import { Component, JSXElement, Signal, createMemo, onCleanup } from 'solid-js'
 import { Portal } from 'solid-js/web'
 import styles from './Modal.module.css'
 
-export const Modal: Component<{ show: Signal<boolean>; title: string; children?: JSXElement }> = (
-    props
-) => {
+export const Modal: Component<{
+    show: Signal<boolean>
+    title: string
+    confirm: (close: () => void) => void
+    cancel: (close: () => void) => void
+    children?: JSXElement
+}> = (props) => {
     let modalRef: any
 
     const [show, setShow] = props.show
@@ -17,6 +21,17 @@ export const Modal: Component<{ show: Signal<boolean>; title: string; children?:
     }
     document.body.addEventListener('click', onClick)
     onCleanup(() => document.body.removeEventListener('click', onClick))
+
+    //事件处理
+    //#region
+    const handleConfirm = () => {
+        props.confirm(() => setShow(false))
+    }
+    const handleCancel = () => {
+        props.cancel(() => setShow(false))
+    }
+
+    //#endregion
     return (
         <Portal>
             <div
@@ -26,11 +41,16 @@ export const Modal: Component<{ show: Signal<boolean>; title: string; children?:
                 class={styles['modal-overlay']}
             >
                 <div ref={modalRef} class={styles['modal-content']}>
-                    <div class="card-body">
-                        <h2 class="card-title">Card title!</h2>
-                        <p>If a dog chews shoes whose shoes does he choose?</p>
+                    <div class="card-body p-0">
+                        <h2 class="card-title">{props.title}</h2>
+                        {props.children}
                         <div class="card-actions justify-end">
-                            <button class="btn btn-primary">Buy Now</button>
+                            <button class="btn btn-primary" onClick={handleConfirm}>
+                                确认
+                            </button>
+                            <button class="btn btn-error" onClick={handleCancel}>
+                                取消
+                            </button>
                         </div>
                     </div>
                 </div>

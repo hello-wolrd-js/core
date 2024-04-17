@@ -21,12 +21,22 @@ const Home: Component = () => {
         setShowModal(true)
     }
     //#endregion
+
+    //模态框
+    //#region
+    const confirm = (close: () => void) => {
+        close()
+    }
+    const cancel = (close: () => void) => {
+        close()
+    }
+    //#endregion
     return (
         <div id="home-container" class="flex justify-evenly flex-wrap">
             <For each={cards()}>{(card) => <Card {...card} openModal={openModal}></Card>}</For>
             {/* 模态框 */}
-            <Modal show={showSignal} title="test">
-                <p>123</p>
+            <Modal show={showSignal} title="确认删除吗" confirm={confirm} cancel={cancel}>
+                <p>请三思!</p>
             </Modal>
         </div>
     )
