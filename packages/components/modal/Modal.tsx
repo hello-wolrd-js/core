@@ -4,7 +4,7 @@ import styles from './Modal.module.css'
 
 export const Modal: Component<{
     show: Signal<boolean>
-    title: string
+    title: string | JSXElement
     confirm: (close: () => void) => void
     cancel: (close: () => void) => void
     children?: JSXElement
@@ -45,10 +45,10 @@ export const Modal: Component<{
                         <h2 class="card-title">{props.title}</h2>
                         {props.children}
                         <div class="card-actions justify-end">
-                            <button class="btn btn-primary" onClick={handleConfirm}>
+                            <button class="btn btn-primary btn-outline" onClick={handleConfirm}>
                                 确认
                             </button>
-                            <button class="btn btn-error" onClick={handleCancel}>
+                            <button class="btn btn-error btn-outline" onClick={handleCancel}>
                                 取消
                             </button>
                         </div>

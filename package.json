@@ -31,6 +31,7 @@
     "elysia": "latest",
     "mongoose": "^8.3.2",
     "nes.css": "^2.3.0",
-    "solid-js": "^1.8.11"
+    "solid-js": "^1.8.11",
+    "solid-toast": "^0.5.0"
   }
 }

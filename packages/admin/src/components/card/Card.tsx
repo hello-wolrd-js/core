@@ -1,13 +1,13 @@
-import { createSignal, type Component } from 'solid-js'
+import { type Component } from 'solid-js'
 
 import type { World } from '@core/models'
 import { useNavigate } from '@solidjs/router'
 
-const Card: Component<World & { openModal: () => void }> = (props) => {
+const Card: Component<{ openModal: (world: World) => void; world: World }> = (props) => {
     //导航
     //#region
     const navigate = useNavigate()
-    const toWorld = () => {
+    const handleTry = () => {
         navigate('/world')
         setTimeout(() => {
             const iframe = document.getElementById('world-container')! as HTMLIFrameElement
@@ -29,7 +29,7 @@ const Card: Component<World & { openModal: () => void }> = (props) => {
 
             const _mount = _dom.createElement('script')
             _mount.innerHTML = `
-                import("${props.url}").then((module) => {
+                import("${props.world.url}").then((module) => {
                     module.default(window.world);
                     window.world = void 0;
                 });
@@ -40,35 +40,41 @@ const Card: Component<World & { openModal: () => void }> = (props) => {
     }
     //#endregion
 
+    const handleDelete = () => {
+        props.openModal(props.world)
+    }
+
     return (
         <div
             class="card w-96 bg-base-100 shadow-lg m-4"
             style={{
-                width: props.card.style?.width + 'px',
-                height: props.card.style?.height + 'px'
+                width: props.world.card.style?.width + 'px',
+                height: props.world.card.style?.height + 'px'
             }}
         >
             <figure>
-                <img src={props.card.cover} alt={props.card.title} />
+                {props.world.card.cover && (
+                    <img src={props.world.card.cover} alt={props.world.card.title} />
+                )}
             </figure>
 
             <div class="card-body">
-                <h2 class="card-title">{props.card.title}</h2>
-                <p>{props.card.description}</p>
+                <h2 class="card-title">{props.world.card.title}</h2>
+                <p>{props.world.card.description}</p>
                 <div class="divider mt-0 mb-0 text-gray-600/50">statistic</div>
                 {/* 统计 */}
                 <div class=" stat p-0">
                     <div class="stat-figure text-secondary"></div>
                     <div class="stat-title">Total star</div>
-                    <div class="stat-value">{props.total.star}</div>
+                    <div class="stat-value">{props.world.total.star}</div>
                 </div>
                 <div class="divider mt-0 mb-0 text-gray-600/50">actions</div>
                 {/* 交互栏 */}
                 <div class="card-actions justify-end mt-4">
-                    <button class="btn btn-outline" onClick={toWorld}>
+                    <button class="btn btn-outline" onClick={handleTry}>
                         Try
                     </button>
-                    <button class="btn btn-outline btn-error" onClick={props.openModal}>
+                    <button class="btn btn-outline btn-error" onClick={handleDelete}>
                         Delete
                     </button>
                 </div>
