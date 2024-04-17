@@ -3,7 +3,7 @@ import { WORLD_API_INSTANCE } from './instance'
 import { handleRequest } from './handle'
 
 export async function getWorld() {
-    return await handleRequest<World[]>(() => WORLD_API_INSTANCE.get('/card'))
+    return await handleRequest<World[]>(() => WORLD_API_INSTANCE.get('/'))
 }
 export async function deleteWorld(id: string) {
     return await handleRequest<World>(() =>
@@ -16,5 +16,6 @@ export async function deleteWorld(id: string) {
 }
 
 export default {
-     getWorld
+    getWorld,
+    deleteWorld
 }
