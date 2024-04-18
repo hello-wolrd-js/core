@@ -18,10 +18,8 @@
     }
 
     body {
-        /* width: 100vw;
-        height: 100vh; */
-        /* font-family: 'PressStart2P'; */
-        
+        width: 100vw;
+        height: 100vh;
     }
 
     #root {

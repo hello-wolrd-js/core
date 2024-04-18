@@ -6,18 +6,9 @@ const worldSchema = new mongoose.Schema<World>(
     {
         id: Types.ObjectId,
         name: String,
-        card: {
-            title: String,
-            cover: String,
-            description: String,
-            style: {
-                width: Number,
-                height: Number
-            }
-        },
-        total: {
-            star: Number
-        },
+        cover: String,
+        description: String,
+        star: Number,
         url: String
     },
     {

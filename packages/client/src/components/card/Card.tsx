@@ -2,7 +2,7 @@ import { Component } from 'solid-js'
 import type { World } from '@core/models'
 import { useNavigate } from '@solidjs/router'
 
-const Card: Component<World> = (props) => {
+const Card: Component<{ world: World }> = (props) => {
     const navigate = useNavigate()
     const toWorld = () => {
         navigate('/world')
@@ -26,7 +26,7 @@ const Card: Component<World> = (props) => {
 
             const _mount = _dom.createElement('script')
             _mount.innerHTML = `
-                import("${props.url}").then((module) => {
+                import("${props.world.url}").then((module) => {
                     module.default(window.world);
                     window.world = void 0;
                 });
@@ -36,25 +36,19 @@ const Card: Component<World> = (props) => {
         })
     }
     return (
-        <div
-            class="card w-96 bg-base-100 shadow-lg m-4"
-            style={{
-                width: props.card.style?.width + 'px',
-                height: props.card.style?.height + 'px'
-            }}
-        >
+        <div class="card w-96 bg-base-100 shadow-lg m-4">
             <figure>
-                {props.card.cover && <img src={props.card.cover} alt={props.card.title} />}
+                {props.world.cover && <img src={props.world.cover} alt={props.world.name} />}
             </figure>
             <div class="card-body">
-                <h2 class="card-title">{props.card.title}</h2>
-                <p>{props.card.description}</p>
+                <h2 class="card-title">{props.world.name}</h2>
+                <p>{props.world.description}</p>
                 <div class="divider mt-0 mb-0 text-gray-600/50">statistic</div>
                 {/* 统计 */}
                 <div class=" stat p-0">
                     <div class="stat-figure text-secondary"></div>
                     <div class="stat-title">Total star</div>
-                    <div class="stat-value">{props.total.star}</div>
+                    <div class="stat-value">{props.world.star}</div>
                 </div>
                 <div class="divider mt-0 mb-0 text-gray-600/50">actions</div>
                 {/* 交互栏 */}
@@ -77,7 +71,7 @@ const Card: Component<World> = (props) => {
                         </svg>
                     </button>
                     <button class="btn btn-outline" onClick={toWorld}>
-                        Go
+                        Try
                     </button>
                 </div>
             </div>

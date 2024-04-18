@@ -1,12 +1,10 @@
 import { World } from '@core/models'
 import { WorldModel } from './schema'
 
-export const createWorld = async (world: Omit<World, 'total' | 'id'>) => {
+export const createWorld = async (world: Omit<World, 'id' | 'star'>) => {
     const newWorld = new WorldModel({
         ...world,
-        total: {
-            star: 0
-        }
+        star: 0
     })
     return await newWorld.save()
 }

@@ -1,18 +1,16 @@
 import type { Component, JSX } from 'solid-js'
-import styles from './App.module.css'
 import NavBar from './components/layout/NavBar'
+import { Toaster } from 'solid-toast'
 
-const navHeight = 60
-
+const navHeight = 64
 const App: Component<{ children?: JSX.Element }> = (props) => {
     return (
-        <div class={styles.AppLayout}>
+        <div class="flex flex-col h-full">
             <NavBar height={navHeight}></NavBar>
-            <div style={{ display: 'flex' }}>
-                <main style={{ width: '100%', 'margin-top': `${navHeight}px` }}>
-                    {props.children}
-                </main>
-            </div>
+            <Toaster position="top-center" gutter={8} />
+            <main class="w-full h-full" style={{ 'margin-top': `${navHeight}px` }}>
+                {props.children}
+            </main>
         </div>
     )
 }

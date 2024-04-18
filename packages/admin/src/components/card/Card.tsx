@@ -44,28 +44,20 @@ const Card: Component<{ openModal: (world: World) => void; world: World }> = (pr
     }
 
     return (
-        <div
-            class="card w-96 bg-base-100 shadow-lg m-4"
-            style={{
-                width: props.world.card.style?.width + 'px',
-                height: props.world.card.style?.height + 'px'
-            }}
-        >
+        <div class="card w-96 bg-base-100 shadow-lg m-4">
             <figure>
-                {props.world.card.cover && (
-                    <img src={props.world.card.cover} alt={props.world.card.title} />
-                )}
+                {props.world.cover && <img src={props.world.cover} alt={props.world.name} />}
             </figure>
 
             <div class="card-body">
-                <h2 class="card-title">{props.world.card.title}</h2>
-                <p>{props.world.card.description}</p>
+                <h2 class="card-title">{props.world.name}</h2>
+                <p>{props.world.description}</p>
                 <div class="divider mt-0 mb-0 text-gray-600/50">statistic</div>
                 {/* 统计 */}
                 <div class=" stat p-0">
                     <div class="stat-figure text-secondary"></div>
                     <div class="stat-title">Total star</div>
-                    <div class="stat-value">{props.world.total.star}</div>
+                    <div class="stat-value">{props.world.star}</div>
                 </div>
                 <div class="divider mt-0 mb-0 text-gray-600/50">actions</div>
                 {/* 交互栏 */}

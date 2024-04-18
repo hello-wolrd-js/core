@@ -4,8 +4,9 @@ import { Component } from 'solid-js'
 const NavBar: Component<{ height: number }> = (props) => {
     const navigate = useNavigate()
     const toHome = () => navigate('/', { replace: true })
+    const toPublish = () => navigate('/publish')
     return (
-        <div
+        <nav
             class="navbar bg-base-100 shadow-xl fixed z-50"
             style={{ height: `${props.height}px` }}
         >
@@ -32,10 +33,9 @@ const NavBar: Component<{ height: number }> = (props) => {
                         class="mt-2 dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
                     >
                         <li>
-                            <a>Item 1</a>
-                        </li>
-                        <li>
-                            <a>Item 2</a>
+                            <a onClick={toPublish}>
+                                发布
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -58,7 +58,7 @@ const NavBar: Component<{ height: number }> = (props) => {
                     </svg>
                 </a>
             </div>
-        </div>
+        </nav>
     )
 }
 

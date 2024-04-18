@@ -46,7 +46,7 @@ const Home: Component = () => {
     //#endregion
 
     const empty = (
-        <div class="hero min-h-screen bg-base-200">
+        <div class="hero bg-base-200">
             <div class="hero-content text-center">
                 <div class="max-w-md">
                     <h1 class="text-5xl font-bold">暂无世界</h1>
@@ -60,7 +60,7 @@ const Home: Component = () => {
     )
 
     return (
-        <div id="home-container" class="flex justify-evenly flex-wrap">
+        <div class="flex h-full justify-evenly flex-wrap">
             <Show when={worlds().length} fallback={empty}>
                 <For each={worlds()}>
                     {(world) => <Card world={world} openModal={openModal}></Card>}

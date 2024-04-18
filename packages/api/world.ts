@@ -15,7 +15,12 @@ export async function deleteWorld(id: string) {
     )
 }
 
+export async function createWorld(world: Omit<World, 'id' | 'star'>) {
+    return await handleRequest<World>(() => WORLD_API_INSTANCE.post('/', world))
+}
+
 export default {
     getWorld,
-    deleteWorld
+    deleteWorld,
+    createWorld
 }
