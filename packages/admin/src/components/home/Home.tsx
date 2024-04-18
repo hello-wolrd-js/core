@@ -54,7 +54,6 @@ const Home: Component = () => {
                         Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi
                         exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.
                     </p>
-                    <button class="btn btn-primary">前往发布</button>
                 </div>
             </div>
         </div>
@@ -70,7 +69,7 @@ const Home: Component = () => {
 
             {/* 模态框 */}
             <Modal show={modalSignal} title="确定要删除吗?" confirm={confirm} cancel={cancel}>
-                <p>请三思!</p>
+                <p>该操作不可逆,请三思!</p>
             </Modal>
         </div>
     )

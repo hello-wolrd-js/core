@@ -39,7 +39,6 @@ const Card: Component<{ openModal: (world: World) => void; world: World }> = (pr
         })
     }
     //#endregion
-
     const handleDelete = () => {
         props.openModal(props.world)
     }
