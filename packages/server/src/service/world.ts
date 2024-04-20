@@ -11,7 +11,7 @@ export const WorldService = new Elysia()
             .get(
                 '/',
                 async ({ query }) => {
-                    const res = await db.getWorld(query.name)
+                    const res = await db.world.getWorld(query.name)
                     return createSuccessResponse(200, '获取世界成功', res)
                 },
                 WorldDTO.search
@@ -20,7 +20,7 @@ export const WorldService = new Elysia()
                 '/',
                 async ({ body }) => {
                     console.log(body)
-                    const newWorld = await db.createWorld(body)
+                    const newWorld = await db.world.createWorld(body)
                     return createSuccessResponse(200, '创建世界成功,待审核完成后即可公开', newWorld)
                 },
                 WorldDTO.create
@@ -28,7 +28,7 @@ export const WorldService = new Elysia()
             .delete(
                 '/',
                 async ({ query }) => {
-                    const res = await db.deleteWorld(query.id)
+                    const res = await db.world.deleteWorld(query.id)
                     return createSuccessResponse(200, '删除世界成功', res)
                 },
                 WorldDTO.delete
@@ -36,7 +36,7 @@ export const WorldService = new Elysia()
             .put(
                 '/',
                 async ({ query, body }) => {
-                    const res = await db.updateWorld(query.id, body)
+                    const res = await db.world.updateWorld(query.id, body)
                     return createSuccessResponse(200, '更新世界成功', res)
                 },
                 WorldDTO.update
@@ -45,7 +45,7 @@ export const WorldService = new Elysia()
                 '/check',
                 async ({ body }) => {
                     try {
-                        await db.checkedWorld(body.id)
+                        await db.world.checkedWorld(body.id)
                         return createSuccessResponse(200, '审核成功', null)
                     } catch (error) {
                         return createErrorResponse(-1, error + '')
@@ -57,7 +57,7 @@ export const WorldService = new Elysia()
                 '/uncheck',
                 async ({ body }) => {
                     try {
-                        await db.uncheckedWorld(body.id)
+                        await db.world.uncheckedWorld(body.id)
                         return createSuccessResponse(200, '退回审核成功', null)
                     } catch (error) {
                         return createErrorResponse(-1, error + '')

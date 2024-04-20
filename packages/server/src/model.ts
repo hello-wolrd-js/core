@@ -46,3 +46,18 @@ export const WorldDTO = {
         })
     }
 }
+
+export const UserDTO = {
+    login: {
+        body: t.Object({
+            username: t.String(),
+            password: t.String()
+        })
+    },
+    register: {
+        body: t.Object({
+            username: t.String(),
+            password: t.String()
+        })
+    }
+}
