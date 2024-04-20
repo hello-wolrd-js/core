@@ -1,19 +1,22 @@
 import { User } from '@core/models'
 import { createStore } from 'solid-js/store'
 
-interface StoreState {
+interface UserStoreState {
     user: User | null
+    token: string
     loggedIn: boolean
 }
 
-const [store, setStore] = createStore<StoreState>({
+const [store, setStore] = createStore<UserStoreState>({
     user: null,
+    token: '',
     loggedIn: false
 })
 
-function login(user: User): void {
+function login(user: User, token: string): void {
     setStore({
-        user: user,
+        user,
+        token,
         loggedIn: true
     })
 }
@@ -21,6 +24,7 @@ function login(user: User): void {
 function logout(): void {
     setStore({
         user: null,
+        token: '',
         loggedIn: false
     })
 }

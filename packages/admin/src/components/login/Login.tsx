@@ -1,11 +1,11 @@
-import { useUserStore } from '@/stores/user'
+import { useUserStore } from '@core/stores'
 import { USER_API } from '@core/api'
 import { isSuccessResponse } from '@core/shared'
 import { useNavigate } from '@solidjs/router'
-import { Component, createSignal } from 'solid-js'
+import { createSignal } from 'solid-js'
 import toast from 'solid-toast'
 
-const Login: Component = () => {
+const Login = () => {
     const userStore = useUserStore()
     const navigate = useNavigate()
     const [username, setUsername] = createSignal('')
@@ -25,7 +25,7 @@ const Login: Component = () => {
         })
         if (isSuccessResponse(result)) {
             toast.success(result.msg)
-            userStore.login(result.data)
+            userStore.login(result.data.user, result.data.token)
             navigate('/')
         } else {
             toast.error(result.error)

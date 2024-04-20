@@ -5,7 +5,7 @@ import { Component, createSignal } from 'solid-js'
 import toast from 'solid-toast'
 
 const Publish: Component = () => {
-    const origin: Omit<World, 'id' | 'star'> = {
+    const origin: Omit<World, 'id' | 'star' | 'checked'> = {
         name: '',
         description: '',
         url: '',

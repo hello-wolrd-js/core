@@ -1,6 +1,7 @@
 import { World } from '@core/models'
 import { WORLD_API_INSTANCE } from './instance'
 import { handleRequest } from './handle'
+import { AxiosInstance } from 'axios'
 
 export async function getWorld() {
     return await handleRequest<World[]>(() => WORLD_API_INSTANCE.get('/'))
@@ -15,7 +16,7 @@ export async function deleteWorld(id: string) {
     )
 }
 
-export async function createWorld(world: Omit<World, 'id' | 'star'>) {
+export async function createWorld(world: Omit<World, 'id' | 'star' | 'checked'>) {
     return await handleRequest<World>(() => WORLD_API_INSTANCE.post('/', world))
 }
 

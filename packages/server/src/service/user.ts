@@ -12,7 +12,7 @@ export const UserService = new Elysia().use(jwt).group('/user', (app) =>
                 try {
                     const user = await db.user.getUser(body)
                     return createSuccessResponse(200, '登陆成功', {
-                        ...user.toJSON(),
+                        user: user.toJSON(),
                         token: await jwt.sign({
                             username: user.username,
                             role: user.role,

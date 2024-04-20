@@ -5,7 +5,6 @@ import App from './App'
 import { Route, Router } from '@solidjs/router'
 import Home from '@/components/home/Home'
 import World from '@/components/world/World'
-import Login from '@/components/login/Login'
 import { Toaster } from 'solid-toast'
 import NotFound from './components/404/404'
 
@@ -22,7 +21,6 @@ render(
         <>
             <Router root={App}>
                 <Route path="/" component={Home} />
-                <Route path="/login" component={Login} />
                 <Route path="/world" component={World} />
                 <Route path="*404" component={NotFound} />
             </Router>
