@@ -4,5 +4,6 @@ export interface World {
     description: string
     cover?: string
     star: number
-    url: string
+    url: string //世界url
+    checked: boolean //是否通过审核
 }
