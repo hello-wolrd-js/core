@@ -7,6 +7,7 @@ const UserSchema = new mongoose.Schema<User>(
         id: Types.ObjectId,
         username: String,
         password: String,
+        role: String,
         worlds: Array<String>
     },
     {
