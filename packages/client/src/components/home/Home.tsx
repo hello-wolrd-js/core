@@ -7,7 +7,7 @@ import { isSuccessResponse } from '@core/shared'
 const Home: Component = () => {
     const [worlds, setWorlds] = createSignal<World[]>([])
 
-    WORLD_API.getWorld().then((res) => {
+    WORLD_API.getWorld('checked').then((res) => {
         if (isSuccessResponse(res)) {
             setWorlds(res.data)
         }

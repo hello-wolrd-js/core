@@ -1,29 +1,33 @@
 import { ErrorResponse, SuccessResponse } from '@core/models'
-import type { AxiosError, AxiosResponse } from 'axios'
+import { createErrorResponse } from '@core/shared'
+import { isAxiosError, type AxiosError, type AxiosResponse } from 'axios'
+
 export async function handleRequest<T>(
     request:
         | Promise<AxiosResponse<SuccessResponse<T>>>
         | (() => Promise<AxiosResponse<SuccessResponse<T>>>),
     options: {
         onSuccess?: (data: SuccessResponse<T>) => void
-        onError?: (error: AxiosError<ErrorResponse>) => void
+        onError?: (error: AxiosError<unknown>) => void
         onFinal?: () => void
-        useRefresh?: boolean
-        useCatch?: boolean
     } = {}
 ): Promise<SuccessResponse<T> | ErrorResponse> {
     try {
         const response = await (typeof request === 'function' ? request() : request)
         options.onSuccess?.(response.data)
         return response.data
-    } catch (_error) {
-        const error = _error as AxiosError<ErrorResponse>
-        options.onError?.(error)
-        return (
-            error.response?.data || {
-                code: -1,
-                error: '网络错误!'
+    } catch (error) {
+        if (isAxiosError<ErrorResponse>(error)) {
+            options.onError?.(error)
+            if (error.response) {
+                return error.response.data
+            } else {
+                return createErrorResponse(-2, '网络错误!')
             }
-        )
+        } else {
+            return createErrorResponse(-3, '未知错误: ' + error)
+        }
+    } finally {
+        options.onFinal?.()
     }
 }

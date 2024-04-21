@@ -36,7 +36,7 @@ const Card: Component<{ world: World }> = (props) => {
         })
     }
     return (
-        <div class="card w-96 bg-base-100 shadow-lg m-4">
+        <div class="card w-96 bg-base-100 h-3/4 shadow-lg m-4">
             <figure>
                 {props.world.cover && <img src={props.world.cover} alt={props.world.name} />}
             </figure>
