@@ -1,12 +1,11 @@
 import { LoginParams } from '@core/models'
 import { UserModel } from './schema/user'
 
-export const getUser = async ({ username, password }: LoginParams) => {
+export const login = async ({ username, password }: LoginParams) => {
     const user = await UserModel.findOne({ username })
     if (!user) throw '不存在该用户!'
     if (user.password !== password) throw '密码错误!'
-
-    return user
+    return user.getInfo()
 }
 
 export const createUser = async ({ username, password }: LoginParams) => {
@@ -16,7 +15,14 @@ export const createUser = async ({ username, password }: LoginParams) => {
     return await UserModel.create({ username, password, role: 'common' })
 }
 
+export const getUser = async (id: string) => {
+    const user = await UserModel.findById(id)
+    if (!user) throw '不存在该用户!'
+    return user.getInfo()
+}
+
 export default {
-    getUser,
-    createUser
+    login,
+    createUser,
+    getUser
 }

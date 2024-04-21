@@ -44,7 +44,7 @@ const Card: Component<{ openModal: (world: World) => void; world: World }> = (pr
     }
 
     return (
-        <div class="card w-96 bg-base-100 shadow-lg m-4">
+        <div class="card w-96 h-3/4 bg-base-100 shadow-lg m-4">
             <figure>
                 {props.world.cover && <img src={props.world.cover} alt={props.world.name} />}
             </figure>

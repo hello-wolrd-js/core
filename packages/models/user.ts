@@ -1,7 +1,7 @@
 export interface User {
     id: string
     username: string
-    password: string
+    // password: string
     role: 'admin' | 'common'
     worlds: string[] //存储所创建世界的id
 }

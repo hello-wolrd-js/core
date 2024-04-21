@@ -2,7 +2,10 @@ import { User } from '@core/models'
 import * as mongoose from 'mongoose'
 import { Types } from 'mongoose'
 
-const UserSchema = new mongoose.Schema<User>(
+type DB_User = User &
+    mongoose.Document & { password: string; getInfo: () => Omit<User, 'password'> }
+
+const UserSchema = new mongoose.Schema<DB_User>(
     {
         id: Types.ObjectId,
         username: String,
@@ -11,16 +14,19 @@ const UserSchema = new mongoose.Schema<User>(
         worlds: Array<String>
     },
     {
-        // timestamps: true,
         versionKey: false,
         id: true,
-        toJSON: {
-            transform(doc, ret) {
-                ret.id = ret._id
-                delete ret._id
+        methods: {
+            getInfo() {
+                return {
+                    id: this._id,
+                    username: this.username,
+                    role: this.role,
+                    worlds: this.worlds
+                }
             }
         }
     }
 )
 
-export const UserModel = mongoose.model<User>('user', UserSchema)
+export const UserModel = mongoose.model<DB_User>('user', UserSchema)

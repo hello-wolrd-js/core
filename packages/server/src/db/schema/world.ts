@@ -2,9 +2,11 @@ import { World } from '@core/models'
 import * as mongoose from 'mongoose'
 import { Types } from 'mongoose'
 
+type DB_World = World & mongoose.Document
+
 //schema
 //#region
-const CheckedWorldSchema = new mongoose.Schema<World>(
+const CheckedWorldSchema = new mongoose.Schema<DB_World>(
     {
         id: Types.ObjectId,
         name: String,
@@ -26,7 +28,7 @@ const CheckedWorldSchema = new mongoose.Schema<World>(
         }
     }
 )
-const UncheckedWorldSchema = new mongoose.Schema<World>(
+const UncheckedWorldSchema = new mongoose.Schema<DB_World>(
     {
         id: Types.ObjectId,
         name: String,
@@ -48,7 +50,7 @@ const UncheckedWorldSchema = new mongoose.Schema<World>(
         }
     }
 )
-const ArchivedWorldSchema = new mongoose.Schema<World>(
+const ArchivedWorldSchema = new mongoose.Schema<DB_World>(
     {
         id: Types.ObjectId,
         name: String,
