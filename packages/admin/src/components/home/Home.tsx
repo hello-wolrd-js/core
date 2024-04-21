@@ -7,6 +7,8 @@ import { Modal } from '@core/components'
 import toast from 'solid-toast'
 
 const Home: Component = () => {
+    //世界
+    //#region
     const [worlds, setWorlds] = createSignal<World[]>([])
     const getWorld = async () => {
         const result = await WORLD_API.getWorld('archived')
@@ -18,8 +20,8 @@ const Home: Component = () => {
         }
     }
     getWorld()
-
     const [currentWorld, setCurrentWorld] = createSignal<World | null>(null)
+    //#endregion
 
     //模态框
     //#region

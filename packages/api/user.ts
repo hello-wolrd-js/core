@@ -8,5 +8,8 @@ export const login = async (params: LoginParams) => {
     )
 }
 
-export default { login }
+export const getUserInfo = async () => {
+    return await handleRequest<User>(() => USER_API_INSTANCE.get('/info'))
+}
 
+export default { login, getUserInfo }

@@ -9,7 +9,7 @@ interface UserStoreState {
 
 const [store, setStore] = createStore<UserStoreState>({
     user: null,
-    token: '',
+    token: localStorage.getItem('token') || '',
     loggedIn: false
 })
 
@@ -19,6 +19,7 @@ function login(user: User, token: string): void {
         token,
         loggedIn: true
     })
+    localStorage.setItem('token', token)
 }
 
 function logout(): void {
@@ -27,6 +28,7 @@ function logout(): void {
         token: '',
         loggedIn: false
     })
+    localStorage.clear()
 }
 
 export const useUserStore = () => ({ store, login, logout })
