@@ -1,7 +1,7 @@
 import { Component, createSignal, For, Show } from 'solid-js'
 import Card from '@/components/card/Card'
 import type { World } from '@core/models'
-import { WORLD_API } from '@core/api'
+import { WORLD_API } from '@api'
 import { isSuccessResponse } from '@core/shared'
 
 const Home: Component = () => {

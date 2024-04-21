@@ -1,5 +1,5 @@
-import { useUserStore } from '@core/stores'
-import { USER_API } from '@core/api'
+import { useUserStore } from '@stores'
+import { USER_API } from '@api'
 import { isSuccessResponse } from '@core/shared'
 import { useNavigate } from '@solidjs/router'
 import { createSignal } from 'solid-js'
@@ -24,13 +24,9 @@ const Login = () => {
             password: password()
         })
         if (isSuccessResponse(result)) {
-            if (result.data.user.role === 'admin') {
-                toast.success(result.msg)
-                userStore.login(result.data.user, result.data.token)
-                navigate('/')
-            } else {
-                toast.error('用户权限不足!')
-            }
+            toast.success(result.msg)
+            userStore.login(result.data.user, result.data.token)
+            navigate('/')
         } else {
             toast.error(result.error)
         }

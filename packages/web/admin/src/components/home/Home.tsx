@@ -1,9 +1,9 @@
 import { Component, createSignal, For, Show } from 'solid-js'
 import Card from '@/components/card/Card'
 import type { World } from '@core/models'
-import { WORLD_API } from '@core/api'
+import { WORLD_API } from '@api'
 import { isSuccessResponse } from '@core/shared'
-import { Modal } from '@core/components'
+import { Modal } from '@components'
 import toast from 'solid-toast'
 
 const Home: Component = () => {

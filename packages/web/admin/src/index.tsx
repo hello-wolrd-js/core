@@ -5,9 +5,8 @@ import App from './App'
 import { Route, Router } from '@solidjs/router'
 import Home from '@/components/home/Home'
 import World from '@/components/world/World'
-import Publish from './components/publish/Publish'
 import { Toaster } from 'solid-toast'
-import { NotFound } from '@core/components'
+import { NotFound } from '@components'
 
 const root = document.getElementById('root')
 
@@ -21,12 +20,11 @@ render(
     () => (
         <>
             <Router root={App}>
-                <Route path="/" component={Home}></Route>
-                <Route path="/world" component={World}></Route>
-                <Route path="/publish" component={Publish}></Route>
+                <Route path="/" component={Home} />
+                <Route path="/world" component={World} />
                 <Route path="*404" component={NotFound} />
             </Router>
-            <Toaster position="top-center" gutter={8} />
+            <Toaster position="top-center" gutter={6} />
         </>
     ),
     root!

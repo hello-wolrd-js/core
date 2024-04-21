@@ -1,5 +1,4 @@
 {
-    "include": ["env.d.ts", "src/**/*", "models"],
     "compilerOptions": {
         "strict": true,
         "target": "ESNext",
@@ -13,7 +12,10 @@
         "noEmit": true,
         "isolatedModules": true,
         "paths": {
-            "@/*": ["./src/*"]
+            "@stores": ["./packages/web/stores/index.ts"],
+            "@components": ["./packages/web/components/index.ts"],
+            "@api": ["./packages/web/api/index.ts"]
         }
-    }
+    },
+    "exclude": ["node_modules", "**/node_modules/*"]
 }

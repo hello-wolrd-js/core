@@ -1,0 +1,13 @@
+{
+    "include": ["env.d.ts", "src/**/*"],
+    "extends": "../../../tsconfig.web.json",
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["./src/*"],
+            "@stores": ["../stores/index.ts"],
+            "@components": ["../components/index.ts"],
+            "@api": ["../api/index.ts"]
+        }
+    }
+}

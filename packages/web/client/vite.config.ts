@@ -20,7 +20,10 @@ export default defineConfig({
     },
     resolve: {
         alias: {
-            '@': fileURLToPath(new URL('./src', import.meta.url))
+            '@': fileURLToPath(new URL('./src', import.meta.url)),
+            '@api': fileURLToPath(new URL('../api', import.meta.url)),
+            '@stores': fileURLToPath(new URL('../stores', import.meta.url)),
+            '@components': fileURLToPath(new URL('../components', import.meta.url))
         }
     }
 })

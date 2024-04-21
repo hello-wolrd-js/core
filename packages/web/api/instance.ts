@@ -1,4 +1,4 @@
-import { useUserStore } from '@core/stores'
+import { useUserStore } from '@stores'
 import axios, { AxiosRequestHeaders } from 'axios'
 const baseUrl = 'http://127.0.0.1:4000'
 
