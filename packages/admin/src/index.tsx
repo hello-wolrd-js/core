@@ -6,7 +6,7 @@ import { Route, Router } from '@solidjs/router'
 import Home from '@/components/home/Home'
 import World from '@/components/world/World'
 import { Toaster } from 'solid-toast'
-import NotFound from './components/404/404'
+import { NotFound } from '@core/components'
 
 const root = document.getElementById('root')
 

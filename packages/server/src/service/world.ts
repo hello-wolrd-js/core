@@ -18,7 +18,7 @@ export const WorldService = new Elysia()
                         '/',
                         async ({ query }) => {
                             try {
-                                const res = await db.world.getWorld(query.name)
+                                const res = await db.world.getWorld(query.status, query.name)
                                 return createSuccessResponse(200, '获取世界成功', res)
                             } catch (error) {
                                 return createErrorResponse(-1, '获取世界失败: ' + error)

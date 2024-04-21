@@ -9,7 +9,7 @@ import toast from 'solid-toast'
 const Home: Component = () => {
     const [worlds, setWorlds] = createSignal<World[]>([])
     const getWorld = async () => {
-        const result = await WORLD_API.getWorld()
+        const result = await WORLD_API.getWorld('archived')
         if (isSuccessResponse(result)) {
             setWorlds(result.data)
         } else {

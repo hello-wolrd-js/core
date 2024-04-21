@@ -7,3 +7,5 @@ export interface World {
     url: string //世界url
     checked: boolean //是否通过审核
 }
+
+export type WorldStatus = 'checked' | 'unchecked' | 'archived'

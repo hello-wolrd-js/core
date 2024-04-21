@@ -1,10 +1,16 @@
-import { World } from '@core/models'
+import { World, WorldStatus } from '@core/models'
 import { WORLD_API_INSTANCE } from './instance'
 import { handleRequest } from './handle'
-import { AxiosInstance } from 'axios'
 
-export async function getWorld() {
-    return await handleRequest<World[]>(() => WORLD_API_INSTANCE.get('/'))
+export async function getWorld(status: WorldStatus, name?: string) {
+    return await handleRequest<World[]>(() =>
+        WORLD_API_INSTANCE.get('/', {
+            params: {
+                status,
+                name
+            }
+        })
+    )
 }
 export async function deleteWorld(id: string) {
     return await handleRequest<World>(() =>

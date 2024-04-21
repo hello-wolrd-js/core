@@ -1,7 +1,7 @@
 import { useNavigate } from '@solidjs/router'
 import { Component } from 'solid-js'
 
-const NotFound: Component = () => {
+export const NotFound: Component = () => {
     const navigate = useNavigate()
     return (
         <div class="hero h-full bg-base-200">
@@ -16,5 +16,3 @@ const NotFound: Component = () => {
         </div>
     )
 }
-
-export default NotFound

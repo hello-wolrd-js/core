@@ -1,4 +1,4 @@
-import { World } from '@core/models'
+import { World, WorldStatus } from '@core/models'
 import { ArchivedWorldModel, CheckedWorldModel, UncheckedWorldModel } from './schema'
 
 //敏感字段
@@ -13,9 +13,19 @@ export const createWorld = async (world: Omit<World, SensitiveField | 'star'>) =
     await newWorld.save()
     return await UncheckedWorldModel.create(newWorld.toObject())
 }
-export const getWorld = async (name?: string) => {
+
+export const getWorld = async (status: WorldStatus | string, name?: string) => {
     const filter = name ? { name } : {}
-    return await CheckedWorldModel.find(filter)
+    switch (status) {
+        case 'checked':
+            return await CheckedWorldModel.find(filter)
+        case 'unchecked':
+            return await UncheckedWorldModel.find(filter)
+        case 'archived':
+            return await ArchivedWorldModel.find(filter)
+        default:
+            throw '世界状态参数错误!'
+    }
 }
 
 export const deleteWorld = async (id: string) => {
