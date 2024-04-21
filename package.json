@@ -20,11 +20,8 @@
         "bun-types": "latest"
     },
     "dependencies": {
-        "@core/api": "workspace:^",
-        "@core/components": "workspace:^",
         "@core/models": "workspace:^",
         "@core/shared": "workspace:^",
-        "@core/stores": "workspace:^",
         "@elysiajs/bearer": "^1.0.2",
         "@elysiajs/cors": "^1.0.2",
         "@elysiajs/jwt": "^1.0.2",
