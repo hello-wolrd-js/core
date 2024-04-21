@@ -1,7 +1,7 @@
 import _jwt from '@elysiajs/jwt'
 import { bearer as _bearer } from '@elysiajs/bearer'
 import Elysia from 'elysia'
-import { createErrorResponse } from '@core/shared'
+import { createErrorResponse } from './util'
 import { User } from '@core/models'
 
 //这里secret应该配置成读取环境变量

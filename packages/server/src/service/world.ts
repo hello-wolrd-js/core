@@ -1,5 +1,5 @@
 import Elysia from 'elysia'
-import { createErrorResponse, createSuccessResponse } from '@core/shared'
+import { createErrorResponse, createSuccessResponse } from '../util'
 import { db } from '../db'
 import { WorldDTO } from '../model'
 import { verifyAdminUser, verifyCommonUser } from '../plugin'
