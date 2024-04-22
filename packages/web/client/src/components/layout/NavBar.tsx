@@ -1,10 +1,16 @@
 import { useNavigate } from '@solidjs/router'
+import { useUserStore } from '@stores'
 import { Component } from 'solid-js'
 
 const NavBar: Component<{ height: number }> = (props) => {
     const navigate = useNavigate()
-    const toHome = () => navigate('/', { replace: true })
-    const toPublish = () => navigate('/publish')
+    const handleToHome = () => navigate('/', { replace: true })
+    const handleToPublish = () => navigate('/publish')
+
+    const userStore = useUserStore()
+    const handleLogout = () => {
+        userStore.logout()
+    }
     return (
         <nav
             class="navbar bg-base-100 shadow-xl fixed z-50"
@@ -33,16 +39,15 @@ const NavBar: Component<{ height: number }> = (props) => {
                         class="mt-2 dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
                     >
                         <li>
-                            <a onClick={toPublish}>
-                                发布
-                            </a>
+                            <a onClick={handleToPublish}>发布</a>
+                            <a onClick={handleLogout}>退出登陆</a>
                         </li>
                     </ul>
                 </div>
             </div>
             {/* 标题 */}
             <div class="flex-1">
-                <a class="btn btn-ghost text-xl" onClick={toHome}>
+                <a class="btn btn-ghost text-xl" onClick={handleToHome}>
                     Hello-World
                 </a>
             </div>

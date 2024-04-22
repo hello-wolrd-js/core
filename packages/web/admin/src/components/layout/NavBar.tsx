@@ -1,21 +1,55 @@
 import { useNavigate } from '@solidjs/router'
 import { Component } from 'solid-js'
+import { useUserStore } from '@stores'
 
 const NavBar: Component<{ height: number }> = (props) => {
     const navigate = useNavigate()
-    const toHome = () => navigate('/', { replace: true })
+    const handleToHome = () => navigate('/', { replace: true })
+
+    const userStore = useUserStore()
+    const handleLogout = () => {
+        userStore.logout()
+    }
     return (
-        <div
+        <nav
             class="navbar bg-base-100 shadow-xl fixed z-50"
             style={{ height: `${props.height}px` }}
         >
+            <div class="flex-none">
+                <div class="dropdown">
+                    <div tabindex="0" role="button" class="btn btn-square btn-ghost m-1">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            class="inline-block w-5 h-5 stroke-current"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16"
+                            ></path>
+                        </svg>
+                    </div>
+                    <ul
+                        tabindex="0"
+                        class="mt-2 dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+                    >
+                        <li>
+                            <a onClick={handleLogout}>退出登陆</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
             {/* 标题 */}
             <div class="flex-1">
-                <a class="btn btn-ghost text-xl" onClick={toHome}>
+                <a class="btn btn-ghost text-xl" onClick={handleToHome}>
                     Hello-World-Admin
                 </a>
             </div>
             <div class="flex-none">
+                {/* 下拉菜单 */}
                 <a class="btn btn-square btn-ghost" href="https://github.com/hello-wolrd-js">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -27,7 +61,7 @@ const NavBar: Component<{ height: number }> = (props) => {
                     </svg>
                 </a>
             </div>
-        </div>
+        </nav>
     )
 }
 
