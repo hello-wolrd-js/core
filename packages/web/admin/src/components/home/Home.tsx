@@ -3,7 +3,7 @@ import Card from '@/components/card/Card'
 import type { World } from '@core/models'
 import { WORLD_API } from '@api'
 import { isSuccessResponse } from '@core/shared'
-import { Modal } from '@components'
+import { Dialog, Modal } from '@components'
 import toast from 'solid-toast'
 import { useWorldStore } from '@stores'
 
@@ -18,12 +18,13 @@ const Home: Component = () => {
     //模态框
     //#region
     const modalSignal = createSignal(false)
-    const [_, showModal] = modalSignal
-    const openModal = async (world: World) => {
+    const [showModal, setShowModal] = modalSignal
+    const handleOpenModal = async (world: World) => {
         setCurrentWorld(world)
-        showModal(true)
+        setShowModal(true)
     }
-    const confirm = async (close: () => void) => {
+
+    const handleConfirm = async (close: () => void) => {
         const result = await worldStore.deleteWorld(currentWorld()!.id)
         if (isSuccessResponse(result)) {
             toast.success('删除成功')
@@ -32,7 +33,7 @@ const Home: Component = () => {
             toast.error('删除失败')
         }
     }
-    const cancel = (close: () => void) => {
+    const handleCancel = (close: () => void) => {
         close()
     }
     //#endregion
@@ -55,14 +56,19 @@ const Home: Component = () => {
         <div class="flex h-full justify-evenly flex-wrap">
             <Show when={worldStore.state.worlds.length} fallback={empty}>
                 <For each={worldStore.state.worlds}>
-                    {(world) => <Card world={world} openModal={openModal}></Card>}
+                    {(world) => <Card world={world} openModal={handleOpenModal}></Card>}
                 </For>
             </Show>
 
             {/* 模态框 */}
-            <Modal show={modalSignal} title="确定要删除吗?" confirm={confirm} cancel={cancel}>
-                <p>该操作不可逆,请三思!</p>
-            </Modal>
+            <Dialog
+                show={showModal()}
+                onClose={() => setShowModal(false)}
+                title="确定要删除这个世界吗?"
+                content="请君三思"
+                onCancel={handleCancel}
+                onConfirm={handleConfirm}
+            />
         </div>
     )
 }
