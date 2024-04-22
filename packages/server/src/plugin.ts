@@ -18,9 +18,9 @@ const verifyBase = new Elysia()
     .use(jwt)
     .state('user', { username: '', id: '', role: '' } as JwtPayload)
 
-export const verifyCommonUser = verifyBase.onBeforeHandle(
-    { as: 'scoped' },
-    async ({ bearer, jwt, set, store }) => {
+export const verifyCommonUser = new Elysia()
+    .use(verifyBase)
+    .onBeforeHandle({ as: 'scoped' }, async ({ bearer, jwt, set, store }) => {
         //校验token
         const payload = await jwt.verify(bearer)
         if (!payload) {
@@ -29,11 +29,10 @@ export const verifyCommonUser = verifyBase.onBeforeHandle(
         } else {
             store.user = payload as unknown as JwtPayload
         }
-    }
-)
-export const verifyAdminUser = verifyBase.onBeforeHandle(
-    { as: 'scoped' },
-    async ({ bearer, jwt, set, store }) => {
+    })
+export const verifyAdminUser = new Elysia()
+    .use(verifyBase)
+    .onBeforeHandle({ as: 'scoped' }, async ({ bearer, jwt, set, store }) => {
         //校验token
         const payload = (await jwt.verify(bearer)) as { role: User['role'] }
         if (!payload || payload.role !== 'admin') {
@@ -42,5 +41,4 @@ export const verifyAdminUser = verifyBase.onBeforeHandle(
         } else {
             store.user = payload as unknown as JwtPayload
         }
-    }
-)
+    })

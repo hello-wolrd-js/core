@@ -4,6 +4,9 @@ import { ArchivedWorldModel, CheckedWorldModel, UncheckedWorldModel } from './sc
 //敏感字段
 type SensitiveField = 'id' | 'checked'
 
+//基本的增删改查
+//#region
+
 export const createWorld = async (world: Omit<World, SensitiveField | 'star'>) => {
     const newWorld = new ArchivedWorldModel({
         ...world,
@@ -36,21 +39,27 @@ export const updateWorld = async (id: string, world: Omit<World, SensitiveField>
     return await CheckedWorldModel.findByIdAndUpdate(id, world)
 }
 
+//#endregion
+
 //审核
 //#region
 export const checkedWorld = async (id: string) => {
     //文档转移
     const world = await UncheckedWorldModel.findById(id)
-    if (!world) throw '无效世界id'
-    world.checked = true
+    const _archivedWorld = await ArchivedWorldModel.findById(id)
+    if (!world || !_archivedWorld) throw '无效世界id'
+
+    _archivedWorld.checked = world.checked = true
     await CheckedWorldModel.create(world.toObject())
     await world.deleteOne()
 }
 export const uncheckedWorld = async (id: string) => {
     //文档转移
     const world = await CheckedWorldModel.findById(id)
-    if (!world) throw '无效世界id'
-    world.checked = false
+    const _archivedWorld = await ArchivedWorldModel.findById(id)
+    if (!world || !_archivedWorld) throw '无效世界id'
+
+    _archivedWorld.checked = world.checked = true
     await UncheckedWorldModel.create(world.toObject())
     await world.deleteOne()
 }

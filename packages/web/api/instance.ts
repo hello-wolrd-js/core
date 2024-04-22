@@ -1,6 +1,6 @@
 import { useUserStore } from '@stores'
 import axios, { AxiosRequestHeaders } from 'axios'
-const baseUrl = 'http://127.0.0.1:4000'
+const baseUrl = 'http://tyee.life:4000'
 
 const userStore = useUserStore()
 const createAPI = (url: string) => {

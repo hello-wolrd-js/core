@@ -29,7 +29,6 @@ export const WorldService = new Elysia()
                     .post(
                         '/',
                         async ({ body }) => {
-                            console.log(body)
                             const newWorld = await db.world.createWorld(body)
                             return createSuccessResponse(
                                 200,
