@@ -41,7 +41,7 @@ export async function createWorld(world: Omit<World, 'id' | 'star' | 'checked'>)
     return await handleRequest<World>(() => WORLD_API_INSTANCE.post('/', world))
 }
 
-export default {
+export const WORLD_API = {
     getWorld,
     deleteWorld,
     createWorld,

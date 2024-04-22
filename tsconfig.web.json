@@ -12,9 +12,9 @@
         "noEmit": true,
         "isolatedModules": true,
         "paths": {
-            "@stores": ["./packages/web/stores/index.ts"],
-            "@components": ["./packages/web/components/index.ts"],
-            "@api": ["./packages/web/api/index.ts"]
+            "@stores/*": ["./packages/web/stores/*"],
+            "@components/*": ["./packages/web/components/*"],
+            "@api/*": ["./packages/web/api/*"]
         }
     },
     "exclude": ["node_modules", "**/node_modules/*"]

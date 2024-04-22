@@ -1,4 +1,4 @@
-import { WORLD_API } from '@api'
+import { WORLD_API } from '@api/world'
 import { World, WorldStatus } from '@core/models'
 import { isSuccessResponse } from '@core/shared'
 import { createStore, produce } from 'solid-js/store'

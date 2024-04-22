@@ -1,10 +1,9 @@
 import { Show, type Component } from 'solid-js'
 import type { World } from '@core/models'
 import { useNavigate } from '@solidjs/router'
-import { WORLD_API } from '@api'
 import { isSuccessResponse } from '@core/shared'
 import toast from 'solid-toast'
-import { useWorldStore } from '@stores'
+import { useWorldStore } from '@stores/world'
 
 const Card: Component<{ openModal: (world: World) => void; world: World }> = (props) => {
     const worldStore = useWorldStore()

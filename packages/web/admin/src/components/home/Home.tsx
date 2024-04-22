@@ -1,13 +1,12 @@
 import { Component, createSignal, For, Show } from 'solid-js'
 import Card from '@/components/card/Card'
 import type { World } from '@core/models'
-import { WORLD_API } from '@api'
 import { isSuccessResponse } from '@core/shared'
-import { Dialog, Modal } from '@components'
+import { Dialog } from '@components/dialog/Dialog'
 import toast from 'solid-toast'
-import { useWorldStore } from '@stores'
+import { useWorldStore } from '@stores/world'
 
-const Home: Component = () => {
+export const Home: Component = () => {
     //世界
     //#region
     const worldStore = useWorldStore()
@@ -72,5 +71,3 @@ const Home: Component = () => {
         </div>
     )
 }
-
-export default Home

@@ -1,10 +1,10 @@
 import { Component, createSignal, For, Show } from 'solid-js'
-import Card from '@/components/card/Card'
+import { Card } from '@/components/card/Card'
 import type { World } from '@core/models'
-import { WORLD_API } from '@api'
+import { WORLD_API } from '@api/world'
 import { isSuccessResponse } from '@core/shared'
 
-const Home: Component = () => {
+export const Home: Component = () => {
     const [worlds, setWorlds] = createSignal<World[]>([])
 
     WORLD_API.getWorld('checked').then((res) => {
@@ -35,5 +35,3 @@ const Home: Component = () => {
         </div>
     )
 }
-
-export default Home

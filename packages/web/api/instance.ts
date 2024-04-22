@@ -1,4 +1,4 @@
-import { useUserStore } from '@stores'
+import { useUserStore } from '@stores/user'
 import axios, { AxiosRequestHeaders } from 'axios'
 const baseUrl = 'http://localhost:4000'
 

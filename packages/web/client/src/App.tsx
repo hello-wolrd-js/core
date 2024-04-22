@@ -1,6 +1,6 @@
 import { Show, createMemo, type Component, type JSX } from 'solid-js'
 import NavBar from './components/layout/NavBar'
-import { useUserStore } from '@stores'
+import { useUserStore } from '@stores/user'
 import Login from './components/login/Login'
 
 const navHeight = 64

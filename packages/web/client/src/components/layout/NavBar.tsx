@@ -1,5 +1,5 @@
 import { useNavigate } from '@solidjs/router'
-import { useUserStore } from '@stores'
+import { useUserStore } from '@stores/user'
 import { Component } from 'solid-js'
 
 const NavBar: Component<{ height: number }> = (props) => {

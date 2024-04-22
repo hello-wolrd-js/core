@@ -1,11 +1,11 @@
-import { useUserStore } from '@stores'
-import { USER_API } from '@api'
+import { useUserStore } from '@stores/user'
+import { USER_API } from '@api/user'
 import { isSuccessResponse } from '@core/shared'
 import { useNavigate } from '@solidjs/router'
 import { createSignal } from 'solid-js'
 import toast from 'solid-toast'
 
-const Login = () => {
+export const Login = () => {
     const userStore = useUserStore()
     const navigate = useNavigate()
     const [username, setUsername] = createSignal('')
@@ -84,5 +84,3 @@ const Login = () => {
         </div>
     )
 }
-
-export default Login

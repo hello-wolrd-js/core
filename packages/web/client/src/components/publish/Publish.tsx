@@ -1,10 +1,10 @@
-import { WORLD_API } from '@api'
+import { WORLD_API } from '@api/world'
 import { World } from '@core/models'
 import { isSuccessResponse } from '@core/shared'
 import { Component, createSignal } from 'solid-js'
 import toast from 'solid-toast'
 
-const Publish: Component = () => {
+export const Publish: Component = () => {
     const origin: Omit<World, 'id' | 'star' | 'checked'> = {
         name: '',
         description: '',
@@ -128,5 +128,3 @@ const Publish: Component = () => {
         </div>
     )
 }
-
-export default Publish

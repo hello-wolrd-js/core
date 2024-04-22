@@ -12,4 +12,4 @@ export const getUserInfo = async () => {
     return await handleRequest<User>(() => USER_API_INSTANCE.get('/info'))
 }
 
-export default { login, getUserInfo }
+export const USER_API = { login, getUserInfo }

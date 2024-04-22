@@ -3,10 +3,10 @@ import { render } from 'solid-js/web'
 import './index.css'
 import App from './App'
 import { Route, Router } from '@solidjs/router'
-import Home from '@/components/home/Home'
-import World from '@/components/world/World'
+import { Home } from '@/components/home/Home'
+import { World } from '@components/world/World'
 import { Toaster } from 'solid-toast'
-import { NotFound } from '@components'
+import { NotFound } from '@components/status/404'
 
 const root = document.getElementById('root')
 
