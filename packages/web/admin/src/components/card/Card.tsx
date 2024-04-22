@@ -1,11 +1,13 @@
-import { type Component } from 'solid-js'
-
+import { Show, type Component } from 'solid-js'
 import type { World } from '@core/models'
 import { useNavigate } from '@solidjs/router'
+import { WORLD_API } from '@api'
+import { isSuccessResponse } from '@core/shared'
+import toast from 'solid-toast'
+import { useWorldStore } from '@stores'
 
 const Card: Component<{ openModal: (world: World) => void; world: World }> = (props) => {
-    //导航
-    //#region
+    const worldStore = useWorldStore()
     const navigate = useNavigate()
     const handleTry = () => {
         navigate('/world')
@@ -38,9 +40,24 @@ const Card: Component<{ openModal: (world: World) => void; world: World }> = (pr
             _dom.body.removeChild(_mount)
         })
     }
-    //#endregion
     const handleDelete = () => {
         props.openModal(props.world)
+    }
+    const handleCheck = async () => {
+        const result = await worldStore.checkWorld(props.world.id)
+        if (isSuccessResponse(result)) {
+            toast.success(result.msg)
+        } else {
+            toast.error(result.error)
+        }
+    }
+    const handleUncheck = async () => {
+        const result = await worldStore.uncheckWorld(props.world.id)
+        if (isSuccessResponse(result)) {
+            toast.success(result.msg)
+        } else {
+            toast.error(result.error)
+        }
     }
 
     return (
@@ -52,20 +69,31 @@ const Card: Component<{ openModal: (world: World) => void; world: World }> = (pr
             <div class="card-body">
                 <h2 class="card-title">{props.world.name}</h2>
                 <p>{props.world.description}</p>
-                <div class="divider mt-0 mb-0 text-gray-600/50">statistic</div>
+                <div class="divider mt-0 mb-0 text-gray-600/50"></div>
                 {/* 统计 */}
-                <div class=" stat p-0">
+                <div class="stat p-0">
                     <div class="stat-figure text-secondary"></div>
-                    <div class="stat-title">Total star</div>
-                    <div class="stat-value">{props.world.star}</div>
+                    <div class="stat-title">审核状态</div>
+                    <div class="stat-value">{props.world.checked ? '已通过' : '待审核'}</div>
                 </div>
-                <div class="divider mt-0 mb-0 text-gray-600/50">actions</div>
                 {/* 交互栏 */}
-                <div class="card-actions justify-end mt-4">
-                    <button class="btn btn-outline" onClick={handleTry}>
+                <div class="card-actions gap-0 justify-end mt-4 join">
+                    <button class="btn join-item" onClick={handleTry}>
                         Try
                     </button>
-                    <button class="btn btn-outline btn-error" onClick={handleDelete}>
+                    <Show
+                        when={props.world.checked}
+                        fallback={
+                            <button class="btn btn-warning join-item" onClick={handleCheck}>
+                                Check
+                            </button>
+                        }
+                    >
+                        <button class="btn btn-warning  join-item" onClick={handleUncheck}>
+                            Uncheck
+                        </button>
+                    </Show>
+                    <button class="btn btn-error join-item" onClick={handleDelete}>
                         Delete
                     </button>
                 </div>

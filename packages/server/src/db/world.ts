@@ -51,6 +51,7 @@ export const checkedWorld = async (id: string) => {
 
     _archivedWorld.checked = world.checked = true
     await CheckedWorldModel.create(world.toObject())
+    await _archivedWorld.save()
     await world.deleteOne()
 }
 export const uncheckedWorld = async (id: string) => {
@@ -59,8 +60,9 @@ export const uncheckedWorld = async (id: string) => {
     const _archivedWorld = await ArchivedWorldModel.findById(id)
     if (!world || !_archivedWorld) throw '无效世界id'
 
-    _archivedWorld.checked = world.checked = true
+    _archivedWorld.checked = world.checked = false
     await UncheckedWorldModel.create(world.toObject())
+    await _archivedWorld.save()
     await world.deleteOne()
 }
 //#endregion

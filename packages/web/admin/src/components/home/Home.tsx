@@ -5,21 +5,13 @@ import { WORLD_API } from '@api'
 import { isSuccessResponse } from '@core/shared'
 import { Modal } from '@components'
 import toast from 'solid-toast'
+import { useWorldStore } from '@stores'
 
 const Home: Component = () => {
     //世界
     //#region
-    const [worlds, setWorlds] = createSignal<World[]>([])
-    const getWorld = async () => {
-        const result = await WORLD_API.getWorld('archived')
-        if (isSuccessResponse(result)) {
-            setWorlds(result.data)
-        } else {
-            toast.error(result.error)
-            console.log(result)
-        }
-    }
-    getWorld()
+    const worldStore = useWorldStore()
+    worldStore.getWorld('archived')
     const [currentWorld, setCurrentWorld] = createSignal<World | null>(null)
     //#endregion
 
@@ -32,10 +24,8 @@ const Home: Component = () => {
         showModal(true)
     }
     const confirm = async (close: () => void) => {
-        const result = await WORLD_API.deleteWorld(currentWorld()!.id)
+        const result = await worldStore.deleteWorld(currentWorld()!.id)
         if (isSuccessResponse(result)) {
-            //重新获取数据
-            await getWorld()
             toast.success('删除成功')
             close()
         } else {
@@ -63,8 +53,8 @@ const Home: Component = () => {
 
     return (
         <div class="flex h-full justify-evenly flex-wrap">
-            <Show when={worlds().length} fallback={empty}>
-                <For each={worlds()}>
+            <Show when={worldStore.state.worlds.length} fallback={empty}>
+                <For each={worldStore.state.worlds}>
                     {(world) => <Card world={world} openModal={openModal}></Card>}
                 </For>
             </Show>

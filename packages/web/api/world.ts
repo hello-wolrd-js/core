@@ -22,6 +22,21 @@ export async function deleteWorld(id: string) {
     )
 }
 
+export async function checkWorld(id: string) {
+    return await handleRequest<World>(() =>
+        WORLD_API_INSTANCE.post('/check', {
+            id
+        })
+    )
+}
+export async function uncheckWorld(id: string) {
+    return await handleRequest<World>(() =>
+        WORLD_API_INSTANCE.post('/uncheck', {
+            id
+        })
+    )
+}
+
 export async function createWorld(world: Omit<World, 'id' | 'star' | 'checked'>) {
     return await handleRequest<World>(() => WORLD_API_INSTANCE.post('/', world))
 }
@@ -29,5 +44,7 @@ export async function createWorld(world: Omit<World, 'id' | 'star' | 'checked'>)
 export default {
     getWorld,
     deleteWorld,
-    createWorld
+    createWorld,
+    checkWorld,
+    uncheckWorld
 }
