@@ -1,5 +1,5 @@
 import { Component, createSignal, For, Show } from 'solid-js'
-import { Card } from '@/components/card/Card'
+import { WorldCard } from '@components/card/WorldCard'
 import type { World } from '@core/models'
 import { WORLD_API } from '@api/world'
 import { isSuccessResponse } from '@core/shared'
@@ -30,7 +30,7 @@ export const Home: Component = () => {
     return (
         <div class="flex justify-evenly flex-wrap h-full">
             <Show when={worlds().length} fallback={empty}>
-                <For each={worlds()}>{(world) => <Card world={world}></Card>}</For>
+                <For each={worlds()}>{(world) => <WorldCard world={world}></WorldCard>}</For>
             </Show>{' '}
         </div>
     )

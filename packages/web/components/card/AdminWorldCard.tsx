@@ -5,7 +5,9 @@ import { isSuccessResponse } from '@core/shared'
 import toast from 'solid-toast'
 import { useWorldStore } from '@stores/world'
 
-const Card: Component<{ openModal: (world: World) => void; world: World }> = (props) => {
+export const AdminWorldCard: Component<{ openModal: (world: World) => void; world: World }> = (
+    props
+) => {
     const worldStore = useWorldStore()
     const navigate = useNavigate()
     const handleTry = () => {
@@ -100,5 +102,3 @@ const Card: Component<{ openModal: (world: World) => void; world: World }> = (pr
         </div>
     )
 }
-
-export default Card

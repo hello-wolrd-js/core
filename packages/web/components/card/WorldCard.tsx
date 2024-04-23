@@ -2,7 +2,7 @@ import { Component } from 'solid-js'
 import type { World } from '@core/models'
 import { useNavigate } from '@solidjs/router'
 
-export const Card: Component<{ world: World }> = (props) => {
+export const WorldCard: Component<{ world: World }> = (props) => {
     const navigate = useNavigate()
     const toWorld = () => {
         navigate('/world')
