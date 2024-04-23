@@ -11,7 +11,8 @@ const UserSchema = new mongoose.Schema<DB_User>(
         username: String,
         password: String,
         role: String,
-        worlds: Array<String>
+        released_worlds: Array<String>,
+        favorite_worlds: Array<String>
     },
     {
         versionKey: false,
@@ -22,7 +23,8 @@ const UserSchema = new mongoose.Schema<DB_User>(
                     id: this._id,
                     username: this.username,
                     role: this.role,
-                    worlds: this.worlds
+                    released_worlds: this.released_worlds,
+                    favorite_worlds: this.favorite_worlds
                 }
             }
         }
