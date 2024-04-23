@@ -25,6 +25,7 @@ const Login = () => {
         })
         if (isSuccessResponse(result)) {
             toast.success(result.msg)
+            console.log(result.data.user)
             userStore.login(result.data.user, result.data.token)
             navigate('/')
         } else {

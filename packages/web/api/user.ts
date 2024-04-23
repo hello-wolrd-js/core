@@ -12,4 +12,12 @@ export const getUserInfo = async () => {
     return await handleRequest<User>(() => USER_API_INSTANCE.get('/info'))
 }
 
-export const USER_API = { login, getUserInfo }
+export const updateUserFavoriteWorld = async (worldId: string) => {
+    return await handleRequest<string[]>(() =>
+        USER_API_INSTANCE.put('/favorite/world', {
+            world_id: worldId
+        })
+    )
+}
+
+export const USER_API = { login, getUserInfo, updateUserFavoriteWorld }

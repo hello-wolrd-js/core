@@ -8,6 +8,7 @@ import { World } from '@components/world/World'
 import { Publish } from './components/publish/Publish'
 import { NotFound } from '@components/status/404'
 import { Toaster } from 'solid-toast'
+import { Favorite } from './components/favorite/Favorite'
 
 const root = document.getElementById('root')
 
@@ -24,6 +25,7 @@ render(
                 <Route path="/" component={Home}></Route>
                 <Route path="/world" component={World}></Route>
                 <Route path="/publish" component={Publish}></Route>
+                <Route path="/favorite" component={Favorite}></Route>
                 <Route path="*404" component={NotFound} />
             </Router>
             <Toaster position="top-center" gutter={8} />

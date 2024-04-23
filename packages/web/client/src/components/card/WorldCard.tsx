@@ -1,10 +1,13 @@
 import { Component } from 'solid-js'
 import type { World } from '@core/models'
 import { useNavigate } from '@solidjs/router'
+import { USER_API } from '@api/user'
+import { isSuccessResponse } from '@core/shared'
+import toast from 'solid-toast'
 
 export const WorldCard: Component<{ world: World }> = (props) => {
     const navigate = useNavigate()
-    const toWorld = () => {
+    const handleToWorld = () => {
         navigate('/world')
         setTimeout(() => {
             const iframe = document.getElementById('world-container')! as HTMLIFrameElement
@@ -35,6 +38,14 @@ export const WorldCard: Component<{ world: World }> = (props) => {
             _dom.body.removeChild(_mount)
         })
     }
+    const handleStar = async () => {
+        const result = await USER_API.updateUserFavoriteWorld(props.world.id)
+        if (isSuccessResponse(result)) {
+            toast.success(result.msg)
+        } else {
+            toast.error(result.error)
+        }
+    }
     return (
         <div class="card w-96 bg-base-100 h-3/4 shadow-lg m-4">
             <figure>
@@ -53,24 +64,24 @@ export const WorldCard: Component<{ world: World }> = (props) => {
                 <div class="divider mt-0 mb-0 text-gray-600/50">actions</div>
                 {/* 交互栏 */}
                 <div class="card-actions justify-end mt-4">
-                    <button class="btn btn-outline">
+                    <button class="btn btn-outline" onClick={handleStar}>
                         Star
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            class="h-6 w-6"
                             fill="none"
                             viewBox="0 0 24 24"
+                            stroke-width="1.5"
                             stroke="currentColor"
+                            class="w-6 h-6"
                         >
                             <path
                                 stroke-linecap="round"
                                 stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                                d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
                             />
                         </svg>
                     </button>
-                    <button class="btn btn-outline" onClick={toWorld}>
+                    <button class="btn btn-outline" onClick={handleToWorld}>
                         Try
                     </button>
                 </div>
