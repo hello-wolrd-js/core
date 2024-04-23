@@ -41,7 +41,9 @@ export const getWorld = async (status: WorldStatus | string, name?: string) => {
 }
 
 export const deleteWorld = async (id: string) => {
-    return await CheckedWorldModel.deleteOne({ _id: id })
+    await CheckedWorldModel.deleteOne({ _id: id })
+    await UncheckedWorldModel.deleteOne({ _id: id })
+    await ArchivedWorldModel.deleteOne({ _id: id })
 }
 
 export const updateWorld = async (id: string, world: Omit<World, SensitiveField>) => {

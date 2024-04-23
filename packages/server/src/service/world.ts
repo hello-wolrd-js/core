@@ -49,8 +49,8 @@ export const WorldService = new Elysia()
                         '/',
                         async ({ query }) => {
                             try {
-                                const res = await db.world.deleteWorld(query.id)
-                                return createSuccessResponse(200, '删除世界成功', res)
+                                await db.world.deleteWorld(query.id)
+                                return createSuccessResponse(200, '删除世界成功', null)
                             } catch (error) {
                                 return createErrorResponse(-1, '删除世界失败: ' + error)
                             }
