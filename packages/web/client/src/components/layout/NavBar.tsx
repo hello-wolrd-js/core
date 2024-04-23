@@ -1,6 +1,9 @@
+import { isSuccessResponse } from '@core/shared'
 import { useNavigate } from '@solidjs/router'
 import { useUserStore } from '@stores/user'
+import { useWorldStore } from '@stores/world'
 import { Component } from 'solid-js'
+import toast from 'solid-toast'
 
 const NavBar: Component<{ height: number }> = (props) => {
     const navigate = useNavigate()
@@ -10,6 +13,15 @@ const NavBar: Component<{ height: number }> = (props) => {
     const userStore = useUserStore()
     const handleLogout = () => {
         userStore.logout()
+    }
+    const worldStore = useWorldStore()
+    const handleRefresh = async () => {
+        const result = await worldStore.getWorld('archived')
+        if (isSuccessResponse(result)) {
+            toast.success('刷新成功')
+        } else {
+            toast.error('刷新失败: ' + result.error)
+        }
     }
     return (
         <nav
@@ -46,11 +58,32 @@ const NavBar: Component<{ height: number }> = (props) => {
                 </div>
             </div>
             {/* 标题 */}
-            <div class="flex-1">
+            <div class="flex-none">
                 <a class="btn btn-ghost text-xl" onClick={handleToHome}>
                     Hello-World
                 </a>
             </div>
+            {/* 刷新 */}
+            <div class="flex-none">
+                <a class="btn btn-square btn-ghost" onClick={handleRefresh}>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width={1.5}
+                        stroke="currentColor"
+                        class="w-6 h-6"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
+                        />
+                    </svg>
+                </a>
+            </div>
+            <div class="flex-1"></div>
+            {/* github */}
             <div class="flex-none">
                 <a class="btn btn-square btn-ghost" href="https://github.com/hello-wolrd-js">
                     <svg

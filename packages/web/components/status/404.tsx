@@ -8,9 +8,6 @@ export const NotFound: Component = () => {
             <div class="hero-content text-center">
                 <div class="max-w-md">
                     <h1 class="text-5xl font-bold">404 Not Found</h1>
-                    <button class="btn btn-primary m-8" onClick={() => navigate('/')}>
-                        返回主页
-                    </button>
                 </div>
             </div>
         </div>

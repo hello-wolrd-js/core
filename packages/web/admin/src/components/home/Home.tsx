@@ -1,5 +1,5 @@
 import { Component, createSignal, For, Show } from 'solid-js'
-import { AdminWorldCard } from '@components/card/AdminWorldCard'
+import { AdminWorldCard } from '@/components/card/AdminWorldCard'
 import type { World } from '@core/models'
 import { isSuccessResponse } from '@core/shared'
 import { Dialog } from '@components/dialog/Dialog'

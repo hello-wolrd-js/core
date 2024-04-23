@@ -1,16 +1,14 @@
-import { Component, createSignal, For, Show } from 'solid-js'
-import { WorldCard } from '@components/card/WorldCard'
-import type { World } from '@core/models'
-import { WORLD_API } from '@api/world'
+import { Component, For, Show } from 'solid-js'
+import { WorldCard } from '@/components/card/WorldCard'
+
+import { useWorldStore } from '@stores/world'
 import { isSuccessResponse } from '@core/shared'
+import toast from 'solid-toast'
 
 export const Home: Component = () => {
-    const [worlds, setWorlds] = createSignal<World[]>([])
-
-    WORLD_API.getWorld('checked').then((res) => {
-        if (isSuccessResponse(res)) {
-            setWorlds(res.data)
-        }
+    const worldStore = useWorldStore()
+    worldStore.getWorld('archived').then((result) => {
+        !isSuccessResponse(result) && toast.error('获取世界失败: ' + result.error)
     })
 
     const empty = (
@@ -29,8 +27,10 @@ export const Home: Component = () => {
 
     return (
         <div class="flex justify-evenly flex-wrap h-full">
-            <Show when={worlds().length} fallback={empty}>
-                <For each={worlds()}>{(world) => <WorldCard world={world}></WorldCard>}</For>
+            <Show when={worldStore.state.worlds.length} fallback={empty}>
+                <For each={worldStore.state.worlds}>
+                    {(world) => <WorldCard world={world}></WorldCard>}
+                </For>
             </Show>{' '}
         </div>
     )
