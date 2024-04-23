@@ -1,10 +1,10 @@
-import { World } from '@core/models'
+import { World, WorldQueryParams } from '@core/models'
 import { WorldModel } from './schema/world'
 import { Types } from 'mongoose'
 import { UserModel } from './schema/user'
 
 //敏感字段
-type SensitiveField = 'id' | 'checked' | 'owner'
+type SensitiveField = 'id' | 'status' | 'owner'
 
 //基本的增删改查
 //#region
@@ -13,7 +13,7 @@ export const createWorld = async (world: Omit<World, SensitiveField | 'star'>, u
     const newWorld = new WorldModel({
         ...world,
         star: 0,
-        checked: false,
+        status: 'unchecked',
         owner: new Types.ObjectId(userId)
     })
     await newWorld.save()
@@ -26,9 +26,8 @@ export const createWorld = async (world: Omit<World, SensitiveField | 'star'>, u
     return newWorld
 }
 
-export const getWorld = async (name?: string) => {
-    const filter = name ? { name } : {}
-    return await WorldModel.find(filter).populate('owner', 'id username role')
+export const getWorld = async (params?: WorldQueryParams) => {
+    return await WorldModel.find({ ...params }).populate('owner', 'id username role')
 }
 
 export const deleteWorld = async (id: string) => {
@@ -47,15 +46,15 @@ export const checkedWorld = async (id: string) => {
     //文档转移
     const world = await WorldModel.findById(id)
     if (!world) throw '无效世界id'
-    world.checked = true
-    return world
+    world.status = 'checked'
+    return await world.save()
 }
 export const uncheckedWorld = async (id: string) => {
     //文档转移
     const world = await WorldModel.findById(id)
     if (!world) throw '无效世界id'
-    world.checked = false
-    return world
+    world.status = 'unchecked'
+    return await world.save()
 }
 //#endregion
 

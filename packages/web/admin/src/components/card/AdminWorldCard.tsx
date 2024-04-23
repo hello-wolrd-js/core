@@ -75,7 +75,9 @@ export const AdminWorldCard: Component<{ openModal: (world: World) => void; worl
                 <div class="stat p-0">
                     <div class="stat-figure text-secondary"></div>
                     <div class="stat-title">审核状态</div>
-                    <div class="stat-value">{props.world.checked ? '已通过' : '待审核'}</div>
+                    <div class="stat-value">
+                        {props.world.status === 'checked' ? '已通过' : '待审核'}
+                    </div>
                 </div>
                 {/* 交互栏 */}
                 <div class="card-actions gap-0 justify-end mt-4 join">
@@ -83,7 +85,7 @@ export const AdminWorldCard: Component<{ openModal: (world: World) => void; worl
                         Try
                     </button>
                     <Show
-                        when={props.world.checked}
+                        when={props.world.status === 'checked'}
                         fallback={
                             <button class="btn btn-warning join-item" onClick={handleCheck}>
                                 Check

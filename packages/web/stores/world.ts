@@ -1,5 +1,5 @@
 import { WORLD_API } from '@api/world'
-import { World } from '@core/models'
+import { World, WorldQueryParams } from '@core/models'
 import { isSuccessResponse } from '@core/shared'
 import { createStore, produce } from 'solid-js/store'
 
@@ -11,8 +11,8 @@ const [store, setStore] = createStore<WorldStoreState>({
     worlds: []
 })
 
-const getWorld = async () => {
-    const result = await WORLD_API.getWorld()
+const getWorld = async (params?: WorldQueryParams) => {
+    const result = await WORLD_API.getWorld(params)
     if (isSuccessResponse(result)) {
         setStore({ worlds: result.data })
     }
@@ -37,7 +37,7 @@ const checkWorld = async (id: string) => {
         setStore(
             'worlds',
             (world) => world.id === id,
-            produce((world) => (world.checked = true))
+            produce((world) => (world.status = 'checked'))
         )
     }
     return result
@@ -48,7 +48,7 @@ const uncheckWorld = async (id: string) => {
         setStore(
             'worlds',
             (world) => world.id === id,
-            produce((world) => (world.checked = false))
+            produce((world) => (world.status = 'unchecked'))
         )
     }
     return result

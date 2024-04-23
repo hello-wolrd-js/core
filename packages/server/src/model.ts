@@ -4,7 +4,9 @@ import { createErrorProvider as E } from './util'
 export const WorldDTO = {
     search: {
         query: t.Object({
-            name: t.Optional(t.String(E('需要name参数')))
+            id: t.Optional(t.String(E('id得是字符串!'))),
+            name: t.Optional(t.String(E('name得是字符串!'))),
+            status: t.Optional(t.String(E('status得是字符串!')))
         })
     },
     create: {

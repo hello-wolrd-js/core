@@ -8,5 +8,12 @@ export interface World {
     cover?: string
     star: number
     url: string //世界url
-    checked: boolean //是否通过审核
+    status: 'checked' | 'unchecked'
+}
+
+//世界查询参数
+export interface WorldQueryParams {
+    id?: string
+    name?: string
+    status?: World['status']
 }

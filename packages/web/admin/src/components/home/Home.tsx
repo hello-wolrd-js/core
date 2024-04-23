@@ -10,7 +10,7 @@ export const Home: Component = () => {
     //世界
     //#region
     const worldStore = useWorldStore()
-    worldStore.getWorld('archived')
+    worldStore.getWorld()
     const [currentWorld, setCurrentWorld] = createSignal<World | null>(null)
     //#endregion
 

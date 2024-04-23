@@ -13,7 +13,7 @@ const WorldSchema = new mongoose.Schema<DB_World>(
         description: String,
         star: Number,
         url: String,
-        checked: Boolean
+        status: String
     },
     {
         versionKey: false,
