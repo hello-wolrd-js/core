@@ -14,6 +14,7 @@ export const WorldService = new Elysia()
             .guard((app) =>
                 app
                     .use(verifyCommonUser)
+                    //获取世界(待分页)
                     .get(
                         '/',
                         async ({ query }) => {
@@ -26,10 +27,11 @@ export const WorldService = new Elysia()
                         },
                         WorldDTO.search
                     )
+                    //创建世界
                     .post(
                         '/',
-                        async ({ body }) => {
-                            const newWorld = await db.world.createWorld(body)
+                        async ({ body, store }) => {
+                            const newWorld = await db.world.createWorld(body, store.user.id)
                             return createSuccessResponse(
                                 200,
                                 '创建世界成功,待审核完成后即可公开',
@@ -38,6 +40,7 @@ export const WorldService = new Elysia()
                         },
                         WorldDTO.create
                     )
+                    //删除世界
                     .delete(
                         '/',
                         async ({ query }) => {
@@ -46,6 +49,7 @@ export const WorldService = new Elysia()
                         },
                         WorldDTO.delete
                     )
+                    //更新世界信息
                     .put(
                         '/',
                         async ({ query, body }) => {

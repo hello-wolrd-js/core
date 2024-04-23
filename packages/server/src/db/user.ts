@@ -1,9 +1,13 @@
 import { LoginParams } from '@core/models'
 import { UserModel } from './schema/user'
+import { ArchivedWorldModel } from './schema'
 
 export const login = async ({ username, password }: LoginParams) => {
-    const user = await UserModel.findOne({ username })
-    if (!user) throw '不存在该用户!'
+    const user = await UserModel.findOne({ username }).populate([
+        'released_worlds',
+        'favorite_worlds'
+    ])
+    if (!user) throw '该用户不存在!'
     if (user.password !== password) throw '密码错误!'
     return user.getInfo()
 }
@@ -16,13 +20,30 @@ export const createUser = async ({ username, password }: LoginParams) => {
 }
 
 export const getUser = async (id: string) => {
-    const user = await UserModel.findById(id)
-    if (!user) throw '不存在该用户!'
+    const user = await UserModel.findById(id).populate(['released_worlds', 'favorite_worlds'])
+    if (!user) throw '该用户不存在!'
     return user.getInfo()
+}
+
+export const updateUserFavoriteWorld = async (userId: string, worldId: string) => {
+    const user = await UserModel.findById(userId)
+    if (!user) throw '该用户不存在!'
+
+    try {
+        await ArchivedWorldModel.findById(worldId)
+    } catch {
+        throw '目标世界不存在!'
+    }
+    if (user.favorite_worlds.indexOf(worldId) === -1) {
+        user.favorite_worlds.push(worldId)
+        await user.save()
+    }
+    return user.favorite_worlds
 }
 
 export default {
     login,
     createUser,
-    getUser
+    getUser,
+    updateUserFavoriteWorld
 }

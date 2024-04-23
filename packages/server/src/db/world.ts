@@ -1,5 +1,6 @@
 import { World, WorldStatus } from '@core/models'
 import { ArchivedWorldModel, CheckedWorldModel, UncheckedWorldModel } from './schema'
+import { Types } from 'mongoose'
 
 //敏感字段
 type SensitiveField = 'id' | 'checked'
@@ -7,11 +8,15 @@ type SensitiveField = 'id' | 'checked'
 //基本的增删改查
 //#region
 
-export const createWorld = async (world: Omit<World, SensitiveField | 'star'>) => {
+export const createWorld = async (
+    world: Omit<World, SensitiveField | 'star' | 'owner'>,
+    userId: string
+) => {
     const newWorld = new ArchivedWorldModel({
         ...world,
         star: 0,
-        checked: false
+        checked: false,
+        owner: new Types.ObjectId(userId)
     })
     await newWorld.save()
     return await UncheckedWorldModel.create(newWorld.toObject())
@@ -21,11 +26,11 @@ export const getWorld = async (status: WorldStatus | string, name?: string) => {
     const filter = name ? { name } : {}
     switch (status) {
         case 'checked':
-            return await CheckedWorldModel.find(filter)
+            return await CheckedWorldModel.find(filter).populate('owner', '-_id username role')
         case 'unchecked':
-            return await UncheckedWorldModel.find(filter)
+            return await UncheckedWorldModel.find(filter).populate('owner', '-_id username role')
         case 'archived':
-            return await ArchivedWorldModel.find(filter)
+            return await ArchivedWorldModel.find(filter).populate('owner', '-_id username role')
         default:
             throw '世界状态参数错误!'
     }
@@ -35,7 +40,7 @@ export const deleteWorld = async (id: string) => {
     return await CheckedWorldModel.deleteOne({ _id: id })
 }
 
-export const updateWorld = async (id: string, world: Omit<World, SensitiveField>) => {
+export const updateWorld = async (id: string, world: Omit<World, SensitiveField | 'owner'>) => {
     return await CheckedWorldModel.findByIdAndUpdate(id, world)
 }
 

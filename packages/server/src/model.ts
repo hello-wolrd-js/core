@@ -42,23 +42,40 @@ export const WorldDTO = {
         )
     },
     uncheck: {
-        body: t.Object({
-            id: t.String()
-        })
+        body: t.Object(
+            {
+                id: t.String()
+            },
+            E('需要请求体')
+        )
     }
 }
 
 export const UserDTO = {
     login: {
-        body: t.Object({
-            username: t.String(),
-            password: t.String()
-        })
+        body: t.Object(
+            {
+                username: t.String(),
+                password: t.String()
+            },
+            E('需要请求体')
+        )
     },
     register: {
-        body: t.Object({
-            username: t.String(),
-            password: t.String()
-        })
+        body: t.Object(
+            {
+                username: t.String(),
+                password: t.String()
+            },
+            E('需要请求体')
+        )
+    },
+    updateFavoriteWorld: {
+        body: t.Object(
+            {
+                world_id: t.String()
+            },
+            E('需要请求体')
+        )
     }
 }

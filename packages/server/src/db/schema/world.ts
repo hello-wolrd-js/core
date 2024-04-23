@@ -1,6 +1,7 @@
 import { World } from '@core/models'
 import * as mongoose from 'mongoose'
 import { Types } from 'mongoose'
+import { UserModel } from './user'
 
 type DB_World = World & mongoose.Document
 
@@ -9,6 +10,7 @@ type DB_World = World & mongoose.Document
 const CheckedWorldSchema = new mongoose.Schema<DB_World>(
     {
         id: Types.ObjectId,
+        owner: { type: Types.ObjectId, ref: 'user' },
         name: String,
         cover: String,
         description: String,
@@ -17,10 +19,14 @@ const CheckedWorldSchema = new mongoose.Schema<DB_World>(
         checked: Boolean
     },
     {
-        // timestamps: true,
         versionKey: false,
-        id: true,
         toJSON: {
+            transform(doc, ret) {
+                ret.id = ret._id
+                delete ret._id
+            }
+        },
+        toObject: {
             transform(doc, ret) {
                 ret.id = ret._id
                 delete ret._id
@@ -31,6 +37,7 @@ const CheckedWorldSchema = new mongoose.Schema<DB_World>(
 const UncheckedWorldSchema = new mongoose.Schema<DB_World>(
     {
         id: Types.ObjectId,
+        owner: { type: Types.ObjectId, ref: 'user' },
         name: String,
         cover: String,
         description: String,
@@ -39,10 +46,14 @@ const UncheckedWorldSchema = new mongoose.Schema<DB_World>(
         checked: Boolean
     },
     {
-        // timestamps: true,
         versionKey: false,
-        id: true,
         toJSON: {
+            transform(doc, ret) {
+                ret.id = ret._id
+                delete ret._id
+            }
+        },
+        toObject: {
             transform(doc, ret) {
                 ret.id = ret._id
                 delete ret._id
@@ -53,6 +64,7 @@ const UncheckedWorldSchema = new mongoose.Schema<DB_World>(
 const ArchivedWorldSchema = new mongoose.Schema<DB_World>(
     {
         id: Types.ObjectId,
+        owner: { type: Types.ObjectId, ref: 'user' },
         name: String,
         cover: String,
         description: String,
@@ -61,10 +73,14 @@ const ArchivedWorldSchema = new mongoose.Schema<DB_World>(
         checked: Boolean
     },
     {
-        // timestamps: true,
         versionKey: false,
-        id: true,
         toJSON: {
+            transform(doc, ret) {
+                ret.id = ret._id
+                delete ret._id
+            }
+        },
+        toObject: {
             transform(doc, ret) {
                 ret.id = ret._id
                 delete ret._id

@@ -1,4 +1,4 @@
-import Elysia from 'elysia'
+import Elysia, { t } from 'elysia'
 import { createErrorResponse, createSuccessResponse } from '../util'
 import { UserDTO } from '../model'
 import { db } from '../db'
@@ -12,6 +12,7 @@ export const UserService = new Elysia()
             //不需要鉴权的接口
             .guard((app) =>
                 app
+                    //登陆
                     .post(
                         '/login',
                         async ({ body, jwt }) => {
@@ -31,6 +32,7 @@ export const UserService = new Elysia()
                         },
                         UserDTO.login
                     )
+                    //注册
                     .post(
                         '/register',
                         async ({ body }) => {
@@ -49,16 +51,40 @@ export const UserService = new Elysia()
             )
             //需要鉴权的接口
             .guard((app) =>
-                app.use(verifyCommonUser).get('/info', async ({ store }) => {
-                    try {
-                        return createSuccessResponse(
-                            200,
-                            '获取用户信息成功',
-                            await db.user.getUser(store.user.id)
-                        )
-                    } catch (error) {
-                        return createErrorResponse(-1, '获取用户信息失败: ' + error)
-                    }
-                })
+                app
+                    .use(verifyCommonUser)
+                    //获取个人信息
+                    .get('/info', async ({ store, set }) => {
+                        try {
+                            return createSuccessResponse(
+                                200,
+                                '获取用户信息成功',
+                                await db.user.getUser(store.user.id)
+                            )
+                        } catch (error) {
+                            set.status = 400
+                            return createErrorResponse(-1, '获取用户信息失败: ' + error)
+                        }
+                    })
+                    //收藏世界
+                    .put(
+                        '/favorite/world',
+                        async ({ store, body, set }) => {
+                            try {
+                                return createSuccessResponse(
+                                    200,
+                                    '收藏世界成功',
+                                    await db.user.updateUserFavoriteWorld(
+                                        store.user.id,
+                                        body.world_id
+                                    )
+                                )
+                            } catch (error) {
+                                set.status = 400
+                                return createErrorResponse(-1, '收藏世界失败: ' + error)
+                            }
+                        },
+                        UserDTO.updateFavoriteWorld
+                    )
             )
     )

@@ -1,5 +1,8 @@
+import { User } from './user'
+
 export interface World {
     id: string
+    owner: Omit<User, 'favorite_worlds' | 'released_worlds'>
     name: string
     description: string
     cover?: string
