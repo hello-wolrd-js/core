@@ -1,17 +1,15 @@
 import { World, WorldStatus } from '@core/models'
 import { ArchivedWorldModel, CheckedWorldModel, UncheckedWorldModel } from './schema'
 import { Types } from 'mongoose'
+import { UserModel } from './schema/user'
 
 //敏感字段
-type SensitiveField = 'id' | 'checked'
+type SensitiveField = 'id' | 'checked' | 'owner'
 
 //基本的增删改查
 //#region
 
-export const createWorld = async (
-    world: Omit<World, SensitiveField | 'star' | 'owner'>,
-    userId: string
-) => {
+export const createWorld = async (world: Omit<World, SensitiveField | 'star'>, userId: string) => {
     const newWorld = new ArchivedWorldModel({
         ...world,
         star: 0,
@@ -19,6 +17,12 @@ export const createWorld = async (
         owner: new Types.ObjectId(userId)
     })
     await newWorld.save()
+
+    const user = await UserModel.findById(userId)
+    if (!user) throw '该用户不存在!'
+    user.released_worlds.push(userId)
+    await user.save()
+
     return await UncheckedWorldModel.create(newWorld.toObject())
 }
 
@@ -26,11 +30,11 @@ export const getWorld = async (status: WorldStatus | string, name?: string) => {
     const filter = name ? { name } : {}
     switch (status) {
         case 'checked':
-            return await CheckedWorldModel.find(filter).populate('owner', '-_id username role')
+            return await CheckedWorldModel.find(filter).populate('owner', 'id username role')
         case 'unchecked':
-            return await UncheckedWorldModel.find(filter).populate('owner', '-_id username role')
+            return await UncheckedWorldModel.find(filter).populate('owner', 'id username role')
         case 'archived':
-            return await ArchivedWorldModel.find(filter).populate('owner', '-_id username role')
+            return await ArchivedWorldModel.find(filter).populate('owner', 'id username role')
         default:
             throw '世界状态参数错误!'
     }
@@ -40,7 +44,7 @@ export const deleteWorld = async (id: string) => {
     return await CheckedWorldModel.deleteOne({ _id: id })
 }
 
-export const updateWorld = async (id: string, world: Omit<World, SensitiveField | 'owner'>) => {
+export const updateWorld = async (id: string, world: Omit<World, SensitiveField>) => {
     return await CheckedWorldModel.findByIdAndUpdate(id, world)
 }
 

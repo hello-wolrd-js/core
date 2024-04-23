@@ -2,10 +2,11 @@ import { User, World } from '@core/models'
 import * as mongoose from 'mongoose'
 import { Types } from 'mongoose'
 
-type DB_User = Omit<User, 'favorite_worlds'> &
+type DB_User = Omit<User, 'favorite_worlds' | 'released_worlds'> &
     mongoose.Document & {
         password: string
         favorite_worlds: string[]
+        released_worlds: string[]
         getInfo: () => Omit<User, 'password'>
     }
 
@@ -20,7 +21,6 @@ const UserSchema = new mongoose.Schema<DB_User>(
     },
     {
         versionKey: false,
-        id: true,
         methods: {
             getInfo() {
                 return {
@@ -30,6 +30,18 @@ const UserSchema = new mongoose.Schema<DB_User>(
                     released_worlds: this.released_worlds as unknown as World[],
                     favorite_worlds: this.favorite_worlds as unknown as World[]
                 }
+            }
+        },
+        toJSON: {
+            transform(_, ret) {
+                ret.id = ret._id
+                delete ret._id
+            }
+        },
+        toObject: {
+            transform(_, ret) {
+                ret.id = ret._id
+                delete ret._id
             }
         }
     }

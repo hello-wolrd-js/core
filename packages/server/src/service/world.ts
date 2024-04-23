@@ -31,12 +31,16 @@ export const WorldService = new Elysia()
                     .post(
                         '/',
                         async ({ body, store }) => {
-                            const newWorld = await db.world.createWorld(body, store.user.id)
-                            return createSuccessResponse(
-                                200,
-                                '创建世界成功,待审核完成后即可公开',
-                                newWorld
-                            )
+                            try {
+                                const newWorld = await db.world.createWorld(body, store.user.id)
+                                return createSuccessResponse(
+                                    200,
+                                    '创建世界成功,待审核完成后即可公开',
+                                    newWorld
+                                )
+                            } catch (error) {
+                                return createErrorResponse(-1, '创建世界失败: ' + error)
+                            }
                         },
                         WorldDTO.create
                     )
@@ -44,8 +48,12 @@ export const WorldService = new Elysia()
                     .delete(
                         '/',
                         async ({ query }) => {
-                            const res = await db.world.deleteWorld(query.id)
-                            return createSuccessResponse(200, '删除世界成功', res)
+                            try {
+                                const res = await db.world.deleteWorld(query.id)
+                                return createSuccessResponse(200, '删除世界成功', res)
+                            } catch (error) {
+                                return createErrorResponse(-1, '删除世界失败: ' + error)
+                            }
                         },
                         WorldDTO.delete
                     )
@@ -53,8 +61,12 @@ export const WorldService = new Elysia()
                     .put(
                         '/',
                         async ({ query, body }) => {
-                            const res = await db.world.updateWorld(query.id, body)
-                            return createSuccessResponse(200, '更新世界成功', res)
+                            try {
+                                const res = await db.world.updateWorld(query.id, body)
+                                return createSuccessResponse(200, '更新世界成功', res)
+                            } catch (error) {
+                                return createErrorResponse(-1, '更新世界失败: ' + error)
+                            }
                         },
                         WorldDTO.update
                     )
@@ -70,7 +82,7 @@ export const WorldService = new Elysia()
                                 await db.world.checkedWorld(body.id)
                                 return createSuccessResponse(200, '审核成功', null)
                             } catch (error) {
-                                return createErrorResponse(-1, error + '')
+                                return createErrorResponse(-1, '审核失败: ' + error)
                             }
                         },
                         WorldDTO.check
@@ -82,7 +94,7 @@ export const WorldService = new Elysia()
                                 await db.world.uncheckedWorld(body.id)
                                 return createSuccessResponse(200, '退回审核成功', null)
                             } catch (error) {
-                                return createErrorResponse(-1, error + '')
+                                return createErrorResponse(-1, '退回审核失败: ' + error)
                             }
                         },
                         WorldDTO.uncheck
