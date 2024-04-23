@@ -23,17 +23,17 @@ export const Home: Component = () => {
         setShowModal(true)
     }
 
-    const handleConfirm = async (close: () => void) => {
+    const handleConfirm = async () => {
         const result = await worldStore.deleteWorld(currentWorld()!.id)
         if (isSuccessResponse(result)) {
             toast.success('删除成功')
-            close()
         } else {
             toast.error('删除失败')
         }
     }
-    const handleCancel = (close: () => void) => {
-        close()
+    const handleCancel = () => {}
+    const handleClose = () => {
+        setShowModal(false)
     }
     //#endregion
 
@@ -64,7 +64,7 @@ export const Home: Component = () => {
             {/* 模态框 */}
             <Dialog
                 show={showModal()}
-                onClose={() => setShowModal(false)}
+                onClose={handleClose}
                 title="确定要删除这个世界吗?"
                 content="请君三思"
                 onCancel={handleCancel}

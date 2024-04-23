@@ -1,6 +1,5 @@
 import { Component, For, Show } from 'solid-js'
 import { WorldCard } from '@/components/card/WorldCard'
-
 import { useWorldStore } from '@stores/world'
 import { isSuccessResponse } from '@core/shared'
 import toast from 'solid-toast'
@@ -31,7 +30,7 @@ export const Home: Component = () => {
                 <For each={worldStore.state.worlds}>
                     {(world) => <WorldCard world={world}></WorldCard>}
                 </For>
-            </Show>{' '}
+            </Show>
         </div>
     )
 }

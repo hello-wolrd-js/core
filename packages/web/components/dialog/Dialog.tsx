@@ -9,7 +9,6 @@ export const Dialog: Component<{
     show: boolean
     onClose: Function
 }> = (props) => {
-
     const handleConfirm = () => {
         props.onConfirm()
         props.onClose()
