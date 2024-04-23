@@ -6,7 +6,7 @@ import toast from 'solid-toast'
 
 export const Home: Component = () => {
     const worldStore = useWorldStore()
-    worldStore.getWorld('checked').then((result) => {
+    worldStore.getWorld().then((result) => {
         !isSuccessResponse(result) && toast.error('获取世界失败: ' + result.error)
     })
 

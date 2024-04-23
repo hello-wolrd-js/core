@@ -1,5 +1,5 @@
 import { WORLD_API } from '@api/world'
-import { World, WorldStatus } from '@core/models'
+import { World } from '@core/models'
 import { isSuccessResponse } from '@core/shared'
 import { createStore, produce } from 'solid-js/store'
 
@@ -11,8 +11,8 @@ const [store, setStore] = createStore<WorldStoreState>({
     worlds: []
 })
 
-const getWorld = async (status: WorldStatus) => {
-    const result = await WORLD_API.getWorld(status)
+const getWorld = async () => {
+    const result = await WORLD_API.getWorld()
     if (isSuccessResponse(result)) {
         setStore({ worlds: result.data })
     }

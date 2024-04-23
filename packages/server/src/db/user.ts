@@ -1,6 +1,6 @@
 import { LoginParams } from '@core/models'
 import { UserModel } from './schema/user'
-import { ArchivedWorldModel } from './schema'
+import { WorldModel } from './schema/world'
 
 export const login = async ({ username, password }: LoginParams) => {
     const user = await UserModel.findOne({ username }).populate([
@@ -30,7 +30,7 @@ export const updateUserFavoriteWorld = async (userId: string, worldId: string) =
     if (!user) throw '该用户不存在!'
 
     try {
-        await ArchivedWorldModel.findById(worldId)
+        await WorldModel.findById(worldId)
     } catch {
         throw '目标世界不存在!'
     }

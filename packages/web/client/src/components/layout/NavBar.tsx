@@ -17,7 +17,7 @@ const NavBar: Component<{ height: number }> = (props) => {
     }
     const worldStore = useWorldStore()
     const handleRefresh = async () => {
-        const result = await worldStore.getWorld('checked')
+        const result = await worldStore.getWorld()
         if (isSuccessResponse(result)) {
             toast.success('刷新成功')
         } else {

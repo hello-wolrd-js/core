@@ -16,8 +16,8 @@ const UserSchema = new mongoose.Schema<DB_User>(
         username: String,
         password: String,
         role: String,
-        released_worlds: [{ type: Types.ObjectId, ref: 'archived-worlds' }],
-        favorite_worlds: [{ type: Types.ObjectId, ref: 'archived-worlds' }]
+        released_worlds: [{ type: Types.ObjectId, ref: 'worlds' }],
+        favorite_worlds: [{ type: Types.ObjectId, ref: 'worlds' }]
     },
     {
         versionKey: false,

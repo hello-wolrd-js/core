@@ -1,12 +1,11 @@
-import { World, WorldStatus } from '@core/models'
+import { World } from '@core/models'
 import { WORLD_API_INSTANCE } from './instance'
 import { handleRequest } from './handle'
 
-export async function getWorld(status: WorldStatus, name?: string) {
+export async function getWorld(name?: string) {
     return await handleRequest<World[]>(() =>
         WORLD_API_INSTANCE.get('/', {
             params: {
-                status,
                 name
             }
         })
@@ -37,7 +36,7 @@ export async function uncheckWorld(id: string) {
     )
 }
 
-export async function createWorld(world: Omit<World, 'id' | 'star' | 'checked'>) {
+export async function createWorld(world: Omit<World, 'id' | 'star' | 'checked' | 'owner'>) {
     return await handleRequest<World>(() => WORLD_API_INSTANCE.post('/', world))
 }
 
