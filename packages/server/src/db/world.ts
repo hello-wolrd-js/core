@@ -14,13 +14,13 @@ export const createWorld = async (world: Omit<World, SensitiveField | 'star'>, u
         ...world,
         star: 0,
         checked: false,
-        owner: new Types.ObjectId(userId)
+        owner: new Types.ObjectId()
     })
     await newWorld.save()
 
     const user = await UserModel.findById(userId)
     if (!user) throw '该用户不存在!'
-    user.released_worlds.push(userId)
+    user.released_worlds.push(newWorld.id)
     await user.save()
 
     return await UncheckedWorldModel.create(newWorld.toObject())
