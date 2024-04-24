@@ -1,3 +1,4 @@
+import { PaginatedList, PaginationQueryParams } from './pagination'
 import { User } from './user'
 
 export interface World {
@@ -6,16 +7,20 @@ export interface World {
     name: string
     description: string
     cover?: string
-    url: string //世界url
+    url: string
     star: number
     status: 'checked' | 'unchecked' | string
+}
+
+export interface WorldList extends PaginatedList {
+    list: World[]
 }
 
 export interface WorldCreateParams {
     name: string
     description: string
+    url: string
     cover?: string
-    url: string //世界url
 }
 
 export interface WorldUpdateParams extends WorldCreateParams {
@@ -23,7 +28,7 @@ export interface WorldUpdateParams extends WorldCreateParams {
 }
 
 //世界查询参数
-export interface WorldQueryParams {
+export interface WorldQueryParams extends PaginationQueryParams {
     id?: string
     name?: string
     status?: World['status']
