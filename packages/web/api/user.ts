@@ -12,10 +12,13 @@ export const getUserInfo = async () => {
     return await handleRequest<User>(() => USER_API_INSTANCE.get('/info'))
 }
 
-export const updateUserFavoriteWorld = async (worldId: string) => {
+export const updateUserFavoriteWorld = async (worldId: string, action: 'add' | 'delete') => {
     return await handleRequest<string[]>(() =>
-        USER_API_INSTANCE.put('/favorite/world', {
-            world_id: worldId
+        USER_API_INSTANCE.put('/favorite/world', null, {
+            params: {
+                world_id: worldId,
+                action
+            }
         })
     )
 }

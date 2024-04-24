@@ -66,22 +66,36 @@ export const UserService = new Elysia()
                             return createErrorResponse(-1, '获取用户信息失败: ' + error)
                         }
                     })
-                    //收藏世界
+                    //获取收藏的世界
+                    .get('/favorite/world', async ({ store, set }) => {
+                        try {
+                            return createSuccessResponse(
+                                200,
+                                '获取收藏世界成功',
+                                await db.user.getUserFavoriteWorld(store.user.id)
+                            )
+                        } catch (error) {
+                            set.status = 400
+                            return createErrorResponse(-1, '获取收藏世界失败: ' + error)
+                        }
+                    })
+                    //更新收藏的世界
                     .put(
                         '/favorite/world',
-                        async ({ store, body, set }) => {
+                        async ({ store, query, set }) => {
                             try {
                                 return createSuccessResponse(
                                     200,
-                                    '收藏世界成功',
+                                    '更新收藏成功',
                                     await db.user.updateUserFavoriteWorld(
                                         store.user.id,
-                                        body.world_id
+                                        query.world_id,
+                                        query.action
                                     )
                                 )
                             } catch (error) {
                                 set.status = 400
-                                return createErrorResponse(-1, '收藏世界失败: ' + error)
+                                return createErrorResponse(-1, '更新收藏失败: ' + error)
                             }
                         },
                         UserDTO.updateFavoriteWorld

@@ -1,4 +1,4 @@
-import { ErrorResponse, SuccessResponse } from '@core/models'
+import { ErrorResponse, SuccessResponse, World } from '@core/models'
 
 export function createErrorProvider(msg: string) {
     return {
@@ -17,5 +17,13 @@ export function createErrorResponse(code: number, error: string): ErrorResponse 
     return {
         code,
         error
+    }
+}
+
+export function isPopulatedWorlds(worlds: string[] | World[]): worlds is World[] {
+    if (typeof worlds[0] === 'string') {
+        return false
+    } else {
+        return true
     }
 }

@@ -5,8 +5,8 @@ import { Types } from 'mongoose'
 type DB_User = Omit<User, 'favorite_worlds' | 'released_worlds'> &
     mongoose.Document & {
         password: string
-        favorite_worlds: string[]
-        released_worlds: string[]
+        favorite_worlds: string[] | World[] //填充时是Wolrd[],不填充时是string[]
+        released_worlds: string[] | World[] //填充时是Wolrd[],不填充时是string[]
         getInfo: () => Omit<User, 'password'>
     }
 

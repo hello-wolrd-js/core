@@ -39,7 +39,15 @@ export const WorldCard: Component<{ world: World }> = (props) => {
         })
     }
     const handleStar = async () => {
-        const result = await USER_API.updateUserFavoriteWorld(props.world.id)
+        const result = await USER_API.updateUserFavoriteWorld(props.world.id, 'add')
+        if (isSuccessResponse(result)) {
+            toast.success(result.msg)
+        } else {
+            toast.error(result.error)
+        }
+    }
+    const handleUnstar = async () => {
+        const result = await USER_API.updateUserFavoriteWorld(props.world.id, 'delete')
         if (isSuccessResponse(result)) {
             toast.success(result.msg)
         } else {

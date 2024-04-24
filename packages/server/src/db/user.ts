@@ -1,4 +1,4 @@
-import { UserLoginParams } from '@core/models'
+import { UserLoginParams, World } from '@core/models'
 import { UserModel } from './schema/user'
 import { WorldModel } from './schema/world'
 
@@ -25,25 +25,46 @@ export const getUser = async (id: string) => {
     return user.getInfo()
 }
 
-export const updateUserFavoriteWorld = async (userId: string, worldId: string) => {
+export const updateUserFavoriteWorld = async (
+    userId: string,
+    worldId: string,
+    action: 'add' | 'delete' | string
+) => {
+    if (action !== 'add' && action !== 'delete') throw '无效action参数: 应为 add / delete'
+    //注意这里不填充!
     const user = await UserModel.findById(userId)
     if (!user) throw '该用户不存在!'
 
-    try {
-        await WorldModel.findById(worldId)
-    } catch {
-        throw '目标世界不存在!'
-    }
-    if (user.favorite_worlds.indexOf(worldId) === -1) {
-        user.favorite_worlds.push(worldId)
+    const world = await WorldModel.findById(worldId)
+    if (!world) throw '目标世界不存在!'
+
+    let _tmp = user.favorite_worlds as unknown as string[]
+    if (_tmp.indexOf(worldId) === -1) {
+        if (action === 'add') {
+            _tmp.push(worldId)
+            world.star++
+        } else if (action === 'delete') {
+            _tmp = _tmp.filter((id) => id !== worldId)
+            world.star--
+        }
+        user.favorite_worlds = _tmp
+        await world.save()
         await user.save()
     }
-    return user.favorite_worlds
+    return _tmp
+}
+
+export const getUserFavoriteWorld = async (userId: string) => {
+    const user = await UserModel.findById(userId).populate('favorite_worlds')
+    if (!user) throw '该用户不存在!'
+
+    return user.favorite_worlds as unknown as World[]
 }
 
 export default {
     login,
     createUser,
     getUser,
-    updateUserFavoriteWorld
+    updateUserFavoriteWorld,
+    getUserFavoriteWorld
 }
