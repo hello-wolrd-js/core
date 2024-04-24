@@ -6,7 +6,7 @@ export const WorldDTO = {
         query: t.Object({
             id: t.Optional(t.String(E('id得是字符串!'))),
             name: t.Optional(t.String(E('name得是字符串!'))),
-            status: t.Optional(t.String(E('status得是字符串!')))
+            status: t.Optional(t.String(E('status必须为: checked,unchecked')))
         })
     },
     create: {

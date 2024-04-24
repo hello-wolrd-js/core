@@ -1,15 +1,14 @@
-import { World, WorldQueryParams } from '@core/models'
+import { WorldCreateParams, WorldQueryParams, WorldUpdateParams } from '@core/models'
 import { WorldModel } from './schema/world'
 import { Types } from 'mongoose'
 import { UserModel } from './schema/user'
 
 //敏感字段
-type SensitiveField = 'id' | 'status' | 'owner'
 
 //基本的增删改查
 //#region
 
-export const createWorld = async (world: Omit<World, SensitiveField | 'star'>, userId: string) => {
+export const createWorld = async (world: WorldCreateParams, userId: string) => {
     const newWorld = new WorldModel({
         ...world,
         star: 0,
@@ -34,7 +33,7 @@ export const deleteWorld = async (id: string) => {
     return await WorldModel.deleteOne({ _id: id })
 }
 
-export const updateWorld = async (id: string, world: Omit<World, SensitiveField>) => {
+export const updateWorld = async (id: string, world: WorldUpdateParams) => {
     return await WorldModel.findByIdAndUpdate(id, world)
 }
 

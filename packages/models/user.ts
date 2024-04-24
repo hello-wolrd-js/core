@@ -8,7 +8,9 @@ export interface User {
     favorite_worlds: World[] //收藏的世界
 }
 
-export interface LoginParams {
+export interface UserLoginParams {
     username: string
     password: string
 }
+
+export interface UserRegisterParams extends UserLoginParams {}

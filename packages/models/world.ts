@@ -6,9 +6,20 @@ export interface World {
     name: string
     description: string
     cover?: string
-    star: number
     url: string //世界url
-    status: 'checked' | 'unchecked'
+    star: number
+    status: 'checked' | 'unchecked' | string
+}
+
+export interface WorldCreateParams {
+    name: string
+    description: string
+    cover?: string
+    url: string //世界url
+}
+
+export interface WorldUpdateParams extends WorldCreateParams {
+    star: number
 }
 
 //世界查询参数
