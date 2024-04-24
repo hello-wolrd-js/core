@@ -2,7 +2,6 @@ import { useUserStore } from '@stores/user'
 import axios, { AxiosRequestHeaders } from 'axios'
 const baseUrl = 'http://localhost:4000'
 
-const userStore = useUserStore()
 const createAPI = (url: string) => {
     const _instance = axios.create({
         baseURL: baseUrl + url
@@ -11,7 +10,7 @@ const createAPI = (url: string) => {
         if (!config.headers) {
             config.headers = {} as AxiosRequestHeaders
         }
-        config.headers.Authorization = 'Bearer ' + userStore.state.token
+        config.headers.Authorization = 'Bearer ' + useUserStore().state.token
         return config
     })
     return _instance

@@ -28,40 +28,19 @@ export const Home: Component = () => {
     //handle
     //#region
     const handleUpdateFavorite = async (id: string, action: 'add' | 'delete') => {
-        if (action === 'delete') {
-            const result = await USER_API.updateUserFavoriteWorld(id, 'delete')
-            if (isSuccessResponse(result)) {
-                userStore.setStore(
-                    'user',
-                    produce((user) => {
-                        user!.favorite_worlds = user!.favorite_worlds.filter((id) => id !== id)
-                    })
-                )
-                setWorldStore(
-                    'worlds',
-                    (world) => world.id === id,
-                    produce((world) => world.star--)
-                )
-                toast.success(result.msg)
-            } else {
-                toast.error(result.error)
-            }
-        } else if (action === 'add') {
-            const result = await USER_API.updateUserFavoriteWorld(id, 'add')
-            if (isSuccessResponse(result)) {
-                userStore.setStore(
-                    'user',
-                    produce((user) => user!.favorite_worlds.push(id))
-                )
-                setWorldStore(
-                    'worlds',
-                    (world) => world.id === id,
-                    produce((world) => world.star++)
-                )
-                toast.success(result.msg)
-            } else {
-                toast.error(result.error)
-            }
+        const result =
+            action === 'add'
+                ? await userStore.addUserFavoriteWorld(id)
+                : await userStore.deleteUserFavoriteWorld(id)
+        if (isSuccessResponse(result)) {
+            setWorldStore(
+                'worlds',
+                (world) => world.id === id,
+                produce((world) => (action === 'add' ? world.star++ : world.star--))
+            )
+            toast.success(result.msg)
+        } else {
+            toast.error(result.error)
         }
     }
     const navigate = useNavigate()
