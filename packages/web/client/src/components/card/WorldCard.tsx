@@ -1,48 +1,12 @@
 import { Component, createMemo } from 'solid-js'
 import type { World } from '@core/models'
-import { useNavigate } from '@solidjs/router'
-import { USER_API } from '@api/user'
-import { isSuccessResponse } from '@core/shared'
-import toast from 'solid-toast'
-import { useWorldStore } from '@stores/world'
 import { useUserStore } from '@stores/user'
-import { produce } from 'solid-js/store'
 
-export const WorldCard: Component<{ world: World }> = (props) => {
-    const navigate = useNavigate()
-    const handleToWorld = () => {
-        navigate('/world')
-        setTimeout(() => {
-            const iframe = document.getElementById('world-container')! as HTMLIFrameElement
-
-            const _dom = iframe.contentDocument!
-            const _window = iframe.contentWindow!
-            Object.defineProperty(_window, 'world', { value: _dom.body })
-
-            //安全措施
-            //禁用部分属性
-            const avoids = ['localStorage', 'sessionStorage']
-            avoids.forEach((item) => {
-                Object.defineProperty(_window, item, {
-                    value: void 0,
-                    writable: false,
-                    configurable: false
-                })
-            })
-
-            const _mount = _dom.createElement('script')
-            _mount.innerHTML = `
-                import("${props.world.url}").then((module) => {
-                    module.default(window.world);
-                    window.world = void 0;
-                });
-            `
-            _dom.body.appendChild(_mount)
-            _dom.body.removeChild(_mount)
-        })
-    }
-
-    const worldStore = useWorldStore()
+export const WorldCard: Component<{
+    world: World
+    onUpdateFavorite: (id: string, action: 'add' | 'delete') => Promise<void>
+    onToWorld: (world: World) => void
+}> = (props) => {
     const userStore = useUserStore()
 
     //Star逻辑
@@ -50,46 +14,8 @@ export const WorldCard: Component<{ world: World }> = (props) => {
     const isStared = createMemo(() => {
         return userStore.state.user!.favorite_worlds.includes(props.world.id)
     })
-    const handleUpdateStar = async () => {
-        if (isStared()) {
-            const result = await USER_API.updateUserFavoriteWorld(props.world.id, 'delete')
-
-            if (isSuccessResponse(result)) {
-                userStore.setStore(
-                    'user',
-                    produce((user) => {
-                        user!.favorite_worlds = user!.favorite_worlds.filter(
-                            (id) => id !== props.world.id
-                        )
-                    })
-                )
-                worldStore.setStore(
-                    'worlds',
-                    (world) => world.id === props.world.id,
-                    produce((world) => world.star--)
-                )
-                toast.success(result.msg)
-            } else {
-                toast.error(result.error)
-            }
-        } else {
-            const result = await USER_API.updateUserFavoriteWorld(props.world.id, 'add')
-
-            if (isSuccessResponse(result)) {
-                userStore.setStore(
-                    'user',
-                    produce((user) => user!.favorite_worlds.push(props.world.id))
-                )
-                worldStore.setStore(
-                    'worlds',
-                    (world) => world.id === props.world.id,
-                    produce((world) => world.star++)
-                )
-                toast.success(result.msg)
-            } else {
-                toast.error(result.error)
-            }
-        }
+    const handleUpdateFavorite = () => {
+        props.onUpdateFavorite(props.world.id, isStared() ? 'delete' : 'add')
     }
     //#endregion
 
@@ -111,7 +37,7 @@ export const WorldCard: Component<{ world: World }> = (props) => {
                 <div class="divider mt-0 mb-0 text-gray-600/50">actions</div>
                 {/* 交互栏 */}
                 <div class="card-actions justify-end mt-4">
-                    <button class="btn btn-outline" onClick={handleUpdateStar}>
+                    <button class="btn btn-outline" onClick={handleUpdateFavorite}>
                         {isStared() ? '取消收藏' : '收藏'}
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -128,7 +54,7 @@ export const WorldCard: Component<{ world: World }> = (props) => {
                             />
                         </svg>
                     </button>
-                    <button class="btn btn-outline" onClick={handleToWorld}>
+                    <button class="btn btn-outline" onClick={() => props.onToWorld(props.world)}>
                         Try
                     </button>
                 </div>
