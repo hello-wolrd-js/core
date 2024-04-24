@@ -3,12 +3,13 @@ import { render } from 'solid-js/web'
 import './index.css'
 import App from './App'
 import { Route, Router } from '@solidjs/router'
-import { Home } from '@/components/home/Home'
-import { World } from '@components/world/World'
-import { Publish } from './components/publish/Publish'
+import { HomeView } from '@/views/home/Home'
+import { WorldView } from '@components/world/World'
+import { PublishView } from './views/publish/Publish'
 import { NotFound } from '@components/status/404'
 import { Toaster } from 'solid-toast'
-import { Favorite } from './components/favorite/Favorite'
+import { FavoriteView } from './views/favorite/Favorite'
+import { ReleasedView } from './views/released/Released'
 
 const root = document.getElementById('root')
 
@@ -22,10 +23,11 @@ render(
     () => (
         <>
             <Router root={App}>
-                <Route path="/" component={Home}></Route>
-                <Route path="/world" component={World}></Route>
-                <Route path="/publish" component={Publish}></Route>
-                <Route path="/favorite" component={Favorite}></Route>
+                <Route path="/" component={HomeView}></Route>
+                <Route path="/world" component={WorldView}></Route>
+                <Route path="/publish" component={PublishView}></Route>
+                <Route path="/favorite" component={FavoriteView}></Route>
+                <Route path="/released" component={ReleasedView}></Route>
                 <Route path="*404" component={NotFound} />
             </Router>
             <Toaster position="top-center" gutter={8} />

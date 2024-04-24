@@ -4,7 +4,7 @@ import { isSuccessResponse } from '@core/shared'
 import { Component, createSignal } from 'solid-js'
 import toast from 'solid-toast'
 
-export const Publish: Component = () => {
+export const PublishView: Component = () => {
     const origin: Omit<World, 'id' | 'star' | 'status' | 'owner'> = {
         name: '',
         description: '',

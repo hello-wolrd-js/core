@@ -1,6 +1,6 @@
 import { Component } from 'solid-js'
 
-export const World: Component = () => {
+export const WorldView: Component = () => {
     return (
         <iframe
             id="world-container"

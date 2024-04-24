@@ -1,32 +1,39 @@
-import { World } from '@core/models'
-import { useNavigate } from '@solidjs/router'
-import { useUserStore } from '@stores/user'
 import { Component, For, Show } from 'solid-js'
-import { WorldCard } from '../card/WorldCard'
+import { WorldCard } from '@/components/card/WorldCard'
+import { isSuccessResponse } from '@core/shared'
+import toast from 'solid-toast'
+import { produce } from 'solid-js/store'
+import { World } from '@core/models'
+import { useUserStore } from '@stores/user'
+import { useNavigate } from '@solidjs/router'
+import { useWorldStore } from '@stores/world'
 
-export const Favorite: Component = () => {
+export const HomeView: Component = () => {
+    //world
+    //#region
     const userStore = useUserStore()
-    userStore.getUserFavoriteWorlds().then((r) => {
-        console.log(r)
+    const worldStore = useWorldStore()
+    worldStore.getWorld({ status: 'checked' }).then((result) => {
+        if (!isSuccessResponse(result)) toast.error('获取世界失败: ' + result.error)
     })
 
     //handle
     //#region
     const handleUpdateFavorite = async (id: string, action: 'add' | 'delete') => {
-        // const result =
-        //     action === 'add'
-        //         ? await userStore.addUserFavoriteWorld(id)
-        //         : await userStore.deleteUserFavoriteWorld(id)
-        // if (isSuccessResponse(result)) {
-        //     setWorldStore(
-        //         'worlds',
-        //         (world) => world.id === id,
-        //         produce((world) => (action === 'add' ? world.star++ : world.star--))
-        //     )
-        //     toast.success(result.msg)
-        // } else {
-        //     toast.error(result.error)
-        // }
+        const result =
+            action === 'add'
+                ? await userStore.addUserFavoriteWorld(id)
+                : await userStore.deleteUserFavoriteWorld(id)
+        if (isSuccessResponse(result)) {
+            worldStore.setStore(
+                'list',
+                (world) => world.id === id,
+                produce((world) => (action === 'add' ? world.star++ : world.star--))
+            )
+            toast.success(result.msg)
+        } else {
+            toast.error(result.error)
+        }
     }
     const navigate = useNavigate()
     const handleToWorld = (world: World) => {
@@ -66,7 +73,7 @@ export const Favorite: Component = () => {
         <div class="hero bg-base-200">
             <div class="hero-content text-center">
                 <div class="max-w-md">
-                    <h1 class="text-5xl font-bold">暂无收藏的世界</h1>
+                    <h1 class="text-5xl font-bold">暂无世界</h1>
                     <p class="py-6">
                         Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi
                         exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.
@@ -78,8 +85,8 @@ export const Favorite: Component = () => {
 
     return (
         <div class="flex justify-evenly flex-wrap h-full">
-            <Show when={userStore.state.favorite_worlds.list.length} fallback={empty}>
-                <For each={userStore.state.favorite_worlds.list}>
+            <Show when={worldStore.state.list.length} fallback={empty}>
+                <For each={worldStore.state.list}>
                     {(world) => (
                         <WorldCard
                             world={world}

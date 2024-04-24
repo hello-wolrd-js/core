@@ -6,7 +6,7 @@ import { Dialog } from '@components/dialog/Dialog'
 import toast from 'solid-toast'
 import { useWorldStore } from '@stores/world'
 
-export const Home: Component = () => {
+export const HomeView: Component = () => {
     //世界
     //#region
     const worldStore = useWorldStore()
