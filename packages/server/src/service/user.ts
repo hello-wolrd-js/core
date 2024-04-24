@@ -72,11 +72,24 @@ export const UserService = new Elysia()
                             return createSuccessResponse(
                                 200,
                                 '获取收藏世界成功',
-                                await db.user.getUserFavoriteWorld(store.user.id)
+                                await db.user.getUserFavoriteWorlds(store.user.id)
                             )
                         } catch (error) {
                             set.status = 400
                             return createErrorResponse(-1, '获取收藏世界失败: ' + error)
+                        }
+                    })
+                    //获取已发布的世界
+                    .get('/released/world', async ({ store, set }) => {
+                        try {
+                            return createSuccessResponse(
+                                200,
+                                '获取已发布世界成功',
+                                await db.user.getUserReleasedWorlds(store.user.id)
+                            )
+                        } catch (error) {
+                            set.status = 400
+                            return createErrorResponse(-1, '获取已发布世界失败: ' + error)
                         }
                     })
                     //更新收藏的世界

@@ -1,5 +1,3 @@
-import { World } from './world'
-
 export interface User {
     id: string
     username: string

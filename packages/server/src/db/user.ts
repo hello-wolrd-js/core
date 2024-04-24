@@ -53,11 +53,18 @@ export const updateUserFavoriteWorld = async (
     return _tmp
 }
 
-export const getUserFavoriteWorld = async (userId: string) => {
+export const getUserFavoriteWorlds = async (userId: string) => {
     const user = await UserModel.findById(userId).populate('favorite_worlds')
     if (!user) throw '该用户不存在!'
 
     return user.favorite_worlds as unknown as World[]
+}
+
+export const getUserReleasedWorlds = async (userId: string) => {
+    const user = await UserModel.findById(userId).populate('released_worlds')
+    if (!user) throw '该用户不存在!'
+
+    return user.released_worlds as unknown as World[]
 }
 
 export default {
@@ -65,5 +72,6 @@ export default {
     createUser,
     getUser,
     updateUserFavoriteWorld,
-    getUserFavoriteWorld
+    getUserFavoriteWorlds,
+    getUserReleasedWorlds
 }
