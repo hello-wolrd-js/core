@@ -5,6 +5,7 @@ import Login from './components/login/Login'
 import { USER_API } from '@api/user'
 import { isSuccessResponse } from '@core/shared'
 import toast from 'solid-toast'
+import { Opacity } from '@components/transition/Opacity'
 
 const navHeight = 64
 const App: Component<{ children?: JSX.Element }> = (props) => {
@@ -25,14 +26,16 @@ const App: Component<{ children?: JSX.Element }> = (props) => {
     }
 
     return (
-        <Show when={isEffective()} fallback={Login()}>
-            <div class="flex flex-col h-full">
-                <NavBar height={navHeight}></NavBar>
-                <main class="w-full h-full" style={{ 'margin-top': `${navHeight}px` }}>
-                    {props.children}
-                </main>
-            </div>
-        </Show>
+        <Opacity duration={[250, 250]}>
+            <Show when={isEffective()} fallback={Login()}>
+                <div class="flex flex-col h-full">
+                    <NavBar height={navHeight}></NavBar>
+                    <main class="w-full h-full" style={{ 'margin-top': `${navHeight}px` }}>
+                        <Opacity duration={[250, 250]}>{props.children}</Opacity>
+                    </main>
+                </div>
+            </Show>
+        </Opacity>
     )
 }
 

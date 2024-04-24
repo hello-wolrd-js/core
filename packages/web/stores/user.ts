@@ -1,19 +1,22 @@
 import { USER_API } from '@api/user'
-import { User } from '@core/models'
+import { User, World } from '@core/models'
 import { isSuccessResponse } from '@core/shared'
 import { createStore, produce } from 'solid-js/store'
-import { useWorldStore } from './world'
 
 interface UserStoreState {
     user: User | null
     token: string
     loggedIn: boolean
+    favorite_worlds: World[]
+    released_worlds: World[]
 }
 
 const [store, setStore] = createStore<UserStoreState>({
     user: null,
     token: localStorage.getItem('token') || '',
-    loggedIn: false
+    loggedIn: false,
+    favorite_worlds: [],
+    released_worlds: []
 })
 
 const login = (user: User, token: string) => {
@@ -65,6 +68,14 @@ const deleteUserFavoriteWorld = async (id: string) => {
     return result
 }
 
+const getUserFavoriteWorlds = async () => {
+    const result = await USER_API.getUserFavoriteWorlds()
+    if (isSuccessResponse(result)) {
+        setStore('favorite_worlds', result.data)
+    }
+    return result
+}
+
 export const useUserStore = () => {
     return {
         state: store,
@@ -73,6 +84,7 @@ export const useUserStore = () => {
         setStore,
         getUserInfo,
         addUserFavoriteWorld,
-        deleteUserFavoriteWorld
+        deleteUserFavoriteWorld,
+        getUserFavoriteWorlds
     }
 }

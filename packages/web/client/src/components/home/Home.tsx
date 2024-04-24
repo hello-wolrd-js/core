@@ -6,7 +6,6 @@ import { createStore, produce } from 'solid-js/store'
 import { WORLD_API } from '@api/world'
 import { World } from '@core/models'
 import { useUserStore } from '@stores/user'
-import { USER_API } from '@api/user'
 import { useNavigate } from '@solidjs/router'
 
 export const Home: Component = () => {
