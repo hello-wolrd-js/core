@@ -5,8 +5,8 @@ import { Types } from 'mongoose'
 type DB_User = Omit<User, 'favorite_worlds' | 'released_worlds'> &
     mongoose.Document & {
         password: string
-        favorite_worlds: string[] | World[] //填充时是Wolrd[],不填充时是string[]
-        released_worlds: string[] | World[] //填充时是Wolrd[],不填充时是string[]
+        favorite_worlds: Types.ObjectId[] //填充时是Wolrd[]
+        released_worlds: Types.ObjectId[] //填充时是Wolrd[]
         getInfo: () => Omit<User, 'password'>
     }
 
@@ -27,8 +27,8 @@ const UserSchema = new mongoose.Schema<DB_User>(
                     id: this._id,
                     username: this.username,
                     role: this.role,
-                    released_worlds: this.released_worlds as unknown as World[],
-                    favorite_worlds: this.favorite_worlds as unknown as World[]
+                    released_worlds: this.released_worlds,
+                    favorite_worlds: this.favorite_worlds
                 }
             }
         },

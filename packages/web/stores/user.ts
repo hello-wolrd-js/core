@@ -1,4 +1,6 @@
+import { USER_API } from '@api/user'
 import { User } from '@core/models'
+import { isSuccessResponse } from '@core/shared'
 import { createStore } from 'solid-js/store'
 
 interface UserStoreState {
@@ -31,4 +33,4 @@ function logout(): void {
     localStorage.clear()
 }
 
-export const useUserStore = () => ({ store, login, logout })
+export const useUserStore = () => ({ state: store, login, logout, setStore })

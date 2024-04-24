@@ -1,9 +1,12 @@
-import { Component } from 'solid-js'
+import { Component, createMemo } from 'solid-js'
 import type { World } from '@core/models'
 import { useNavigate } from '@solidjs/router'
 import { USER_API } from '@api/user'
 import { isSuccessResponse } from '@core/shared'
 import toast from 'solid-toast'
+import { useWorldStore } from '@stores/world'
+import { useUserStore } from '@stores/user'
+import { produce } from 'solid-js/store'
 
 export const WorldCard: Component<{ world: World }> = (props) => {
     const navigate = useNavigate()
@@ -38,24 +41,60 @@ export const WorldCard: Component<{ world: World }> = (props) => {
             _dom.body.removeChild(_mount)
         })
     }
-    const handleStar = async () => {
-        const result = await USER_API.updateUserFavoriteWorld(props.world.id, 'add')
-        if (isSuccessResponse(result)) {
-            toast.success(result.msg)
+
+    const worldStore = useWorldStore()
+    const userStore = useUserStore()
+
+    //Star逻辑
+    //#region
+    const isStared = createMemo(() => {
+        return userStore.state.user!.favorite_worlds.includes(props.world.id)
+    })
+    const handleUpdateStar = async () => {
+        if (isStared()) {
+            const result = await USER_API.updateUserFavoriteWorld(props.world.id, 'delete')
+
+            if (isSuccessResponse(result)) {
+                userStore.setStore(
+                    'user',
+                    produce((user) => {
+                        user!.favorite_worlds = user!.favorite_worlds.filter(
+                            (id) => id !== props.world.id
+                        )
+                    })
+                )
+                worldStore.setStore(
+                    'worlds',
+                    (world) => world.id === props.world.id,
+                    produce((world) => world.star--)
+                )
+                toast.success(result.msg)
+            } else {
+                toast.error(result.error)
+            }
         } else {
-            toast.error(result.error)
+            const result = await USER_API.updateUserFavoriteWorld(props.world.id, 'add')
+
+            if (isSuccessResponse(result)) {
+                userStore.setStore(
+                    'user',
+                    produce((user) => user!.favorite_worlds.push(props.world.id))
+                )
+                worldStore.setStore(
+                    'worlds',
+                    (world) => world.id === props.world.id,
+                    produce((world) => world.star++)
+                )
+                toast.success(result.msg)
+            } else {
+                toast.error(result.error)
+            }
         }
     }
-    const handleUnstar = async () => {
-        const result = await USER_API.updateUserFavoriteWorld(props.world.id, 'delete')
-        if (isSuccessResponse(result)) {
-            toast.success(result.msg)
-        } else {
-            toast.error(result.error)
-        }
-    }
+    //#endregion
+
     return (
-        <div class="card w-96 bg-base-100 h-3/4 shadow-lg m-4">
+        <div class="card  w-96 bg-base-100 h-3/4 shadow-lg m-4">
             <figure>
                 {props.world.cover && <img src={props.world.cover} alt={props.world.name} />}
             </figure>
@@ -72,8 +111,8 @@ export const WorldCard: Component<{ world: World }> = (props) => {
                 <div class="divider mt-0 mb-0 text-gray-600/50">actions</div>
                 {/* 交互栏 */}
                 <div class="card-actions justify-end mt-4">
-                    <button class="btn btn-outline" onClick={handleStar}>
-                        Star
+                    <button class="btn btn-outline" onClick={handleUpdateStar}>
+                        {isStared() ? '取消收藏' : '收藏'}
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"

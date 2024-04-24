@@ -1,6 +1,7 @@
 import { UserLoginParams, World } from '@core/models'
 import { UserModel } from './schema/user'
 import { WorldModel } from './schema/world'
+import { Types } from 'mongoose'
 
 export const login = async ({ username, password }: UserLoginParams) => {
     const user = await UserModel.findOne({ username }).populate([
@@ -20,7 +21,7 @@ export const createUser = async ({ username, password }: UserLoginParams) => {
 }
 
 export const getUser = async (id: string) => {
-    const user = await UserModel.findById(id).populate(['released_worlds', 'favorite_worlds'])
+    const user = await UserModel.findById(id)
     if (!user) throw '该用户不存在!'
     return user.getInfo()
 }
@@ -38,19 +39,17 @@ export const updateUserFavoriteWorld = async (
     const world = await WorldModel.findById(worldId)
     if (!world) throw '目标世界不存在!'
 
-    let _tmp = user.favorite_worlds as unknown as string[]
-    if (_tmp.indexOf(worldId) === -1) {
-        if (action === 'add') {
-            _tmp.push(worldId)
-            world.star++
-        } else if (action === 'delete') {
-            _tmp = _tmp.filter((id) => id !== worldId)
-            world.star--
-        }
-        user.favorite_worlds = _tmp
-        await world.save()
-        await user.save()
+    let _tmp = user.favorite_worlds
+    if (action === 'add' && _tmp.findIndex((v) => v.toString() === worldId) === -1) {
+        _tmp.push(new Types.ObjectId(worldId))
+        world.star++
+    } else if (action === 'delete' && _tmp.findIndex((v) => v.toString() === worldId) !== -1) {
+        _tmp = _tmp.filter((id) => id.toString() !== worldId)
+        world.star--
     }
+    user.favorite_worlds = _tmp
+    await world.save()
+    await user.save()
     return _tmp
 }
 

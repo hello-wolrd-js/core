@@ -11,7 +11,7 @@ const createAPI = (url: string) => {
         if (!config.headers) {
             config.headers = {} as AxiosRequestHeaders
         }
-        config.headers.Authorization = 'Bearer ' + userStore.store.token
+        config.headers.Authorization = 'Bearer ' + userStore.state.token
         return config
     })
     return _instance

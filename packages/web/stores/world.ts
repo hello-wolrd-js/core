@@ -5,14 +5,16 @@ import { createStore, produce } from 'solid-js/store'
 
 interface WorldStoreState {
     worlds: World[]
+    queryParams?: WorldQueryParams
 }
 
 const [store, setStore] = createStore<WorldStoreState>({
-    worlds: []
+    worlds: [],
+    queryParams: void 0
 })
 
 const getWorld = async (params?: WorldQueryParams) => {
-    const result = await WORLD_API.getWorld(params)
+    const result = await WORLD_API.getWorld({ ...store.queryParams, ...params })
     if (isSuccessResponse(result)) {
         setStore({ worlds: result.data })
     }
@@ -60,6 +62,7 @@ export const useWorldStore = () => {
         getWorld,
         deleteWorld,
         checkWorld,
-        uncheckWorld
+        uncheckWorld,
+        setStore
     }
 }

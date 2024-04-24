@@ -8,7 +8,7 @@ const App: Component<{ children?: JSX.Element }> = (props) => {
     //监听路由变化
     const userStore = useUserStore()
     const isEffective = createMemo(() => {
-        return userStore.store.loggedIn || userStore.store.token
+        return userStore.state.loggedIn || userStore.state.token
     })
 
     return (
