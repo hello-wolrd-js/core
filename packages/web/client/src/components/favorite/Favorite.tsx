@@ -78,8 +78,8 @@ export const Favorite: Component = () => {
 
     return (
         <div class="flex justify-evenly flex-wrap h-full">
-            <Show when={userStore.state.favorite_worlds.length} fallback={empty}>
-                <For each={userStore.state.favorite_worlds}>
+            <Show when={userStore.state.favorite_worlds.list.length} fallback={empty}>
+                <For each={userStore.state.favorite_worlds.list}>
                     {(world) => (
                         <WorldCard
                             world={world}

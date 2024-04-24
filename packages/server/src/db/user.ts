@@ -1,4 +1,4 @@
-import { UserLoginParams, World } from '@core/models'
+import { UserLoginParams, World, WorldList, WorldQueryParams } from '@core/models'
 import { UserModel } from './schema/user'
 import { WorldModel } from './schema/world'
 import { Types } from 'mongoose'
@@ -53,18 +53,50 @@ export const updateUserFavoriteWorld = async (
     return _tmp
 }
 
-export const getUserFavoriteWorlds = async (userId: string) => {
-    const user = await UserModel.findById(userId).populate('favorite_worlds')
+export const getUserFavoriteWorlds = async (
+    userId: string,
+    params?: WorldQueryParams
+): Promise<WorldList> => {
+    const page = parseInt(params?.page || '1')
+    const pageSize = parseInt(params?.pageSize || '10')
+    const query = UserModel.findById(userId)
+    const total = await query.clone().countDocuments()
+    const user = await query.clone().populate({
+        path: 'favorite_worlds',
+        options: {
+            skip: (page - 1) * pageSize,
+            limit: pageSize
+        }
+    })
     if (!user) throw '该用户不存在!'
 
-    return user.favorite_worlds as unknown as World[]
+    return {
+        list: user.favorite_worlds as unknown as World[],
+        total
+    }
 }
 
-export const getUserReleasedWorlds = async (userId: string) => {
-    const user = await UserModel.findById(userId).populate('released_worlds')
+export const getUserReleasedWorlds = async (
+    userId: string,
+    params?: WorldQueryParams
+): Promise<WorldList> => {
+    const page = parseInt(params?.page || '1')
+    const pageSize = parseInt(params?.pageSize || '10')
+    const query = UserModel.findById(userId)
+    const total = await query.clone().countDocuments()
+    const user = await query.clone().populate({
+        path: 'released_worlds',
+        options: {
+            skip: (page - 1) * pageSize,
+            limit: pageSize
+        }
+    })
     if (!user) throw '该用户不存在!'
 
-    return user.released_worlds as unknown as World[]
+    return {
+        list: user.released_worlds as unknown as World[],
+        total
+    }
 }
 
 export default {

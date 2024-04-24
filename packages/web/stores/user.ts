@@ -1,5 +1,5 @@
 import { USER_API } from '@api/user'
-import { User, WorldList } from '@core/models'
+import { User, WorldList, WorldQueryParams } from '@core/models'
 import { isSuccessResponse } from '@core/shared'
 import { createStore, produce } from 'solid-js/store'
 
@@ -82,10 +82,18 @@ const deleteUserFavoriteWorld = async (id: string) => {
     return result
 }
 
-const getUserFavoriteWorlds = async () => {
-    const result = await USER_API.getUserFavoriteWorlds()
+const getUserFavoriteWorlds = async (params?: WorldQueryParams) => {
+    const result = await USER_API.getUserFavoriteWorlds(params)
     if (isSuccessResponse(result)) {
         setStore('favorite_worlds', result.data)
+    }
+    return result
+}
+
+const getUserReleasedWorlds = async (params?: WorldQueryParams) => {
+    const result = await USER_API.getUserReleasedWorlds(params)
+    if (isSuccessResponse(result)) {
+        setStore('released_worlds', result.data)
     }
     return result
 }
@@ -99,6 +107,7 @@ export const useUserStore = () => {
         getUserInfo,
         addUserFavoriteWorld,
         deleteUserFavoriteWorld,
-        getUserFavoriteWorlds
+        getUserFavoriteWorlds,
+        getUserReleasedWorlds
     }
 }

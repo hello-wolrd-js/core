@@ -1,4 +1,4 @@
-import { UserLoginParams, User, World, WorldList } from '@core/models'
+import { UserLoginParams, User, World, WorldList, WorldQueryParams } from '@core/models'
 import { handleRequest } from './handle'
 import { USER_API_INSTANCE } from './instance'
 
@@ -23,8 +23,26 @@ export const updateUserFavoriteWorld = async (id: string, action: 'add' | 'delet
     )
 }
 
-export const getUserFavoriteWorlds = async () => {
-    return await handleRequest<WorldList>(() => USER_API_INSTANCE.get('/favorite/world'))
+export const getUserFavoriteWorlds = async (params?: WorldQueryParams) => {
+    return await handleRequest<WorldList>(() =>
+        USER_API_INSTANCE.get('/favorite/world', {
+            params
+        })
+    )
 }
 
-export const USER_API = { login, getUserInfo, updateUserFavoriteWorld, getUserFavoriteWorlds }
+export const getUserReleasedWorlds = async (params?: WorldQueryParams) => {
+    return await handleRequest<WorldList>(() =>
+        USER_API_INSTANCE.get('/released/world', {
+            params
+        })
+    )
+}
+
+export const USER_API = {
+    login,
+    getUserInfo,
+    updateUserFavoriteWorld,
+    getUserFavoriteWorlds,
+    getUserReleasedWorlds
+}

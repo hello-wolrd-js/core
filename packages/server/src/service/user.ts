@@ -67,12 +67,12 @@ export const UserService = new Elysia()
                         }
                     })
                     //获取收藏的世界
-                    .get('/favorite/world', async ({ store, set }) => {
+                    .get('/favorite/world', async ({ store, set, query }) => {
                         try {
                             return createSuccessResponse(
                                 200,
                                 '获取收藏世界成功',
-                                await db.user.getUserFavoriteWorlds(store.user.id)
+                                await db.user.getUserFavoriteWorlds(store.user.id, query)
                             )
                         } catch (error) {
                             set.status = 400
@@ -80,12 +80,12 @@ export const UserService = new Elysia()
                         }
                     })
                     //获取已发布的世界
-                    .get('/released/world', async ({ store, set }) => {
+                    .get('/released/world', async ({ store, set, query }) => {
                         try {
                             return createSuccessResponse(
                                 200,
                                 '获取已发布世界成功',
-                                await db.user.getUserReleasedWorlds(store.user.id)
+                                await db.user.getUserReleasedWorlds(store.user.id, query)
                             )
                         } catch (error) {
                             set.status = 400

@@ -31,8 +31,8 @@ export const getWorld = async (params?: WorldQueryParams): Promise<WorldList> =>
         page: void 0, //这里要shadow掉分页参数
         pageSize: void 0
     }
-    const page = parseInt(params?.page || '0')
-    const pageSize = parseInt(params?.pageSize || '0')
+    const page = parseInt(params?.page || '1')
+    const pageSize = parseInt(params?.pageSize || '10')
     const query = WorldModel.find(filter)
     const total = await query.clone().countDocuments()
     const list = await query
