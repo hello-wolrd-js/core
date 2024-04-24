@@ -1,5 +1,5 @@
 import { USER_API } from '@api/user'
-import { User, World } from '@core/models'
+import { User, WorldList } from '@core/models'
 import { isSuccessResponse } from '@core/shared'
 import { createStore, produce } from 'solid-js/store'
 
@@ -7,16 +7,22 @@ interface UserStoreState {
     user: User | null
     token: string
     loggedIn: boolean
-    favorite_worlds: World[]
-    released_worlds: World[]
+    favorite_worlds: WorldList
+    released_worlds: WorldList
 }
 
 const [store, setStore] = createStore<UserStoreState>({
     user: null,
     token: localStorage.getItem('token') || '',
     loggedIn: false,
-    favorite_worlds: [],
-    released_worlds: []
+    favorite_worlds: {
+        list: [],
+        total: 0
+    },
+    released_worlds: {
+        list: [],
+        total: 0
+    }
 })
 
 const login = (user: User, token: string) => {
@@ -32,7 +38,15 @@ const logout = () => {
     setStore({
         user: null,
         token: '',
-        loggedIn: false
+        loggedIn: false,
+        favorite_worlds: {
+            list: [],
+            total: 0
+        },
+        released_worlds: {
+            list: [],
+            total: 0
+        }
     })
     localStorage.clear()
 }

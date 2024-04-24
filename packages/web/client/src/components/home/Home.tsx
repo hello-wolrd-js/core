@@ -2,27 +2,20 @@ import { Component, For, Show } from 'solid-js'
 import { WorldCard } from '@/components/card/WorldCard'
 import { isSuccessResponse } from '@core/shared'
 import toast from 'solid-toast'
-import { createStore, produce } from 'solid-js/store'
-import { WORLD_API } from '@api/world'
+import { produce } from 'solid-js/store'
 import { World } from '@core/models'
 import { useUserStore } from '@stores/user'
 import { useNavigate } from '@solidjs/router'
+import { useWorldStore } from '@stores/world'
 
 export const Home: Component = () => {
     //world
     //#region
     const userStore = useUserStore()
-    const [worldStore, setWorldStore] = createStore<{ worlds: World[] | null }>({
-        worlds: null
+    const worldStore = useWorldStore()
+    worldStore.getWorld({ status: 'checked' }).then((result) => {
+        if (!isSuccessResponse(result)) toast.error('获取世界失败: ' + result.error)
     })
-    WORLD_API.getWorld({ status: 'checked' }).then((result) => {
-        if (isSuccessResponse(result)) {
-            setWorldStore('worlds', result.data)
-        } else {
-            toast.error('获取世界失败: ' + result.error)
-        }
-    })
-    //#endregion
 
     //handle
     //#region
@@ -32,8 +25,8 @@ export const Home: Component = () => {
                 ? await userStore.addUserFavoriteWorld(id)
                 : await userStore.deleteUserFavoriteWorld(id)
         if (isSuccessResponse(result)) {
-            setWorldStore(
-                'worlds',
+            worldStore.setStore(
+                'list',
                 (world) => world.id === id,
                 produce((world) => (action === 'add' ? world.star++ : world.star--))
             )
@@ -92,8 +85,8 @@ export const Home: Component = () => {
 
     return (
         <div class="flex justify-evenly flex-wrap h-full">
-            <Show when={worldStore.worlds?.length} fallback={empty}>
-                <For each={worldStore.worlds}>
+            <Show when={worldStore.state.list.length} fallback={empty}>
+                <For each={worldStore.state.list}>
                     {(world) => (
                         <WorldCard
                             world={world}

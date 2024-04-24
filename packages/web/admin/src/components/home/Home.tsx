@@ -53,8 +53,8 @@ export const Home: Component = () => {
 
     return (
         <div class="flex h-full justify-evenly flex-wrap">
-            <Show when={worldStore.state.worlds.length} fallback={empty}>
-                <For each={worldStore.state.worlds}>
+            <Show when={worldStore.state.list.length} fallback={empty}>
+                <For each={worldStore.state.list}>
                     {(world) => (
                         <AdminWorldCard world={world} openModal={handleOpenModal}></AdminWorldCard>
                     )}

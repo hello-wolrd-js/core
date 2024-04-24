@@ -4,9 +4,11 @@ import { createErrorProvider as E } from './util'
 export const WorldDTO = {
     search: {
         query: t.Object({
-            id: t.Optional(t.String(E('id得是字符串!'))),
-            name: t.Optional(t.String(E('name得是字符串!'))),
-            status: t.Optional(t.String(E('status必须为: checked,unchecked')))
+            id: t.Optional(t.String()),
+            name: t.Optional(t.String()),
+            status: t.Optional(t.String()),
+            page: t.Optional(t.String()),
+            pageSize: t.Optional(t.String())
         })
     },
     create: {

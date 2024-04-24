@@ -1,7 +1,7 @@
 export interface PaginationQueryParams {
-    page?: number
-    pageSize?: number
+    page?: string //这里因为是query传参,所以只能用string
+    pageSize?: string
 }
-export interface PaginatedList extends Required<PaginationQueryParams> {
+export interface PaginatedList {
     total: number
 }

@@ -1,9 +1,15 @@
-import { World, WorldCreateParams, WorldQueryParams, WorldUpdateParams } from '@core/models'
+import {
+    World,
+    WorldCreateParams,
+    WorldList,
+    WorldQueryParams,
+    WorldUpdateParams
+} from '@core/models'
 import { WORLD_API_INSTANCE } from './instance'
 import { handleRequest } from './handle'
 
 export async function getWorld(params?: WorldQueryParams) {
-    return await handleRequest<World[]>(() =>
+    return await handleRequest<WorldList>(() =>
         WORLD_API_INSTANCE.get('/', {
             params
         })

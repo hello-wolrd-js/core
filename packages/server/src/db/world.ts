@@ -1,4 +1,4 @@
-import { WorldCreateParams, WorldQueryParams, WorldUpdateParams } from '@core/models'
+import { WorldCreateParams, WorldList, WorldQueryParams, WorldUpdateParams } from '@core/models'
 import { WorldModel } from './schema/world'
 import { Types } from 'mongoose'
 import { UserModel } from './schema/user'
@@ -19,14 +19,31 @@ export const createWorld = async (world: WorldCreateParams, userId: string) => {
 
     const user = await UserModel.findById(userId)
     if (!user) throw '该用户不存在!'
-    user.released_worlds.push(newWorld._id.toString())
+    user.released_worlds.push(newWorld._id)
     await user.save()
 
     return newWorld
 }
 
-export const getWorld = async (params?: WorldQueryParams) => {
-    return await WorldModel.find({ ...params }).populate('owner', 'id username role')
+export const getWorld = async (params?: WorldQueryParams): Promise<WorldList> => {
+    const filter = {
+        ...params,
+        page: void 0, //这里要shadow掉分页参数
+        pageSize: void 0
+    }
+    const page = parseInt(params?.page || '0')
+    const pageSize = parseInt(params?.pageSize || '0')
+    const query = WorldModel.find(filter)
+    const total = await query.clone().countDocuments()
+    const list = await query
+        .clone()
+        .skip((page - 1) * pageSize)
+        .limit(pageSize)
+        .populate('owner', 'id username role')
+    return {
+        list,
+        total
+    }
 }
 
 export const deleteWorld = async (id: string) => {

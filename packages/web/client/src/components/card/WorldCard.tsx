@@ -27,14 +27,13 @@ export const WorldCard: Component<{
             <div class="card-body">
                 <h2 class="card-title">{props.world.name}</h2>
                 <p>{props.world.description}</p>
-                <div class="divider mt-0 mb-0 text-gray-600/50">statistic</div>
+                <div class="divider mt-0 mb-0 text-gray-600/50"></div>
                 {/* 统计 */}
                 <div class=" stat p-0">
                     <div class="stat-figure text-secondary"></div>
                     <div class="stat-title">Total star</div>
                     <div class="stat-value">{props.world.star}</div>
                 </div>
-                <div class="divider mt-0 mb-0 text-gray-600/50">actions</div>
                 {/* 交互栏 */}
                 <div class="card-actions justify-end mt-4">
                     <button class="btn btn-outline" onClick={handleUpdateFavorite}>

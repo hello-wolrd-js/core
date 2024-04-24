@@ -1,4 +1,4 @@
-import { User, World } from '@core/models'
+import { User } from '@core/models'
 import * as mongoose from 'mongoose'
 import { Types } from 'mongoose'
 
