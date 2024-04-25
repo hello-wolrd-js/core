@@ -107,7 +107,7 @@ const NavBar: Component<{ height: number }> = (props) => {
                     </div>
                 </div>
             </div>
-            <div class="flex-none">
+            <div class="flex-none" onClick={handleToReleased}>
                 <div class="tooltip tooltip-bottom" data-tip="发布的世界">
                     <div class="btn btn-square btn-ghost">
                         <svg

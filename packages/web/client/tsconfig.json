@@ -1,5 +1,5 @@
 {
-    "include": ["env.d.ts", "src/**/*", "../components/card"],
+    "include": ["env.d.ts", "src/**/*"],
     "extends": "../../../tsconfig.web.json",
     "compilerOptions": {
         "baseUrl": ".",
@@ -7,7 +7,8 @@
             "@/*": ["./src/*"],
             "@stores/*": ["../stores/*"],
             "@components/*": ["../components/*"],
-            "@api/*": ["../api/*"]
+            "@api/*": ["../api/*"],
+            "@hooks/*": ["../hooks/*"]
         }
     }
 }
