@@ -1,10 +1,11 @@
-import { Component, createSignal, For, Show } from 'solid-js'
+import { Component, createSignal, For, onCleanup, onMount, Show } from 'solid-js'
 import { AdminWorldCard } from '@/components/card/AdminWorldCard'
 import type { World } from '@core/models'
 import { isSuccessResponse } from '@core/shared'
 import { Dialog } from '@components/dialog/Dialog'
 import toast from 'solid-toast'
 import { useWorldStore } from '@stores/world'
+import { debounce } from 'lodash'
 
 export const HomeView: Component = () => {
     //世界
@@ -37,6 +38,43 @@ export const HomeView: Component = () => {
     }
     //#endregion
 
+    //滚动条下滑无感加载
+    //#region
+
+    let containerRef: HTMLDivElement | undefined
+    const refreshDistance = 300
+    //分页参数
+    let page = 1
+    const pageSize = 10
+    //handler
+    const handleTouchDownRefresh = debounce(async () => {
+        //大于总页数时要退出
+        if (!containerRef || worldStore.state.list.length >= worldStore.state.totalItems) return
+        //下滑距离判断
+        if (
+            containerRef.clientHeight + containerRef.scrollTop >=
+            containerRef.scrollHeight - refreshDistance
+        ) {
+            //计算差值
+            const diff = worldStore.state.totalItems - worldStore.state.list.length
+            const result = await worldStore.getWorld({
+                page: `${page++}`,
+                pageSize: `${diff > pageSize ? pageSize : diff}`
+            })
+            //获取失败提示
+            if (!isSuccessResponse(result)) toast.success(result.error)
+        }
+    }, 500)
+    //监听与解除监听
+    onMount(() => {
+        containerRef && containerRef.addEventListener('scroll', handleTouchDownRefresh)
+    })
+    onCleanup(() => {
+        containerRef && containerRef.removeEventListener('scroll', handleTouchDownRefresh)
+    })
+
+    //#endregion
+
     const empty = (
         <div class="hero bg-base-200">
             <div class="hero-content text-center">
@@ -52,7 +90,7 @@ export const HomeView: Component = () => {
     )
 
     return (
-        <div class="flex h-full justify-evenly flex-wrap overflow-y-auto">
+        <div ref={containerRef} class="flex h-full justify-evenly flex-wrap overflow-y-auto">
             <Show when={worldStore.state.list.length} fallback={empty}>
                 <For each={worldStore.state.list}>
                     {(world) => (

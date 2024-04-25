@@ -3,5 +3,6 @@ export interface PaginationQueryParams {
     pageSize?: string
 }
 export interface PaginatedList {
-    total: number
+    totalItems: number
+    totalPages: number
 }

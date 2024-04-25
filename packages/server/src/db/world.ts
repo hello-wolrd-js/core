@@ -34,7 +34,8 @@ export const getWorld = async (params?: WorldQueryParams): Promise<WorldList> =>
     const page = parseInt(params?.page || '1')
     const pageSize = parseInt(params?.pageSize || '10')
     const query = WorldModel.find(filter)
-    const total = await query.clone().countDocuments()
+    const totalItems = await query.clone().countDocuments()
+    const totalPages = Math.ceil(totalItems / pageSize)
     const list = await query
         .clone()
         .skip((page - 1) * pageSize)
@@ -42,7 +43,8 @@ export const getWorld = async (params?: WorldQueryParams): Promise<WorldList> =>
         .populate('owner', 'id username role')
     return {
         list,
-        total
+        totalItems,
+        totalPages
     }
 }
 

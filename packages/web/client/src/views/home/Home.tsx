@@ -1,4 +1,4 @@
-import { Component, For, Show, onMount } from 'solid-js'
+import { Component, For, Show, onCleanup, onMount } from 'solid-js'
 import { WorldCard } from '@/components/card/WorldCard'
 import { isSuccessResponse } from '@core/shared'
 import toast from 'solid-toast'
@@ -71,22 +71,40 @@ export const HomeView: Component = () => {
     }
     //#endregion
 
-    //下滑加载
+    //滚动条下滑无感加载
     //#region
+
     let containerRef: HTMLDivElement | undefined
-    onMount(() => {
-        if (containerRef) {
-            containerRef.addEventListener(
-                'scroll',
-                debounce(() => {
-                    if (
-                        containerRef.clientHeight + containerRef.scrollTop >=
-                        containerRef.scrollHeight - 200
-                    ) {
-                    }
-                }, 500)
-            )
+    const refreshDistance = 300
+    //分页参数
+    let page = 1
+    const pageSize = 10
+    //handler
+    const handleTouchDownRefresh = debounce(async () => {
+        //大于总页数时要退出
+        if (!containerRef || worldStore.state.list.length >= worldStore.state.totalItems) return
+        //下滑距离判断
+        if (
+            containerRef.clientHeight + containerRef.scrollTop >=
+            containerRef.scrollHeight - refreshDistance
+        ) {
+            //计算差值
+            const diff = worldStore.state.totalItems - worldStore.state.list.length
+            const result = await worldStore.getWorld({
+                page: `${page++}`,
+                pageSize: `${diff > pageSize ? pageSize : diff}`,
+                status: 'checked'
+            })
+            //获取失败提示
+            if (!isSuccessResponse(result)) toast.success(result.error)
         }
+    }, 500)
+    //监听与解除监听
+    onMount(() => {
+        containerRef && containerRef.addEventListener('scroll', handleTouchDownRefresh)
+    })
+    onCleanup(() => {
+        containerRef && containerRef.removeEventListener('scroll', handleTouchDownRefresh)
     })
 
     //#endregion

@@ -17,11 +17,13 @@ const [store, setStore] = createStore<UserStoreState>({
     loggedIn: false,
     favorite_worlds: {
         list: [],
-        total: 0
+        totalItems: 0,
+        totalPages: 0
     },
     released_worlds: {
         list: [],
-        total: 0
+        totalItems: 0,
+        totalPages: 0
     }
 })
 
@@ -41,11 +43,13 @@ const logout = () => {
         loggedIn: false,
         favorite_worlds: {
             list: [],
-            total: 0
+            totalItems: 0,
+            totalPages: 0
         },
         released_worlds: {
             list: [],
-            total: 0
+            totalItems: 0,
+            totalPages: 0
         }
     })
     localStorage.clear()

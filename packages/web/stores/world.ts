@@ -9,15 +9,21 @@ interface WorldStoreState extends WorldList {
 
 const [store, setStore] = createStore<WorldStoreState>({
     list: [],
-    total: 0,
+    totalItems: 0,
+    totalPages: 0,
     queryParams: void 0
 })
 
 const getWorld = async (params?: WorldQueryParams) => {
     const result = await WORLD_API.getWorld({ ...store.queryParams, ...params })
     if (isSuccessResponse(result)) {
-        setStore('list', result.data.list)
-        setStore('total', result.data.total)
+        setStore(
+            produce((state) => {
+                state.list = [...new Set(state.list.concat(result.data.list))]
+            })
+        )
+        setStore('totalItems', result.data.totalItems)
+        setStore('totalPages', result.data.totalPages)
     }
     return result
 }
@@ -25,7 +31,6 @@ const getWorld = async (params?: WorldQueryParams) => {
 const deleteWorld = async (id: string) => {
     const result = await WORLD_API.deleteWorld(id)
     if (isSuccessResponse(result)) {
-        // 这里之后可以改成再次请求覆盖为最新的状态
         setStore(
             produce((state) => {
                 state.list = state.list.filter((w) => w.id !== id)

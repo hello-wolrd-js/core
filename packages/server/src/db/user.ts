@@ -60,7 +60,8 @@ export const getUserFavoriteWorlds = async (
     const page = parseInt(params?.page || '1')
     const pageSize = parseInt(params?.pageSize || '10')
     const query = UserModel.findById(userId)
-    const total = await query.clone().countDocuments()
+    const totalItems = await query.clone().countDocuments()
+    const totalPages = Math.ceil(totalItems / pageSize)
     const user = await query.clone().populate({
         path: 'favorite_worlds',
         options: {
@@ -72,7 +73,8 @@ export const getUserFavoriteWorlds = async (
 
     return {
         list: user.favorite_worlds as unknown as World[],
-        total
+        totalItems,
+        totalPages
     }
 }
 
@@ -83,7 +85,8 @@ export const getUserReleasedWorlds = async (
     const page = parseInt(params?.page || '1')
     const pageSize = parseInt(params?.pageSize || '10')
     const query = UserModel.findById(userId)
-    const total = await query.clone().countDocuments()
+    const totalItems = await query.clone().countDocuments()
+    const totalPages = Math.ceil(totalItems / pageSize)
     const user = await query.clone().populate({
         path: 'released_worlds',
         options: {
@@ -95,7 +98,8 @@ export const getUserReleasedWorlds = async (
 
     return {
         list: user.released_worlds as unknown as World[],
-        total
+        totalItems,
+        totalPages
     }
 }
 
