@@ -13,12 +13,18 @@ export const useEmptyWorldList = (): WorldList => {
     }
 }
 
-export const useWorldList = (options: {
+export const useWorldList = ({
+    getter,
+    init,
+    refresh
+}: {
     getter: () => Promise<WorldList>
     init: boolean
-    refresh: {
+    refresh?: {
         getter: (page: number, pageSize: number) => Promise<WorldList>
         refreshDistance: number
+        onBeforeRefresh?: () => void
+        onRefreshed?: () => void
     }
 }) => {
     const [store, setStore] = createStore<WorldList>({
@@ -26,7 +32,7 @@ export const useWorldList = (options: {
         totalItems: 0,
         totalPages: 0
     })
-    options.init && options.getter().then((res) => setStore(res))
+    init && getter().then((res) => setStore(res))
 
     //分页下滑刷新
     //#region
@@ -35,15 +41,17 @@ export const useWorldList = (options: {
     const pageSize = 10
     const handleTouchDownRefresh = debounce(async () => {
         //大于总页数时要退出
-        if (!containerRef || store.list.length >= store.totalItems) return
+        if (!containerRef || !refresh || store.list.length >= store.totalItems) return
         //下滑距离判断
         if (
             containerRef.clientHeight + containerRef.scrollTop >=
-            containerRef.scrollHeight - options.refresh.refreshDistance
+            containerRef.scrollHeight - refresh.refreshDistance
         ) {
+            refresh?.onBeforeRefresh?.()
             //计算差值
             const diff = store.totalItems - store.list.length
-            const result = await options.refresh.getter(page++, diff > pageSize ? pageSize : diff)
+            const result = await refresh.getter(page++, diff > pageSize ? pageSize : diff)
+            //状态改变
             setStore(
                 produce((state) => {
                     //去重
@@ -53,18 +61,21 @@ export const useWorldList = (options: {
                                 a.findIndex((t) => t.id === v.id && t.name === v.name) === i
                         )
                     )
+                    state.totalItems = result.totalItems
+                    state.totalPages = result.totalPages
                 })
             )
-            setStore('totalItems', result.totalItems)
-            setStore('totalPages', result.totalPages)
+            refresh?.onRefreshed?.()
         }
     }, 500)
     //监听与解除监听
     onMount(() => {
-        containerRef && containerRef.addEventListener('scroll', handleTouchDownRefresh)
+        containerRef && refresh && containerRef.addEventListener('scroll', handleTouchDownRefresh)
     })
     onCleanup(() => {
-        containerRef && containerRef.removeEventListener('scroll', handleTouchDownRefresh)
+        containerRef &&
+            refresh &&
+            containerRef.removeEventListener('scroll', handleTouchDownRefresh)
     })
     //#endregion
 
