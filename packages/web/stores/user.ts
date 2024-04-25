@@ -1,5 +1,5 @@
 import { USER_API } from '@api/user'
-import { User, WorldList, WorldQueryParams } from '@core/models'
+import { User, World, WorldList, WorldQueryParams } from '@core/models'
 import { isSuccessResponse } from '@core/shared'
 import { createStore, produce } from 'solid-js/store'
 
@@ -59,25 +59,33 @@ const getUserInfo = async () => {
     return result
 }
 
-const addUserFavoriteWorld = async (id: string) => {
-    const result = await USER_API.updateUserFavoriteWorld(id, 'add')
+const addUserFavoriteWorld = async (world: World) => {
+    const result = await USER_API.updateUserFavoriteWorld(world.id, 'add')
     if (isSuccessResponse(result)) {
         setStore(
-            'user',
-            produce((user) => user!.favorite_worlds.push(id))
+            produce((state) => {
+                state.user!.favorite_worlds.push(world.id)
+                state.favorite_worlds.list.push(world)
+            })
         )
+        world.star++
     }
     return result
 }
-const deleteUserFavoriteWorld = async (id: string) => {
-    const result = await USER_API.updateUserFavoriteWorld(id, 'delete')
+const deleteUserFavoriteWorld = async (world: World) => {
+    const result = await USER_API.updateUserFavoriteWorld(world.id, 'delete')
     if (isSuccessResponse(result)) {
         setStore(
-            'user',
-            produce((user) => {
-                user!.favorite_worlds = user!.favorite_worlds.filter((id) => id !== id)
+            produce((state) => {
+                state.user!.favorite_worlds = state.user!.favorite_worlds.filter(
+                    (id) => id !== world.id
+                )
+                state.favorite_worlds.list = state.favorite_worlds.list.filter(
+                    (w) => w.id !== world.id
+                )
             })
         )
+        world.star--
     }
     return result
 }

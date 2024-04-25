@@ -2,9 +2,10 @@ import { Component, createMemo } from 'solid-js'
 import type { World } from '@core/models'
 import { useUserStore } from '@stores/user'
 
+
 export const WorldCard: Component<{
     world: World
-    onUpdateFavorite: (id: string, action: 'add' | 'delete') => Promise<void>
+    onUpdateFavorite: (world: World, action: 'add' | 'delete') => Promise<void>
     onToWorld: (world: World) => void
 }> = (props) => {
     const userStore = useUserStore()
@@ -15,7 +16,7 @@ export const WorldCard: Component<{
         return userStore.state.user!.favorite_worlds.includes(props.world.id)
     })
     const handleUpdateFavorite = () => {
-        props.onUpdateFavorite(props.world.id, isStared() ? 'delete' : 'add')
+        props.onUpdateFavorite(props.world, isStared() ? 'delete' : 'add')
     }
     //#endregion
 

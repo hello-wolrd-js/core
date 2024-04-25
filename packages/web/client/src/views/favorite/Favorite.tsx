@@ -3,6 +3,8 @@ import { useNavigate } from '@solidjs/router'
 import { useUserStore } from '@stores/user'
 import { Component, For, Show } from 'solid-js'
 import { WorldCard } from '../../components/card/WorldCard'
+import { isSuccessResponse } from '@core/shared/guard'
+import toast from 'solid-toast'
 
 export const FavoriteView: Component = () => {
     const userStore = useUserStore()
@@ -12,21 +14,17 @@ export const FavoriteView: Component = () => {
 
     //handle
     //#region
-    const handleUpdateFavorite = async (id: string, action: 'add' | 'delete') => {
-        // const result =
-        //     action === 'add'
-        //         ? await userStore.addUserFavoriteWorld(id)
-        //         : await userStore.deleteUserFavoriteWorld(id)
-        // if (isSuccessResponse(result)) {
-        //     setWorldStore(
-        //         'worlds',
-        //         (world) => world.id === id,
-        //         produce((world) => (action === 'add' ? world.star++ : world.star--))
-        //     )
-        //     toast.success(result.msg)
-        // } else {
-        //     toast.error(result.error)
-        // }
+    const handleUpdateFavorite = async (world: World, action: 'add' | 'delete') => {
+        const result =
+            action === 'add'
+                ? await userStore.addUserFavoriteWorld(world)
+                : await userStore.deleteUserFavoriteWorld(world)
+        if (isSuccessResponse(result)) {
+            toast.success(result.msg)
+
+        } else {
+            toast.error(result.error)
+        }
     }
     const navigate = useNavigate()
     const handleToWorld = (world: World) => {

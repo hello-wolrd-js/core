@@ -1,4 +1,4 @@
-import { Component, For, Show } from 'solid-js'
+import { Component, For, Show, onMount } from 'solid-js'
 import { WorldCard } from '@/components/card/WorldCard'
 import { isSuccessResponse } from '@core/shared'
 import toast from 'solid-toast'
@@ -16,18 +16,19 @@ export const HomeView: Component = () => {
     worldStore.getWorld({ status: 'checked' }).then((result) => {
         if (!isSuccessResponse(result)) toast.error('获取世界失败: ' + result.error)
     })
+    //#endregion
 
     //handle
     //#region
-    const handleUpdateFavorite = async (id: string, action: 'add' | 'delete') => {
+    const handleUpdateFavorite = async (world: World, action: 'add' | 'delete') => {
         const result =
             action === 'add'
-                ? await userStore.addUserFavoriteWorld(id)
-                : await userStore.deleteUserFavoriteWorld(id)
+                ? await userStore.addUserFavoriteWorld(world)
+                : await userStore.deleteUserFavoriteWorld(world)
         if (isSuccessResponse(result)) {
             worldStore.setStore(
                 'list',
-                (world) => world.id === id,
+                (w) => w.id === world.id,
                 produce((world) => (action === 'add' ? world.star++ : world.star--))
             )
             toast.success(result.msg)
@@ -69,6 +70,17 @@ export const HomeView: Component = () => {
     }
     //#endregion
 
+    //下滑加载
+    //#region
+    let containerRef: HTMLDivElement | undefined
+    onMount(() => {
+        if (containerRef) {
+            containerRef.addEventListener('scrollend', () => console.log(1))
+        }
+    })
+
+    //#endregion
+
     const empty = (
         <div class="hero bg-base-200">
             <div class="hero-content text-center">
@@ -84,7 +96,7 @@ export const HomeView: Component = () => {
     )
 
     return (
-        <div class="flex justify-evenly flex-wrap h-full">
+        <div ref={containerRef} class="flex justify-evenly flex-wrap h-full">
             <Show when={worldStore.state.list.length} fallback={empty}>
                 <For each={worldStore.state.list}>
                     {(world) => (
