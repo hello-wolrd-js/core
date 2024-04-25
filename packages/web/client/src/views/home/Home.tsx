@@ -8,6 +8,7 @@ import { useUserStore } from '@stores/user'
 import { useNavigate } from '@solidjs/router'
 import { useWorldStore } from '@stores/world'
 import { debounce } from 'lodash'
+import { useStatusStore } from '@stores/status'
 
 export const HomeView: Component = () => {
     //world
@@ -19,7 +20,7 @@ export const HomeView: Component = () => {
     })
     //#endregion
 
-    //handle
+    //handlers
     //#region
     const handleUpdateFavorite = async (world: World, action: 'add' | 'delete') => {
         const result =
@@ -38,36 +39,10 @@ export const HomeView: Component = () => {
         }
     }
     const navigate = useNavigate()
+    const statusStore = useStatusStore()
     const handleToWorld = (world: World) => {
         navigate('/world')
-        setTimeout(() => {
-            const iframe = document.getElementById('world-container')! as HTMLIFrameElement
-
-            const _dom = iframe.contentDocument!
-            const _window = iframe.contentWindow!
-            Object.defineProperty(_window, 'world', { value: _dom.body })
-
-            //安全措施
-            //禁用部分属性
-            const avoids = ['localStorage', 'sessionStorage']
-            avoids.forEach((item) => {
-                Object.defineProperty(_window, item, {
-                    value: void 0,
-                    writable: false,
-                    configurable: false
-                })
-            })
-
-            const _mount = _dom.createElement('script')
-            _mount.innerHTML = `
-                import("${world.url}").then((module) => {
-                    module.default(window.world);
-                    window.world = void 0;
-                });
-            `
-            _dom.body.appendChild(_mount)
-            _dom.body.removeChild(_mount)
-        })
+        statusStore.setStore('currentWorld', world)
     }
     //#endregion
 

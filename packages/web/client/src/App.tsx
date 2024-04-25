@@ -5,11 +5,11 @@ import Login from './views/login/Login'
 import { isSuccessResponse } from '@core/shared'
 import toast from 'solid-toast'
 import { Opacity } from '@components/transition/Opacity'
+import { useStatusStore } from '@stores/status'
 
-const navHeight = 64
-const mainHeight = document.body.clientHeight - navHeight
 const App: Component<{ children?: JSX.Element }> = (props) => {
     const userStore = useUserStore()
+    const statusStore = useStatusStore()
     const isEffective = createMemo(() => {
         return userStore.state.loggedIn || userStore.state.token
     })
@@ -25,8 +25,13 @@ const App: Component<{ children?: JSX.Element }> = (props) => {
         <Opacity duration={[250, 250]}>
             <Show when={isEffective()} fallback={Login()}>
                 <div class="flex flex-col h-full">
-                    <NavBar height={navHeight}></NavBar>
-                    <main style={{ 'margin-top': `${navHeight}px`, height: `${mainHeight}px` }}>
+                    <NavBar height={statusStore.state.navHeight}></NavBar>
+                    <main
+                        style={{
+                            'margin-top': `${statusStore.state.navHeight}px`,
+                            height: `${statusStore.state.contentHeight}px`
+                        }}
+                    >
                         <Opacity duration={[250, 250]}>{props.children}</Opacity>
                     </main>
                 </div>

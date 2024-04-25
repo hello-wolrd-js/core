@@ -1,48 +1,20 @@
 import { Show, type Component } from 'solid-js'
 import type { World } from '@core/models'
-import { useNavigate } from '@solidjs/router'
 import { isSuccessResponse } from '@core/shared'
 import toast from 'solid-toast'
 import { useWorldStore } from '@stores/world'
 
-export const AdminWorldCard: Component<{ openModal: (world: World) => void; world: World }> = (
-    props
-) => {
+export const AdminWorldCard: Component<{
+    onOpenModal: (world: World) => void
+    onToWorld: (world: World) => void
+    world: World
+}> = (props) => {
     const worldStore = useWorldStore()
-    const navigate = useNavigate()
-    const handleTry = () => {
-        navigate('/world')
-        setTimeout(() => {
-            const iframe = document.getElementById('world-container')! as HTMLIFrameElement
-
-            const _dom = iframe.contentDocument!
-            const _window = iframe.contentWindow!
-            Object.defineProperty(_window, 'world', { value: _dom.body })
-
-            //安全措施
-            //禁用部分属性
-            const avoids = ['localStorage', 'sessionStorage']
-            avoids.forEach((item) => {
-                Object.defineProperty(_window, item, {
-                    value: void 0,
-                    writable: false,
-                    configurable: false
-                })
-            })
-
-            const _mount = _dom.createElement('script')
-            _mount.innerHTML = `
-                import("${props.world.url}").then((module) => {
-                    module.default(window.world);
-                    window.world = void 0;
-                });
-            `
-            _dom.body.appendChild(_mount)
-            _dom.body.removeChild(_mount)
-        })
+    const handleToWorld = () => {
+        props.onToWorld(props.world)
     }
     const handleDelete = () => {
-        props.openModal(props.world)
+        props.onOpenModal(props.world)
     }
     const handleCheck = async () => {
         const result = await worldStore.checkWorld(props.world.id)
@@ -81,7 +53,7 @@ export const AdminWorldCard: Component<{ openModal: (world: World) => void; worl
                 </div>
                 {/* 交互栏 */}
                 <div class="card-actions gap-0 justify-end mt-4 join">
-                    <button class="btn join-item" onClick={handleTry}>
+                    <button class="btn join-item" onClick={handleToWorld}>
                         Try
                     </button>
                     <Show

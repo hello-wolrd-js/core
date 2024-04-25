@@ -1,5 +1,5 @@
 import { WORLD_API } from '@api/world'
-import { World, WorldList, WorldQueryParams } from '@core/models'
+import {  WorldList, WorldQueryParams } from '@core/models'
 import { isSuccessResponse } from '@core/shared'
 import { createStore, produce } from 'solid-js/store'
 
@@ -8,6 +8,7 @@ interface WorldStoreState extends WorldList {
 }
 
 // const _worldMap = new Map<string, World>()
+
 const [store, setStore] = createStore<WorldStoreState>({
     list: [],
     totalItems: 0,

@@ -6,6 +6,8 @@ import { Dialog } from '@components/dialog/Dialog'
 import toast from 'solid-toast'
 import { useWorldStore } from '@stores/world'
 import { debounce } from 'lodash'
+import { useNavigate } from '@solidjs/router'
+import { useStatusStore } from '@stores/status'
 
 export const HomeView: Component = () => {
     //世界
@@ -13,6 +15,16 @@ export const HomeView: Component = () => {
     const worldStore = useWorldStore()
     worldStore.getWorld()
     const [currentWorld, setCurrentWorld] = createSignal<World | null>(null)
+    //#endregion
+
+    //handler
+    //#region
+    const navigate = useNavigate()
+    const statusStore = useStatusStore()
+    const handleToWorld = (world: World) => {
+        navigate('/world')
+        statusStore.setStore('currentWorld', world)
+    }
     //#endregion
 
     //模态框
@@ -94,7 +106,11 @@ export const HomeView: Component = () => {
             <Show when={worldStore.state.list.length} fallback={empty}>
                 <For each={worldStore.state.list}>
                     {(world) => (
-                        <AdminWorldCard world={world} openModal={handleOpenModal}></AdminWorldCard>
+                        <AdminWorldCard
+                            world={world}
+                            onOpenModal={handleOpenModal}
+                            onToWorld={handleToWorld}
+                        ></AdminWorldCard>
                     )}
                 </For>
             </Show>
