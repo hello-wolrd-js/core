@@ -3,7 +3,8 @@ import { isSuccessResponse } from '@core/shared'
 import { useUserStore } from '@stores/user'
 import { Component, For, Show } from 'solid-js'
 import toast from 'solid-toast'
-import { useEmptyResult, useToWorldFn, useUpdateFavoriteFn } from '@hooks/index'
+import { useEmptyResult, useToWorldFn, useUpdateUserFavoriteFn } from '@hooks/index'
+import { useWorldStore } from '@stores/world'
 
 export const ReleasedView: Component = () => {
     const userStore = useUserStore()
@@ -11,7 +12,7 @@ export const ReleasedView: Component = () => {
         !isSuccessResponse(result) && toast.error(result.error)
     })
 
-    const handleUpdateFavorite = useUpdateFavoriteFn()
+    const handleUpdateFavorite = useUpdateUserFavoriteFn(useWorldStore().setStore)
     const handleToWorld = useToWorldFn()
 
     return (

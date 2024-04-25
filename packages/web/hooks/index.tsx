@@ -1,10 +1,9 @@
-import { World } from '@core/models'
+import { World, WorldList } from '@core/models'
 import { isSuccessResponse } from '@core/shared'
 import { useNavigate } from '@solidjs/router'
 import { useStatusStore } from '@stores/status'
 import { useUserStore } from '@stores/user'
-import { useWorldStore } from '@stores/world'
-import { produce } from 'solid-js/store'
+import { SetStoreFunction, produce } from 'solid-js/store'
 import { JSX } from 'solid-js/web/types/jsx'
 import toast from 'solid-toast'
 
@@ -38,16 +37,15 @@ export const useToWorldFn = () => {
     }
 }
 
-export const useUpdateFavoriteFn = () => {
+export const useUpdateUserFavoriteFn = (setter: SetStoreFunction<WorldList>) => {
     const userStore = useUserStore()
-    const worldStore = useWorldStore()
     return async (world: World, action: 'add' | 'delete') => {
         const result =
             action === 'add'
                 ? await userStore.addUserFavoriteWorld(world)
                 : await userStore.deleteUserFavoriteWorld(world)
         if (isSuccessResponse(result)) {
-            worldStore.setStore(
+            setter(
                 'list',
                 (w) => w.id === world.id,
                 produce((world) => (action === 'add' ? world.star++ : world.star--))
