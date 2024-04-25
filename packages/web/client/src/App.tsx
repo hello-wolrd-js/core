@@ -7,6 +7,7 @@ import toast from 'solid-toast'
 import { Opacity } from '@components/transition/Opacity'
 
 const navHeight = 64
+const mainHeight = document.body.clientHeight - navHeight
 const App: Component<{ children?: JSX.Element }> = (props) => {
     const userStore = useUserStore()
     const isEffective = createMemo(() => {
@@ -25,7 +26,7 @@ const App: Component<{ children?: JSX.Element }> = (props) => {
             <Show when={isEffective()} fallback={Login()}>
                 <div class="flex flex-col h-full">
                     <NavBar height={navHeight}></NavBar>
-                    <main class="w-full h-full" style={{ 'margin-top': `${navHeight}px` }}>
+                    <main style={{ 'margin-top': `${navHeight}px`, height: `${mainHeight}px` }}>
                         <Opacity duration={[250, 250]}>{props.children}</Opacity>
                     </main>
                 </div>

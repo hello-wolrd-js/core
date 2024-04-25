@@ -7,6 +7,7 @@ import { World } from '@core/models'
 import { useUserStore } from '@stores/user'
 import { useNavigate } from '@solidjs/router'
 import { useWorldStore } from '@stores/world'
+import { debounce } from 'lodash'
 
 export const HomeView: Component = () => {
     //world
@@ -75,7 +76,16 @@ export const HomeView: Component = () => {
     let containerRef: HTMLDivElement | undefined
     onMount(() => {
         if (containerRef) {
-            containerRef.addEventListener('scrollend', () => console.log(1))
+            containerRef.addEventListener(
+                'scroll',
+                debounce(() => {
+                    if (
+                        containerRef.clientHeight + containerRef.scrollTop >=
+                        containerRef.scrollHeight - 200
+                    ) {
+                    }
+                }, 500)
+            )
         }
     })
 
@@ -96,7 +106,7 @@ export const HomeView: Component = () => {
     )
 
     return (
-        <div ref={containerRef} class="flex justify-evenly flex-wrap h-full">
+        <div ref={containerRef} class="flex justify-evenly flex-wrap h-full overflow-y-auto">
             <Show when={worldStore.state.list.length} fallback={empty}>
                 <For each={worldStore.state.list}>
                     {(world) => (

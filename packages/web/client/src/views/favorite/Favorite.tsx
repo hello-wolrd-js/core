@@ -21,7 +21,6 @@ export const FavoriteView: Component = () => {
                 : await userStore.deleteUserFavoriteWorld(world)
         if (isSuccessResponse(result)) {
             toast.success(result.msg)
-
         } else {
             toast.error(result.error)
         }
@@ -75,7 +74,7 @@ export const FavoriteView: Component = () => {
     )
 
     return (
-        <div class="flex justify-evenly flex-wrap h-full">
+        <div class="flex justify-evenly flex-wrap h-full overflow-y-auto">
             <Show when={userStore.state.favorite_worlds.list.length} fallback={empty}>
                 <For each={userStore.state.favorite_worlds.list}>
                     {(world) => (

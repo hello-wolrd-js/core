@@ -52,7 +52,7 @@ export const HomeView: Component = () => {
     )
 
     return (
-        <div class="flex h-full justify-evenly flex-wrap">
+        <div class="flex h-full justify-evenly flex-wrap overflow-y-auto">
             <Show when={worldStore.state.list.length} fallback={empty}>
                 <For each={worldStore.state.list}>
                     {(world) => (

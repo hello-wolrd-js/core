@@ -46,7 +46,7 @@ export const PublishView: Component = () => {
     }
 
     return (
-        <div class="flex flex-col-reverse justify-around items-center h-full lg:flex-row">
+        <div class="flex flex-col-reverse justify-around items-center h-full lg:flex-row overflow-auto">
             {/* 基本信息表单 */}
             <div class="card shrink-0 min-w-96 shadow-2xl min-h-2/3 bg-base-50">
                 <div class="card-body">
