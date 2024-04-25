@@ -1,5 +1,5 @@
 import { WORLD_API } from '@api/world'
-import { WorldList, WorldQueryParams } from '@core/models'
+import { World, WorldList, WorldQueryParams } from '@core/models'
 import { isSuccessResponse } from '@core/shared'
 import { createStore, produce } from 'solid-js/store'
 
@@ -7,6 +7,7 @@ interface WorldStoreState extends WorldList {
     queryParams?: WorldQueryParams
 }
 
+// const _worldMap = new Map<string, World>()
 const [store, setStore] = createStore<WorldStoreState>({
     list: [],
     totalItems: 0,
@@ -19,9 +20,27 @@ const getWorld = async (params?: WorldQueryParams) => {
     if (isSuccessResponse(result)) {
         setStore(
             produce((state) => {
-                state.list = [...new Set(state.list.concat(result.data.list))]
+                //去重
+                state.list = state.list.concat(
+                    result.data.list.filter(
+                        (v, i, a) => a.findIndex((t) => t.id === v.id && t.name === v.name) === i
+                    )
+                )
             })
         )
+        setStore('totalItems', result.data.totalItems)
+        setStore('totalPages', result.data.totalPages)
+    }
+    return result
+}
+
+const refreshWorld = async (status?: 'checked' | 'unchecked') => {
+    const result = await WORLD_API.getWorld({
+        pageSize: `${store.list.length}`,
+        status
+    })
+    if (isSuccessResponse(result)) {
+        setStore('list', result.data.list)
         setStore('totalItems', result.data.totalItems)
         setStore('totalPages', result.data.totalPages)
     }
@@ -70,6 +89,7 @@ export const useWorldStore = () => {
         deleteWorld,
         checkWorld,
         uncheckWorld,
-        setStore
+        setStore,
+        refreshWorld
     }
 }
