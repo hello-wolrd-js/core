@@ -68,7 +68,6 @@ const addUserFavoriteWorld = async (world: World) => {
                 state.favorite_worlds.list.push(world)
             })
         )
-        world.star++
     }
     return result
 }
@@ -85,7 +84,6 @@ const deleteUserFavoriteWorld = async (world: World) => {
                 )
             })
         )
-        world.star--
     }
     return result
 }
