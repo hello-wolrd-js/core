@@ -1,36 +1,39 @@
-import { useUserStore } from '@stores/user'
-import { Component, For, Show } from 'solid-js'
-import { WorldCard } from '../../components/card/WorldCard'
+import { Component } from 'solid-js'
 import { isSuccessResponse } from '@core/shared/guard'
 import toast from 'solid-toast'
-import { useEmptyResult, useToWorldFn, useUpdateUserFavoriteFn } from '@hooks/index'
-import { useWorldStore } from '@stores/world'
+import { useEmptyWorldList, useWorldList } from '@hooks/world'
+import { USER_API } from '@api/user'
+import { useEmptyResult } from '@hooks/index'
 
 export const FavoriteView: Component = () => {
-    const userStore = useUserStore()
-    userStore.getUserFavoriteWorlds().then((result) => {
-        !isSuccessResponse(result) && toast.error(result.error)
+    const { WorldList } = useWorldList({
+        async getter() {
+            const result = await USER_API.getUserFavoriteWorlds()
+            if (isSuccessResponse(result)) {
+                return result.data
+            } else {
+                toast.error(result.error)
+                return useEmptyWorldList()
+            }
+        },
+        init: true,
+        empty: useEmptyResult('暂无收藏的世界'),
+        refresh: {
+            async getter(page, pageSize) {
+                const result = await USER_API.getUserFavoriteWorlds({
+                    page: `${page}`,
+                    pageSize: `${pageSize}`
+                })
+                //获取失败时才提示
+                if (isSuccessResponse(result)) {
+                    return result.data
+                } else {
+                    toast.error(result.error)
+                    return useEmptyWorldList()
+                }
+            },
+            refreshDistance: 300
+        }
     })
-
-    const handleUpdateFavorite = useUpdateUserFavoriteFn(useWorldStore().setStore)
-    const handleToWorld = useToWorldFn()
-
-    return (
-        <div class="flex justify-evenly flex-wrap h-full overflow-y-auto">
-            <Show
-                when={userStore.state.favorite_worlds.list.length}
-                fallback={useEmptyResult('暂无收藏')}
-            >
-                <For each={userStore.state.favorite_worlds.list}>
-                    {(world) => (
-                        <WorldCard
-                            world={world}
-                            onUpdateFavorite={handleUpdateFavorite}
-                            onToWorld={handleToWorld}
-                        ></WorldCard>
-                    )}
-                </For>
-            </Show>
-        </div>
-    )
+    return WorldList
 }

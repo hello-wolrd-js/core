@@ -2,7 +2,7 @@ import { WorldList } from '@core/models'
 import { createStore, produce } from 'solid-js/store'
 import { useEmptyResult, useToWorldFn, useUpdateUserFavoriteFn } from '.'
 import { debounce } from 'lodash'
-import { onMount, onCleanup, For, Show } from 'solid-js'
+import { onMount, onCleanup, For, Show, JSXElement } from 'solid-js'
 import { WorldCard } from '../client/src/components/card/WorldCard'
 
 export const useEmptyWorldList = (): WorldList => {
@@ -16,10 +16,12 @@ export const useEmptyWorldList = (): WorldList => {
 export const useWorldList = ({
     getter,
     init,
-    refresh
+    refresh,
+    empty = useEmptyResult('暂无世界')
 }: {
     getter: () => Promise<WorldList>
     init: boolean
+    empty?: JSXElement //为空时展示
     refresh?: {
         getter: (page: number, pageSize: number) => Promise<WorldList>
         refreshDistance: number
@@ -85,7 +87,7 @@ export const useWorldList = ({
     const handleUpdateFavorite = useUpdateUserFavoriteFn(setStore)
     const WorldList = (
         <div ref={containerRef} class="flex justify-evenly flex-wrap h-full overflow-y-auto">
-            <Show when={store.list.length} fallback={useEmptyResult('暂无世界')}>
+            <Show when={store.list.length} fallback={empty}>
                 <For each={store.list}>
                     {(world) => (
                         <WorldCard
