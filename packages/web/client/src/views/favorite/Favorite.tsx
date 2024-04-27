@@ -3,7 +3,7 @@ import { isSuccessResponse } from '@core/shared/guard'
 import toast from 'solid-toast'
 import { useEmptyWorldList, useWorldList } from '@hooks/world'
 import { USER_API } from '@api/user'
-import { useEmptyResult } from '@hooks/index'
+import { useAwait, useEmptyResult } from '@hooks/index'
 import { WorldCard } from '@/components/card/WorldCard'
 
 export const FavoriteView: Component = () => {
@@ -20,7 +20,13 @@ export const FavoriteView: Component = () => {
         init: true,
         empty: useEmptyResult('暂无收藏的世界'),
         refresh: {
-            refreshDistance: 300
+            onBeforeRefresh: async () => {
+                toast.loading('正在加载更多', { duration: 1000 })
+                await useAwait(1000)
+            },
+            onAllRefreshed: () => {
+                toast.success('已经到底啦!')
+            }
         }
     })
 

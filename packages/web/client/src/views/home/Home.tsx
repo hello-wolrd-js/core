@@ -4,6 +4,7 @@ import toast from 'solid-toast'
 import { useEmptyWorldList, useWorldList } from '@hooks/world'
 import { WORLD_API } from '@api/world'
 import { WorldCard } from '@/components/card/WorldCard'
+import { useAwait } from '@hooks/index'
 
 export const HomeView: Component = () => {
     const { WorldList, handleUpdateFavorite } = useWorldList({
@@ -19,7 +20,13 @@ export const HomeView: Component = () => {
         },
         init: true,
         refresh: {
-            refreshDistance: 300
+            onBeforeRefresh: async () => {
+                toast.loading('正在加载更多', { duration: 1000 })
+                await useAwait(1000)
+            },
+            onAllRefreshed: () => {
+                toast.success('已经到底啦!')
+            }
         }
     })
 

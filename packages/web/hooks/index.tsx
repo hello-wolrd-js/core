@@ -56,3 +56,11 @@ export const useUpdateUserFavoriteFn = (setter: SetStoreFunction<WorldList>) => 
         }
     }
 }
+
+export const useAwait = (duration: number) => {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve(1)
+        }, duration)
+    })
+}

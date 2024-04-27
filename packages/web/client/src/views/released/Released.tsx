@@ -3,14 +3,13 @@ import { Component } from 'solid-js'
 import toast from 'solid-toast'
 import { useEmptyWorldList, useWorldList } from '@hooks/world'
 import { USER_API } from '@api/user'
-import { useEmptyResult } from '@hooks/index'
+import { useAwait, useEmptyResult } from '@hooks/index'
 import { WorldCard } from '@/components/card/WorldCard'
 
 export const ReleasedView: Component = () => {
     const { WorldList, handleUpdateFavorite } = useWorldList({
         async getter(params) {
             const result = await USER_API.getUserReleasedWorlds(params)
-            console.log(result)
             if (isSuccessResponse(result)) {
                 return result.data
             } else {
@@ -18,10 +17,15 @@ export const ReleasedView: Component = () => {
                 return useEmptyWorldList()
             }
         },
-        init: true,
         empty: useEmptyResult('暂无发布的世界'),
         refresh: {
-            refreshDistance: 300
+            onBeforeRefresh: async () => {
+                toast.loading('正在加载更多', { duration: 1000 })
+                await useAwait(1000)
+            },
+            onAllRefreshed: () => {
+                toast.success('已经到底啦!')
+            }
         }
     })
 

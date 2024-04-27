@@ -15,20 +15,30 @@ export const useEmptyWorldList = (): WorldList => {
 export const useWorldList = ({
     getter,
     deleter,
-    init,
-    refresh,
+    refresh = true,
+    init = true,
     empty = useEmptyResult('暂无世界')
 }: {
     getter: (params?: WorldQueryParams) => Promise<WorldList>
     deleter?: (target: World) => Promise<void>
-    init: boolean
+    init?: boolean //是否初始获取一次
     empty?: JSXElement //为空时展示
-    refresh?: {
-        refreshDistance: number
-        onBeforeRefresh?: () => void
-        onRefreshed?: () => void
-    }
+    refresh?:
+        | {
+              distance?: number
+              debounce?: number
+              onBeforeRefresh?: () => void | Promise<void>
+              onRefreshed?: () => void | Promise<void>
+              onAllRefreshed?: () => void | Promise<void>
+          }
+        | boolean
 }) => {
+    //默认配置
+    //#region
+    const _originRefresh = typeof refresh === 'boolean' ? {} : refresh
+    const _refresh = { ..._originRefresh, debounce: 100, distance: 200 }
+    //#endregion
+
     //内部状态
     //#region
     const [store, setStore] = createStore<WorldList>({
@@ -60,14 +70,17 @@ export const useWorldList = ({
     //#region
     let containerRef: HTMLDivElement | undefined
     const _handleTouchDownRefresh = debounce(async () => {
-        //大于总页数时要退出
-        if (!containerRef || !refresh || store.list.length >= store.totalItems) return
+        if (!containerRef) return
+
         //下滑距离判断
         if (
             containerRef.clientHeight + containerRef.scrollTop >=
-            containerRef.scrollHeight - refresh.refreshDistance
+            containerRef.scrollHeight - _refresh.distance
         ) {
-            refresh?.onBeforeRefresh?.()
+            //大于总页数时说明刷新完毕
+            if (store.list.length >= store.totalItems) return await _refresh.onAllRefreshed?.()
+
+            await _refresh.onBeforeRefresh?.()
             //计算差值
             const diff = store.totalItems - store.list.length
             //更新分页参数
@@ -75,7 +88,7 @@ export const useWorldList = ({
             queryParams.pageSize = diff > queryParams.pageSize ? queryParams.pageSize : diff
             //获取新值
             const result = await getter(queryParams)
-            //状态改变
+            //改变状态
             setStore(
                 produce((state) => {
                     //去重
@@ -89,9 +102,10 @@ export const useWorldList = ({
                     state.totalPages = result.totalPages
                 })
             )
-            refresh?.onRefreshed?.()
+            await _refresh.onRefreshed?.()
         }
-    }, 500)
+    }, _refresh.debounce)
+
     //监听与解除监听
     onMount(() => {
         containerRef && refresh && containerRef.addEventListener('scroll', _handleTouchDownRefresh)
