@@ -14,12 +14,12 @@ export const WorldService = new Elysia()
             .guard((app) =>
                 app
                     .use(verifyCommonUser)
-                    //获取世界(待分页)
+                    //获取世界
                     .get(
                         '/',
                         async ({ query }) => {
                             try {
-                                const result = await db.world.getWorld(query)
+                                const result = await db.world.getWorld(query as any) //这里因为query必定是字符串所以可以忽略number
                                 return createSuccessResponse(200, '获取世界成功', result)
                             } catch (error) {
                                 return createErrorResponse(-1, '获取世界失败: ' + error)

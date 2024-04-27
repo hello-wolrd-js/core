@@ -57,10 +57,14 @@ export const getUserFavoriteWorlds = async (
     userId: string,
     params?: WorldQueryParams
 ): Promise<WorldList> => {
-    const page = parseInt(params?.page || '1')
-    const pageSize = parseInt(params?.pageSize || '10')
+    const page = params?.page || 1
+    const pageSize = params?.pageSize || 10
+
     const query = UserModel.findById(userId)
-    const totalItems = await query.clone().countDocuments()
+    const _user = await query.clone()
+    if (!_user) throw '该用户不存在!'
+
+    const totalItems = _user.favorite_worlds.length
     const totalPages = Math.ceil(totalItems / pageSize)
     const user = await query.clone().populate({
         path: 'favorite_worlds',
@@ -82,10 +86,14 @@ export const getUserReleasedWorlds = async (
     userId: string,
     params?: WorldQueryParams
 ): Promise<WorldList> => {
-    const page = parseInt(params?.page || '1')
-    const pageSize = parseInt(params?.pageSize || '10')
+    const page = params?.page || 1
+    const pageSize = params?.pageSize || 10
+
     const query = UserModel.findById(userId)
-    const totalItems = await query.clone().countDocuments()
+    const _user = await query.clone()
+    if (!_user) throw '该用户不存在!'
+
+    const totalItems = _user.released_worlds.length
     const totalPages = Math.ceil(totalItems / pageSize)
     const user = await query.clone().populate({
         path: 'released_worlds',

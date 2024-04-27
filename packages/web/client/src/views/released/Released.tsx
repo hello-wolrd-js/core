@@ -8,8 +8,9 @@ import { WorldCard } from '@/components/card/WorldCard'
 
 export const ReleasedView: Component = () => {
     const { WorldList, handleUpdateFavorite } = useWorldList({
-        async getter() {
-            const result = await USER_API.getUserReleasedWorlds()
+        async getter(params) {
+            const result = await USER_API.getUserReleasedWorlds(params)
+            console.log(result)
             if (isSuccessResponse(result)) {
                 return result.data
             } else {
@@ -20,19 +21,6 @@ export const ReleasedView: Component = () => {
         init: true,
         empty: useEmptyResult('暂无发布的世界'),
         refresh: {
-            async getter(page, pageSize) {
-                const result = await USER_API.getUserReleasedWorlds({
-                    page: `${page}`,
-                    pageSize: `${pageSize}`
-                })
-                //获取失败时才提示
-                if (isSuccessResponse(result)) {
-                    return result.data
-                } else {
-                    toast.error(result.error)
-                    return useEmptyWorldList()
-                }
-            },
             refreshDistance: 300
         }
     })

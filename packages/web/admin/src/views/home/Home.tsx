@@ -9,8 +9,8 @@ import { WORLD_API } from '@api/world'
 
 export const HomeView: Component = () => {
     const { WorldList, handleDelete } = useWorldList({
-        async getter() {
-            const result = await WORLD_API.getWorld()
+        async getter(params) {
+            const result = await WORLD_API.getWorld(params)
             //获取失败时才提示
             if (isSuccessResponse(result)) {
                 return result.data
@@ -29,19 +29,6 @@ export const HomeView: Component = () => {
         },
         init: true,
         refresh: {
-            async getter(page, pageSize) {
-                const result = await WORLD_API.getWorld({
-                    page: `${page}`,
-                    pageSize: `${pageSize}`
-                })
-                //获取失败时才提示
-                if (isSuccessResponse(result)) {
-                    return result.data
-                } else {
-                    toast.error(result.error)
-                    return useEmptyWorldList()
-                }
-            },
             refreshDistance: 300
         }
     })

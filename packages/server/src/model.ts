@@ -3,6 +3,7 @@ import { createErrorProvider as E } from './util'
 
 export const WorldDTO = {
     search: {
+        //查询参数
         query: t.Object({
             id: t.Optional(t.String()),
             name: t.Optional(t.String()),

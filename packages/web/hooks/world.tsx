@@ -1,4 +1,4 @@
-import { WorldCardBaseProps, World, WorldList } from '@core/models'
+import { WorldCardBaseProps, World, WorldList, WorldQueryParams } from '@core/models'
 import { createStore, produce } from 'solid-js/store'
 import { useEmptyResult, useToWorldFn, useUpdateUserFavoriteFn } from '.'
 import { debounce } from 'lodash'
@@ -19,30 +19,47 @@ export const useWorldList = ({
     refresh,
     empty = useEmptyResult('暂无世界')
 }: {
-    getter: () => Promise<WorldList>
+    getter: (params?: WorldQueryParams) => Promise<WorldList>
     deleter?: (target: World) => Promise<void>
     init: boolean
     empty?: JSXElement //为空时展示
     refresh?: {
-        getter: (page: number, pageSize: number) => Promise<WorldList>
         refreshDistance: number
         onBeforeRefresh?: () => void
         onRefreshed?: () => void
     }
 }) => {
+    //内部状态
+    //#region
     const [store, setStore] = createStore<WorldList>({
         list: [],
         totalItems: 0,
         totalPages: 0
     })
-    init && getter().then((res) => setStore(res))
+    //#endregion
+
+    //查询参数
+    const queryParams = {
+        page: 1,
+        pageSize: 10
+    }
+
+    //初始化
+    //#region
+    init && getter(queryParams).then((res) => setStore(res))
+    //#endregion
+
+    //搜索
+    //#region
+    const handleSearch = (params?: WorldQueryParams) => {
+        getter({ ...params, ...queryParams }).then((res) => setStore(res))
+    }
+    //#endregion
 
     //分页下滑刷新
     //#region
     let containerRef: HTMLDivElement | undefined
-    let page = 1
-    const pageSize = 10
-    const handleTouchDownRefresh = debounce(async () => {
+    const _handleTouchDownRefresh = debounce(async () => {
         //大于总页数时要退出
         if (!containerRef || !refresh || store.list.length >= store.totalItems) return
         //下滑距离判断
@@ -53,7 +70,11 @@ export const useWorldList = ({
             refresh?.onBeforeRefresh?.()
             //计算差值
             const diff = store.totalItems - store.list.length
-            const result = await refresh.getter(page++, diff > pageSize ? pageSize : diff)
+            //更新分页参数
+            queryParams.page++
+            queryParams.pageSize = diff > queryParams.pageSize ? queryParams.pageSize : diff
+            //获取新值
+            const result = await getter(queryParams)
             //状态改变
             setStore(
                 produce((state) => {
@@ -73,12 +94,12 @@ export const useWorldList = ({
     }, 500)
     //监听与解除监听
     onMount(() => {
-        containerRef && refresh && containerRef.addEventListener('scroll', handleTouchDownRefresh)
+        containerRef && refresh && containerRef.addEventListener('scroll', _handleTouchDownRefresh)
     })
     onCleanup(() => {
         containerRef &&
             refresh &&
-            containerRef.removeEventListener('scroll', handleTouchDownRefresh)
+            containerRef.removeEventListener('scroll', _handleTouchDownRefresh)
     })
     //#endregion
 
@@ -98,7 +119,7 @@ export const useWorldList = ({
     //#region
     const handleToWorld = useToWorldFn()
     const handleUpdateFavorite = useUpdateUserFavoriteFn(setStore)
-    const WorldList = (card: (props: WorldCardBaseProps) => JSXElement): JSXElement => {
+    const WorldList = (wraper: (props: WorldCardBaseProps) => JSXElement): JSXElement => {
         return (
             <div
                 ref={containerRef}
@@ -112,8 +133,9 @@ export const useWorldList = ({
             >
                 <Show when={store.list.length} fallback={empty}>
                     <For each={store.list}>
+                        {/* 包装card */}
                         {(world) =>
-                            card({
+                            wraper({
                                 world,
                                 onToWorld: handleToWorld
                             })
@@ -129,6 +151,12 @@ export const useWorldList = ({
         state: store,
         WorldList,
         handleDelete,
-        handleUpdateFavorite
+        handleUpdateFavorite,
+        handleSearch,
+        handler: {
+            search: handleSearch,
+            delete: handleDelete,
+            updateFavorite: handleUpdateFavorite
+        }
     }
 }

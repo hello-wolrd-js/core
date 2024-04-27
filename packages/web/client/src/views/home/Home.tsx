@@ -7,8 +7,8 @@ import { WorldCard } from '@/components/card/WorldCard'
 
 export const HomeView: Component = () => {
     const { WorldList, handleUpdateFavorite } = useWorldList({
-        async getter() {
-            const result = await WORLD_API.getWorld({ status: 'checked' })
+        async getter(params) {
+            const result = await WORLD_API.getWorld({ ...params, status: 'checked' })
             //获取失败时才提示
             if (isSuccessResponse(result)) {
                 return result.data
@@ -19,20 +19,6 @@ export const HomeView: Component = () => {
         },
         init: true,
         refresh: {
-            async getter(page, pageSize) {
-                const result = await WORLD_API.getWorld({
-                    page: `${page}`,
-                    pageSize: `${pageSize}`,
-                    status: 'checked'
-                })
-                //获取失败时才提示
-                if (isSuccessResponse(result)) {
-                    return result.data
-                } else {
-                    toast.error(result.error)
-                    return useEmptyWorldList()
-                }
-            },
             refreshDistance: 300
         }
     })

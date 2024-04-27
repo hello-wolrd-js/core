@@ -8,8 +8,8 @@ import { WorldCard } from '@/components/card/WorldCard'
 
 export const FavoriteView: Component = () => {
     const { WorldList, handleUpdateFavorite } = useWorldList({
-        async getter() {
-            const result = await USER_API.getUserFavoriteWorlds()
+        async getter(params) {
+            const result = await USER_API.getUserFavoriteWorlds(params)
             if (isSuccessResponse(result)) {
                 return result.data
             } else {
@@ -20,22 +20,9 @@ export const FavoriteView: Component = () => {
         init: true,
         empty: useEmptyResult('暂无收藏的世界'),
         refresh: {
-            async getter(page, pageSize) {
-                const result = await USER_API.getUserFavoriteWorlds({
-                    page: `${page}`,
-                    pageSize: `${pageSize}`
-                })
-                //获取失败时才提示
-                if (isSuccessResponse(result)) {
-                    return result.data
-                } else {
-                    toast.error(result.error)
-                    return useEmptyWorldList()
-                }
-            },
             refreshDistance: 300
         }
     })
-    
+
     return WorldList((props) => WorldCard({ ...props, onUpdateFavorite: handleUpdateFavorite }))
 }

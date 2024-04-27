@@ -28,8 +28,6 @@ export interface WorldUpdateParams extends WorldCreateParams {
 }
 
 //世界查询参数
-export interface WorldQueryParams extends PaginationQueryParams {
-    id?: string
-    name?: string
-    status?: World['status']
-}
+export interface WorldQueryParams
+    extends Partial<PaginationQueryParams>,
+        Partial<Pick<World, 'id' | 'name' | 'status'>> {}
