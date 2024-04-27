@@ -1,42 +1,35 @@
-import { isSuccessResponse } from '@core/shared'
 import { useNavigate } from '@solidjs/router'
 import { useGlobalStore } from '@stores/global'
 import { useUserStore } from '@stores/user'
-import { useWorldStore } from '@stores/world'
 import { debounce } from 'lodash'
 import { Component } from 'solid-js'
-import toast from 'solid-toast'
 
 const NavBar: Component<{ height: number }> = (props) => {
+    //路由导航
     const navigate = useNavigate()
     const handleToHome = () => navigate('/', { replace: true })
     const handleToPublish = () => navigate('/publish')
     const handleToFavorite = () => navigate('/favorite')
     const handleToReleased = () => navigate('/released')
 
+    //用户
     const userStore = useUserStore()
     const handleLogout = () => {
         userStore.logout()
     }
-    const worldStore = useWorldStore()
-    const handleRefresh = async () => {
-        const result = await worldStore.refreshWorld('checked')
-        if (isSuccessResponse(result)) {
-            toast.success('刷新成功')
-        } else {
-            toast.error('刷新失败: ' + result.error)
-        }
-    }
 
-    //搜索
-    //#region
-    const globalStore = useGlobalStore()
-    const handleInput = debounce((e: InputEvent) => {
-        globalStore.state.emitter.emit('search-world', {
+    //跨组件事件
+    const {
+        state: { emitter }
+    } = useGlobalStore()
+    const handleRefreshWorlds = debounce(() => {
+        emitter.emit('refresh-worlds')
+    }, 250)
+    const handleSearchWorld = debounce((e: InputEvent) => {
+        emitter.emit('search-world', {
             name: (e.target as HTMLInputElement).value
         })
-    }, 500)
-    //#endregion
+    }, 250)
 
     return (
         // 导航栏
@@ -80,7 +73,7 @@ const NavBar: Component<{ height: number }> = (props) => {
                 </div>
             </div>
             {/* 刷新 */}
-            <div class="flex-none" onClick={handleRefresh}>
+            <div class="flex-none" onClick={handleRefreshWorlds}>
                 <div class="tooltip tooltip-bottom" data-tip="刷新">
                     <div class="btn btn-square btn-ghost">
                         <svg
@@ -145,7 +138,12 @@ const NavBar: Component<{ height: number }> = (props) => {
             {/* 搜索块 */}
             <div class="flex-1 flex justify-center">
                 <label class="input input-bordered flex items-center gap-2 input-sm ">
-                    <input type="text" class="grow" placeholder="搜搜看吧" onInput={handleInput} />
+                    <input
+                        type="text"
+                        class="grow"
+                        placeholder="搜搜看吧"
+                        onInput={handleSearchWorld}
+                    />
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 16 16"

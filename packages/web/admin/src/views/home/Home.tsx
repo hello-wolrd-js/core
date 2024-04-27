@@ -10,8 +10,7 @@ import { useAwait } from '@hooks/index'
 import { useGlobalStore } from '@stores/global'
 
 export const HomeView: Component = () => {
-    
-    const { WorldList, handleDelete, handleSearch } = useWorldList({
+    const { WorldList, handleDelete, handleSearch, handleRefresh } = useWorldList({
         async getter(params) {
             const result = await WORLD_API.getWorld(params)
             //获取失败时才提示
@@ -63,14 +62,24 @@ export const HomeView: Component = () => {
     }
     //#endregion
 
-    //搜索
+    //事件
     //#region
-    const globalStore = useGlobalStore()
+    const {
+        state: { emitter }
+    } = useGlobalStore()
     onMount(() => {
-        globalStore.state.emitter.on('search-world', handleSearch)
+        emitter.on('search-world', async (params) => {
+            toast.loading('搜索中', { duration: 1000 })
+            await handleSearch(params)
+        })
+        emitter.on('refresh-worlds', async () => {
+            await handleRefresh()
+            toast.success('刷新成功', { duration: 1000 })
+        })
     })
     onCleanup(() => {
-        globalStore.state.emitter.off('search-world')
+        emitter.off('search-world')
+        emitter.off('refresh-worlds')
     })
     //#endregion
 

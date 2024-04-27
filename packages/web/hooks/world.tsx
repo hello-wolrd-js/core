@@ -64,10 +64,19 @@ export const useWorldList = ({
 
     //搜索
     //#region
-    const handleSearch = (queryParams?: WorldQueryParams) => {
-        //注意搜索前要重置分页
+    const handleSearch = async (queryParams?: WorldQueryParams) => {
+        //!注意搜索前要重置分页
         setParams({ ...queryParams, ...initialParams })
-        getter(params).then((res) => setStore(res))
+        setStore(await getter(params))
+    }
+    //#endregion
+
+    //刷新
+    //#region
+    const handleRefresh = async () => {
+        //!注意刷新前要重置分页
+        setParams({ ...params, ...initialParams })
+        setStore(await getter(params))
     }
     //#endregion
 
@@ -83,7 +92,6 @@ export const useWorldList = ({
             containerRef.scrollHeight - _refresh.distance
         ) {
             //大于总页数时说明刷新完毕
-            console.log(store, params)
             if (store.list.length >= store.totalItems) return await _refresh.onAllRefreshed?.()
 
             await _refresh.onBeforeRefresh?.()
@@ -174,10 +182,12 @@ export const useWorldList = ({
         handleDelete,
         handleUpdateFavorite,
         handleSearch,
+        handleRefresh,
         handler: {
             search: handleSearch,
             delete: handleDelete,
-            updateFavorite: handleUpdateFavorite
+            updateFavorite: handleUpdateFavorite,
+            refresh: handleRefresh
         }
     }
 }

@@ -1,39 +1,32 @@
 import { useNavigate } from '@solidjs/router'
 import { Component } from 'solid-js'
 import { useUserStore } from '@stores/user'
-import { useWorldStore } from '@stores/world'
-import { isSuccessResponse } from '@core/shared'
-import toast from 'solid-toast'
 import { useGlobalStore } from '@stores/global'
 import { debounce } from 'lodash'
 
 export const NavBar: Component<{ height: number }> = (props) => {
+    //导航
     const navigate = useNavigate()
     const handleToHome = () => navigate('/', { replace: true })
 
+    //用户
     const userStore = useUserStore()
     const handleLogout = () => {
         userStore.logout()
     }
-    const worldStore = useWorldStore()
-    const handleRefresh = async () => {
-        const result = await worldStore.refreshWorld()
-        if (isSuccessResponse(result)) {
-            toast.success('刷新成功')
-        } else {
-            toast.error('刷新失败: ' + result.error)
-        }
-    }
 
-    //搜索
-    //#region
-    const globalStore = useGlobalStore()
-    const handleInput = debounce((e: InputEvent) => {
-        globalStore.state.emitter.emit('search-world', {
+    //跨组件事件
+    const {
+        state: { emitter }
+    } = useGlobalStore()
+    const handleRefreshWorlds = debounce(() => {
+        emitter.emit('refresh-worlds')
+    }, 250)
+    const handleSearchWorld = debounce((e: InputEvent) => {
+        emitter.emit('search-world', {
             name: (e.target as HTMLInputElement).value
         })
-    }, 500)
-    //#endregion
+    }, 250)
 
     return (
         <nav
@@ -76,7 +69,7 @@ export const NavBar: Component<{ height: number }> = (props) => {
             </div>
             {/* 刷新世界 */}
             <div class="flex-none">
-                <a class="btn btn-square btn-ghost" onClick={handleRefresh}>
+                <a class="btn btn-square btn-ghost" onClick={handleRefreshWorlds}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -96,7 +89,12 @@ export const NavBar: Component<{ height: number }> = (props) => {
             {/* 搜索块 */}
             <div class="flex-1 flex justify-center">
                 <label class="input input-bordered flex items-center gap-2 input-sm ">
-                    <input type="text" class="grow" placeholder="搜搜看吧" onInput={handleInput} />
+                    <input
+                        type="text"
+                        class="grow"
+                        placeholder="搜搜看吧"
+                        onInput={handleSearchWorld}
+                    />
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 16 16"

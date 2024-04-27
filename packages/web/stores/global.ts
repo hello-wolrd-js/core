@@ -7,6 +7,7 @@ interface GlobalStoreState {
     contentHeight: number
     emitter: Emitter<{
         'search-world': WorldQueryParams
+        'refresh-worlds': void
     }>
 }
 
