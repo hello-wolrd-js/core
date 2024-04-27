@@ -1,7 +1,7 @@
 import { World, WorldList } from '@core/models'
 import { isSuccessResponse } from '@core/shared'
 import { useNavigate } from '@solidjs/router'
-import { useStatusStore } from '@stores/status'
+import { useGlobalStore } from '@stores/global'
 import { useUserStore } from '@stores/user'
 import { SetStoreFunction, produce } from 'solid-js/store'
 import { JSX } from 'solid-js/web/types/jsx'
@@ -33,7 +33,7 @@ export const useToWorldFn = () => {
     const navigate = useNavigate()
     return (world: World) => {
         navigate('/world')
-        useStatusStore().setStore('currentWorld', world)
+        useGlobalStore().setStore('currentWorld', world)
     }
 }
 

@@ -1,8 +1,8 @@
-import { useStatusStore } from '@stores/status'
+import { useGlobalStore } from '@stores/global'
 import { Component, onMount } from 'solid-js'
 
 export const WorldView: Component = () => {
-    const statusStore = useStatusStore()
+    const statusStore = useGlobalStore()
     let worldContainerRef: HTMLIFrameElement | undefined
     onMount(() => {
         if (!worldContainerRef) return
