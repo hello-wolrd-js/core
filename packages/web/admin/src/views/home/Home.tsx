@@ -1,4 +1,4 @@
-import { Component, createSignal } from 'solid-js'
+import { Component, createSignal, onCleanup, onMount } from 'solid-js'
 import { AdminWorldCard } from '@/components/card/AdminWorldCard'
 import type { World } from '@core/models'
 import { isSuccessResponse } from '@core/shared'
@@ -7,9 +7,11 @@ import toast from 'solid-toast'
 import { useEmptyWorldList, useWorldList } from '@hooks/world'
 import { WORLD_API } from '@api/world'
 import { useAwait } from '@hooks/index'
+import { useGlobalStore } from '@stores/global'
 
 export const HomeView: Component = () => {
-    const { WorldList, handleDelete } = useWorldList({
+    
+    const { WorldList, handleDelete, handleSearch } = useWorldList({
         async getter(params) {
             const result = await WORLD_API.getWorld(params)
             //获取失败时才提示
@@ -59,6 +61,17 @@ export const HomeView: Component = () => {
     const handleClose = () => {
         setShowModal(false)
     }
+    //#endregion
+
+    //搜索
+    //#region
+    const globalStore = useGlobalStore()
+    onMount(() => {
+        globalStore.state.emitter.on('search-world', handleSearch)
+    })
+    onCleanup(() => {
+        globalStore.state.emitter.off('search-world')
+    })
     //#endregion
 
     return (

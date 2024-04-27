@@ -1,7 +1,9 @@
 import { isSuccessResponse } from '@core/shared'
 import { useNavigate } from '@solidjs/router'
+import { useGlobalStore } from '@stores/global'
 import { useUserStore } from '@stores/user'
 import { useWorldStore } from '@stores/world'
+import { debounce } from 'lodash'
 import { Component } from 'solid-js'
 import toast from 'solid-toast'
 
@@ -25,6 +27,17 @@ const NavBar: Component<{ height: number }> = (props) => {
             toast.error('刷新失败: ' + result.error)
         }
     }
+
+    //搜索
+    //#region
+    const globalStore = useGlobalStore()
+    const handleInput = debounce((e: InputEvent) => {
+        globalStore.state.emitter.emit('search-world', {
+            name: (e.target as HTMLInputElement).value
+        })
+    }, 500)
+    //#endregion
+
     return (
         // 导航栏
         <nav
@@ -132,7 +145,7 @@ const NavBar: Component<{ height: number }> = (props) => {
             {/* 搜索块 */}
             <div class="flex-1 flex justify-center">
                 <label class="input input-bordered flex items-center gap-2 input-sm ">
-                    <input type="text" class="grow" placeholder="搜搜看吧" />
+                    <input type="text" class="grow" placeholder="搜搜看吧" onInput={handleInput} />
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 16 16"

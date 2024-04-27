@@ -49,20 +49,25 @@ export const useWorldList = ({
     //#endregion
 
     //查询参数
-    const queryParams = {
+    const initialParams = {
         page: 1,
         pageSize: 10
     }
+    const [params, setParams] = createStore({
+        ...initialParams
+    })
 
     //初始化
     //#region
-    init && getter(queryParams).then((res) => setStore(res))
+    init && getter(params).then((res) => setStore(res))
     //#endregion
 
     //搜索
     //#region
-    const handleSearch = (params?: WorldQueryParams) => {
-        getter({ ...params, ...queryParams }).then((res) => setStore(res))
+    const handleSearch = (queryParams?: WorldQueryParams) => {
+        //注意搜索前要重置分页
+        setParams({ ...queryParams, ...initialParams })
+        getter(params).then((res) => setStore(res))
     }
     //#endregion
 
@@ -78,26 +83,25 @@ export const useWorldList = ({
             containerRef.scrollHeight - _refresh.distance
         ) {
             //大于总页数时说明刷新完毕
+            console.log(store, params)
             if (store.list.length >= store.totalItems) return await _refresh.onAllRefreshed?.()
 
             await _refresh.onBeforeRefresh?.()
             //计算差值
             const diff = store.totalItems - store.list.length
             //更新分页参数
-            queryParams.page++
-            queryParams.pageSize = diff > queryParams.pageSize ? queryParams.pageSize : diff
+            setParams(
+                produce((state) => {
+                    state.page++
+                    state.pageSize = diff > state.pageSize ? state.pageSize : diff
+                })
+            )
             //获取新值
-            const result = await getter(queryParams)
+            const result = await getter(params)
             //改变状态
             setStore(
                 produce((state) => {
-                    //去重
-                    state.list = state.list.concat(
-                        result.list.filter(
-                            (v, i, a) =>
-                                a.findIndex((t) => t.id === v.id && t.name === v.name) === i
-                        )
-                    )
+                    state.list = state.list.concat(result.list)
                     state.totalItems = result.totalItems
                     state.totalPages = result.totalPages
                 })
@@ -107,6 +111,7 @@ export const useWorldList = ({
     }, _refresh.debounce)
 
     //监听与解除监听
+    //#region
     onMount(() => {
         containerRef && refresh && containerRef.addEventListener('scroll', _handleTouchDownRefresh)
     })
@@ -115,6 +120,8 @@ export const useWorldList = ({
             refresh &&
             containerRef.removeEventListener('scroll', _handleTouchDownRefresh)
     })
+    //#endregion
+
     //#endregion
 
     //封装的CRUD

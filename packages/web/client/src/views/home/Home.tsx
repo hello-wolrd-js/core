@@ -1,15 +1,17 @@
-import { Component } from 'solid-js'
+import { Component, onCleanup, onMount } from 'solid-js'
 import { isSuccessResponse } from '@core/shared'
 import toast from 'solid-toast'
 import { useEmptyWorldList, useWorldList } from '@hooks/world'
 import { WORLD_API } from '@api/world'
 import { WorldCard } from '@/components/card/WorldCard'
 import { useAwait } from '@hooks/index'
+import { useGlobalStore } from '@stores/global'
 
 export const HomeView: Component = () => {
-    const { WorldList, handleUpdateFavorite } = useWorldList({
+    const { WorldList, handleUpdateFavorite, handleSearch } = useWorldList({
         async getter(params) {
             const result = await WORLD_API.getWorld({ ...params, status: 'checked' })
+            console.log(result)
             //获取失败时才提示
             if (isSuccessResponse(result)) {
                 return result.data
@@ -29,6 +31,17 @@ export const HomeView: Component = () => {
             }
         }
     })
+
+    //搜索
+    //#region
+    const globalStore = useGlobalStore()
+    onMount(() => {
+        globalStore.state.emitter.on('search-world', handleSearch)
+    })
+    onCleanup(() => {
+        globalStore.state.emitter.off('search-world')
+    })
+    //#endregion
 
     return WorldList((props) => WorldCard({ ...props, onUpdateFavorite: handleUpdateFavorite }))
 }

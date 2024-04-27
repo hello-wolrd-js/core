@@ -28,6 +28,7 @@ export const createWorld = async (world: WorldCreateParams, userId: string) => {
 export const getWorld = async (params?: WorldQueryParams): Promise<WorldList> => {
     const filter = {
         ...params,
+        name: new RegExp(params?.name || ''),
         page: void 0, //这里要shadow掉分页参数
         pageSize: void 0
     }
