@@ -3,9 +3,10 @@ import { isSuccessResponse } from '@core/shared'
 import toast from 'solid-toast'
 import { useEmptyWorldList, useWorldList } from '@hooks/world'
 import { WORLD_API } from '@api/world'
+import { WorldCard } from '@/components/card/WorldCard'
 
 export const HomeView: Component = () => {
-    const { WorldList } = useWorldList({
+    const { WorldList, handleUpdateFavorite } = useWorldList({
         async getter() {
             const result = await WORLD_API.getWorld({ status: 'checked' })
             //获取失败时才提示
@@ -36,5 +37,5 @@ export const HomeView: Component = () => {
         }
     })
 
-    return WorldList
+    return WorldList((props) => WorldCard({ ...props, onUpdateFavorite: handleUpdateFavorite }))
 }

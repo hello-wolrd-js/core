@@ -1,14 +1,14 @@
 import { Show, type Component } from 'solid-js'
-import type { World } from '@core/models'
+import type { World, WorldCardBaseProps } from '@core/models'
 import { isSuccessResponse } from '@core/shared'
 import toast from 'solid-toast'
 import { useWorldStore } from '@stores/world'
 
-export const AdminWorldCard: Component<{
-    onOpenModal: (world: World) => void
-    onToWorld: (world: World) => void
-    world: World
-}> = (props) => {
+export const AdminWorldCard: Component<
+    {
+        onOpenModal: (world: World) => void
+    } & WorldCardBaseProps
+> = (props) => {
     const worldStore = useWorldStore()
     const handleToWorld = () => {
         props.onToWorld(props.world)

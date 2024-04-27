@@ -1,31 +1,53 @@
-import { Component, createSignal, For, onCleanup, onMount, Show } from 'solid-js'
+import { Component, createSignal } from 'solid-js'
 import { AdminWorldCard } from '@/components/card/AdminWorldCard'
 import type { World } from '@core/models'
 import { isSuccessResponse } from '@core/shared'
 import { Dialog } from '@components/dialog/Dialog'
 import toast from 'solid-toast'
-import { useWorldStore } from '@stores/world'
-import { debounce } from 'lodash'
-import { useNavigate } from '@solidjs/router'
-import { useStatusStore } from '@stores/status'
+import { useEmptyWorldList, useWorldList } from '@hooks/world'
+import { WORLD_API } from '@api/world'
 
 export const HomeView: Component = () => {
-    //世界
-    //#region
-    const worldStore = useWorldStore()
-    worldStore.getWorld()
-    const [currentWorld, setCurrentWorld] = createSignal<World | null>(null)
-    //#endregion
+    const { WorldList, handleDelete } = useWorldList({
+        async getter() {
+            const result = await WORLD_API.getWorld()
+            //获取失败时才提示
+            if (isSuccessResponse(result)) {
+                return result.data
+            } else {
+                toast.error(result.error)
+                return useEmptyWorldList()
+            }
+        },
+        async deleter(target) {
+            const result = await WORLD_API.deleteWorld(target.id)
+            if (isSuccessResponse(result)) {
+                toast.success(result.msg)
+            } else {
+                toast.error(result.error)
+            }
+        },
+        init: true,
+        refresh: {
+            async getter(page, pageSize) {
+                const result = await WORLD_API.getWorld({
+                    page: `${page}`,
+                    pageSize: `${pageSize}`
+                })
+                //获取失败时才提示
+                if (isSuccessResponse(result)) {
+                    return result.data
+                } else {
+                    toast.error(result.error)
+                    return useEmptyWorldList()
+                }
+            },
+            refreshDistance: 300
+        }
+    })
 
-    //handler
-    //#region
-    const navigate = useNavigate()
-    const statusStore = useStatusStore()
-    const handleToWorld = (world: World) => {
-        navigate('/world')
-        statusStore.setStore('currentWorld', world)
-    }
-    //#endregion
+    //引用当前的世界用户模态框操作
+    const [currentWorld, setCurrentWorld] = createSignal<World | null>(null)
 
     //模态框
     //#region
@@ -37,12 +59,8 @@ export const HomeView: Component = () => {
     }
 
     const handleConfirm = async () => {
-        const result = await worldStore.deleteWorld(currentWorld()!.id)
-        if (isSuccessResponse(result)) {
-            toast.success('删除成功')
-        } else {
-            toast.error('删除失败')
-        }
+        const world = currentWorld()
+        world && (await handleDelete(world))
     }
     const handleCancel = () => {}
     const handleClose = () => {
@@ -50,71 +68,10 @@ export const HomeView: Component = () => {
     }
     //#endregion
 
-    //滚动条下滑无感加载
-    //#region
-
-    let containerRef: HTMLDivElement | undefined
-    const refreshDistance = 300
-    //分页参数
-    let page = 1
-    const pageSize = 10
-    //handler
-    const handleTouchDownRefresh = debounce(async () => {
-        //大于总页数时要退出
-        if (!containerRef || worldStore.state.list.length >= worldStore.state.totalItems) return
-        //下滑距离判断
-        if (
-            containerRef.clientHeight + containerRef.scrollTop >=
-            containerRef.scrollHeight - refreshDistance
-        ) {
-            //计算差值
-            const diff = worldStore.state.totalItems - worldStore.state.list.length
-            const result = await worldStore.getWorld({
-                page: `${page++}`,
-                pageSize: `${diff > pageSize ? pageSize : diff}`
-            })
-            //获取失败提示
-            if (!isSuccessResponse(result)) toast.success(result.error)
-        }
-    }, 500)
-    //监听与解除监听
-    onMount(() => {
-        containerRef && containerRef.addEventListener('scroll', handleTouchDownRefresh)
-    })
-    onCleanup(() => {
-        containerRef && containerRef.removeEventListener('scroll', handleTouchDownRefresh)
-    })
-
-    //#endregion
-
-    const empty = (
-        <div class="hero bg-base-200">
-            <div class="hero-content text-center">
-                <div class="max-w-md">
-                    <h1 class="text-5xl font-bold">暂无世界</h1>
-                    <p class="py-6">
-                        Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi
-                        exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.
-                    </p>
-                </div>
-            </div>
-        </div>
-    )
-
     return (
-        <div ref={containerRef} class="flex h-full justify-evenly flex-wrap overflow-y-auto">
-            <Show when={worldStore.state.list.length} fallback={empty}>
-                <For each={worldStore.state.list}>
-                    {(world) => (
-                        <AdminWorldCard
-                            world={world}
-                            onOpenModal={handleOpenModal}
-                            onToWorld={handleToWorld}
-                        ></AdminWorldCard>
-                    )}
-                </For>
-            </Show>
-
+        <>
+            {/* 世界列表 */}
+            {WorldList((props) => AdminWorldCard({ ...props, onOpenModal: handleOpenModal }))}
             {/* 模态框 */}
             <Dialog
                 show={showModal()}
@@ -124,6 +81,6 @@ export const HomeView: Component = () => {
                 onCancel={handleCancel}
                 onConfirm={handleConfirm}
             />
-        </div>
+        </>
     )
 }

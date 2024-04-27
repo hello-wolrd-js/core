@@ -1,9 +1,8 @@
-import { WorldList } from '@core/models'
+import { WorldCardBaseProps, World, WorldList } from '@core/models'
 import { createStore, produce } from 'solid-js/store'
 import { useEmptyResult, useToWorldFn, useUpdateUserFavoriteFn } from '.'
 import { debounce } from 'lodash'
-import { onMount, onCleanup, For, Show, JSXElement } from 'solid-js'
-import { WorldCard } from '../client/src/components/card/WorldCard'
+import { onMount, onCleanup, For, Show, JSXElement, Component } from 'solid-js'
 
 export const useEmptyWorldList = (): WorldList => {
     return {
@@ -15,11 +14,13 @@ export const useEmptyWorldList = (): WorldList => {
 
 export const useWorldList = ({
     getter,
+    deleter,
     init,
     refresh,
     empty = useEmptyResult('暂无世界')
 }: {
     getter: () => Promise<WorldList>
+    deleter?: (target: World) => Promise<void>
     init: boolean
     empty?: JSXElement //为空时展示
     refresh?: {
@@ -81,29 +82,53 @@ export const useWorldList = ({
     })
     //#endregion
 
-    //JSX
+    //封装的CRUD
+    //#region
+    const handleDelete = async (target: World) => {
+        deleter && (await deleter(target))
+        setStore(
+            produce((state) => {
+                state.list = state.list.filter((w) => w.id !== target.id)
+            })
+        )
+    }
+    //#endregion
+
+    //component
     //#region
     const handleToWorld = useToWorldFn()
     const handleUpdateFavorite = useUpdateUserFavoriteFn(setStore)
-    const WorldList = (
-        <div ref={containerRef} class="flex justify-evenly flex-wrap h-full overflow-y-auto">
-            <Show when={store.list.length} fallback={empty}>
-                <For each={store.list}>
-                    {(world) => (
-                        <WorldCard
-                            world={world}
-                            onUpdateFavorite={handleUpdateFavorite}
-                            onToWorld={handleToWorld}
-                        ></WorldCard>
-                    )}
-                </For>
-            </Show>
-        </div>
-    )
+    const WorldList = (card: (props: WorldCardBaseProps) => JSXElement): JSXElement => {
+        return (
+            <div
+                ref={containerRef}
+                style={{
+                    display: 'flex',
+                    'flex-wrap': 'wrap',
+                    height: '100%',
+                    'justify-content': 'space-evenly',
+                    'overflow-y': 'auto'
+                }}
+            >
+                <Show when={store.list.length} fallback={empty}>
+                    <For each={store.list}>
+                        {(world) =>
+                            card({
+                                world,
+                                onToWorld: handleToWorld
+                            })
+                        }
+                    </For>
+                </Show>
+            </div>
+        )
+    }
     //#endregion
 
     return {
         state: store,
-        WorldList
+        WorldList,
+        handleDelete,
+        handleUpdateFavorite
     }
 }

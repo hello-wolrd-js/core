@@ -4,9 +4,10 @@ import toast from 'solid-toast'
 import { useEmptyWorldList, useWorldList } from '@hooks/world'
 import { USER_API } from '@api/user'
 import { useEmptyResult } from '@hooks/index'
+import { WorldCard } from '@/components/card/WorldCard'
 
 export const ReleasedView: Component = () => {
-    const { WorldList } = useWorldList({
+    const { WorldList, handleUpdateFavorite } = useWorldList({
         async getter() {
             const result = await USER_API.getUserReleasedWorlds()
             if (isSuccessResponse(result)) {
@@ -35,5 +36,6 @@ export const ReleasedView: Component = () => {
             refreshDistance: 300
         }
     })
-    return WorldList
+
+    return WorldList((props) => WorldCard({ ...props, onUpdateFavorite: handleUpdateFavorite }))
 }

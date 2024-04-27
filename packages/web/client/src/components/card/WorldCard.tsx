@@ -1,13 +1,12 @@
 import { Component, createMemo } from 'solid-js'
-import type { World } from '@core/models'
+import type { World, WorldCardBaseProps } from '@core/models'
 import { useUserStore } from '@stores/user'
 
-
-export const WorldCard: Component<{
-    world: World
-    onUpdateFavorite: (world: World, action: 'add' | 'delete') => Promise<void>
-    onToWorld: (world: World) => void
-}> = (props) => {
+export const WorldCard: Component<
+    WorldCardBaseProps & {
+        onUpdateFavorite: (world: World, action: 'add' | 'delete') => Promise<void>
+    }
+> = (props) => {
     const userStore = useUserStore()
 
     //Star逻辑
@@ -21,7 +20,7 @@ export const WorldCard: Component<{
     //#endregion
 
     return (
-        <div class="card  w-96 bg-base-100 h-3/4 shadow-lg m-4">
+        <div class="card w-96 bg-base-100 h-3/4 shadow-lg m-4">
             <figure>
                 {props.world.cover && <img src={props.world.cover} alt={props.world.name} />}
             </figure>
