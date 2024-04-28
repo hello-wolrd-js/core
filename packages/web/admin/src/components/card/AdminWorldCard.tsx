@@ -1,6 +1,7 @@
 import { Show, type Component } from 'solid-js'
 import type { World, WorldCardBaseProps } from '@core/models'
 import { useModal } from '@components/modal/Modal'
+import { Dialog } from '@components/dialog/Dialog'
 
 export const AdminWorldCard: Component<
     {
@@ -18,19 +19,9 @@ export const AdminWorldCard: Component<
     }
 
     const { open, close } = useModal()
-    const dialog = (
-        <div class="card-body p-0">
-            <h2 class="card-title">你确定要删除这个卡片吗</h2>
-            <div class="card-actions justify-end">
-                <button class="btn btn-primary" onClick={handleDelete}>
-                    确认
-                </button>
-                <button class="btn btn-error" onClick={close}>
-                    取消
-                </button>
-            </div>
-        </div>
-    )
+    const handleOpenModal = () => {
+        open(Dialog({ confirm: handleDelete, cancel: close, title: '你确定要删除吗?' }))
+    }
 
     return (
         <div class="card w-96 h-3/4 bg-base-100 shadow-lg m-4">
@@ -73,7 +64,7 @@ export const AdminWorldCard: Component<
                             Uncheck
                         </button>
                     </Show>
-                    <button class="btn btn-error join-item" onClick={() => open(dialog)}>
+                    <button class="btn btn-error join-item" onClick={handleOpenModal}>
                         Delete
                     </button>
                 </div>
