@@ -4,6 +4,7 @@ import { useUserStore } from '@stores/user'
 import { Opacity } from '@components/transition/Opacity'
 import { Login } from '@/views/login/Login'
 import { useGlobalStore } from '@stores/global'
+import { ModalProvider } from '@components/modal/Modal'
 
 const App: Component<{ children?: JSX.Element }> = (props) => {
     //监听路由变化
@@ -13,19 +14,21 @@ const App: Component<{ children?: JSX.Element }> = (props) => {
         return userStore.state.loggedIn || userStore.state.token
     })
     return (
-        <Show when={isEffective()} fallback={Login()}>
-            <div class="flex h-full flex-col">
-                <NavBar height={global.state.nav.height} />
-                <main
-                    style={{
-                        'margin-top': `${global.state.nav.height}px`,
-                        height: `${global.state.content.height}px`
-                    }}
-                >
-                    <Opacity duration={[250, 250]}>{props.children}</Opacity>
-                </main>
-            </div>
-        </Show>
+        <ModalProvider>
+            <Show when={isEffective()} fallback={Login()}>
+                <div class="flex h-full flex-col">
+                    <NavBar height={global.state.nav.height} />
+                    <main
+                        style={{
+                            'margin-top': `${global.state.nav.height}px`,
+                            height: `${global.state.content.height}px`
+                        }}
+                    >
+                        <Opacity duration={[250, 250]}>{props.children}</Opacity>
+                    </main>
+                </div>
+            </Show>
+        </ModalProvider>
     )
 }
 

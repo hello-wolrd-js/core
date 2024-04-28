@@ -1,19 +1,36 @@
 import { Show, type Component } from 'solid-js'
 import type { World, WorldCardBaseProps } from '@core/models'
+import { useModal } from '@components/modal/Modal'
 
 export const AdminWorldCard: Component<
     {
         onChecked: (target: World) => void
         onUnchecked: (target: World) => void
-        onOpenModal: (world: World) => void
+        onDeleted: (target: World) => void
     } & WorldCardBaseProps
 > = (props) => {
     const handleToWorld = () => {
         props.onToWorld(props.world)
     }
     const handleDelete = () => {
-        props.onOpenModal(props.world)
+        props.onDeleted(props.world)
+        close()
     }
+
+    const { open, close } = useModal()
+    const dialog = (
+        <div class="card-body p-0">
+            <h2 class="card-title">你确定要删除这个卡片吗</h2>
+            <div class="card-actions justify-end">
+                <button class="btn btn-primary" onClick={handleDelete}>
+                    确认
+                </button>
+                <button class="btn btn-error" onClick={close}>
+                    取消
+                </button>
+            </div>
+        </div>
+    )
 
     return (
         <div class="card w-96 h-3/4 bg-base-100 shadow-lg m-4">
@@ -56,7 +73,7 @@ export const AdminWorldCard: Component<
                             Uncheck
                         </button>
                     </Show>
-                    <button class="btn btn-error join-item" onClick={handleDelete}>
+                    <button class="btn btn-error join-item" onClick={() => open(dialog)}>
                         Delete
                     </button>
                 </div>

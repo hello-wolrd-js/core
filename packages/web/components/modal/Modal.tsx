@@ -1,43 +1,74 @@
-import { Component, JSXElement, createMemo, onCleanup } from 'solid-js'
+import {
+    Component,
+    JSXElement,
+    createMemo,
+    onCleanup,
+    createContext,
+    createSignal,
+    useContext,
+    Show
+} from 'solid-js'
 import { Portal } from 'solid-js/web'
 import styles from './Modal.module.css'
+import { Opacity } from '@components/transition/Opacity'
 
-export const Modal: Component<{
-    show: boolean
-    onClose: Function
-    to?: string | HTMLElement
-    children?: JSXElement
-}> = (props) => {
+//必须同步调用
+export const ModalContext = createContext<{
+    open: (content: JSXElement) => void
+    close: () => void
+}>({
+    open: () => {
+        console.log('default')
+    },
+    close: () => {
+        console.log('default')
+    }
+})
+export const useModal = () => {
+    return useContext(ModalContext)
+}
+export const ModalProvider: Component<{ children: JSXElement }> = (props) => {
+    const [show, setShow] = createSignal(false)
+
     let modalRef: any
-    const isShow = createMemo(() => (props.show ? '' : 'none'))
-
     const onClick = (e: any) => {
         if (!modalRef.contains(e.target)) {
-            props.onClose()
+            setShow(false)
         }
     }
     document.body.addEventListener('click', onClick)
     onCleanup(() => document.body.removeEventListener('click', onClick))
 
-    let mount: HTMLElement | undefined = void 0
-    if (typeof props.to === 'string') {
-        mount = document.getElementById(props.to) || void 0
-    } else if (props.to instanceof HTMLElement) {
-        mount = props.to
+    const [modalContent, setModalContent] = createSignal<JSXElement>()
+    const open = (content: JSXElement) => {
+        setModalContent(content)
+        setShow(true)
     }
-    
+    const close = () => {
+        setShow(false)
+    }
+
     return (
-        <Portal mount={mount}>
-            <div
-                style={{
-                    display: isShow()
+        <>
+            <ModalContext.Provider
+                value={{
+                    open,
+                    close
                 }}
-                class={styles['modal-overlay']}
             >
-                <div ref={modalRef} class={styles['modal-content']}>
-                    {props.children}
-                </div>
-            </div>
-        </Portal>
+                {props.children}
+            </ModalContext.Provider>
+            <Portal>
+                <Opacity duration={[175, 250]}>
+                    <Show when={show()}>
+                        <div class={styles['modal-overlay']}>
+                            <div ref={modalRef} class={styles['modal-content']}>
+                                {modalContent()}
+                            </div>
+                        </div>
+                    </Show>
+                </Opacity>
+            </Portal>
+        </>
     )
 }

@@ -6,6 +6,7 @@ import { isSuccessResponse } from '@core/shared'
 import toast from 'solid-toast'
 import { Opacity } from '@components/transition/Opacity'
 import { useGlobalStore } from '@stores/global'
+import { ModalProvider } from '@components/modal/Modal'
 
 const App: Component<{ children?: JSX.Element }> = (props) => {
     const userStore = useUserStore()
@@ -20,22 +21,25 @@ const App: Component<{ children?: JSX.Element }> = (props) => {
             if (!isSuccessResponse(result)) toast.error('获取个人信息失败: ' + result.error)
         })
     }
+
     return (
-        <Opacity duration={[250, 250]}>
-            <Show when={isEffective()} fallback={Login()}>
-                <div class="flex flex-col h-full">
-                    <NavBar height={global.state.nav.height}></NavBar>
-                    <main
-                        style={{
-                            'margin-top': `${global.state.nav.height}px`,
-                            height: `${global.state.content.height}px`
-                        }}
-                    >
-                        <Opacity duration={[250, 250]}>{props.children}</Opacity>
-                    </main>
-                </div>
-            </Show>
-        </Opacity>
+        <ModalProvider>
+            <Opacity duration={[250, 250]}>
+                <Show when={isEffective()} fallback={Login()}>
+                    <div class="flex flex-col h-full">
+                        <NavBar height={global.state.nav.height}></NavBar>
+                        <main
+                            style={{
+                                'margin-top': `${global.state.nav.height}px`,
+                                height: `${global.state.content.height}px`
+                            }}
+                        >
+                            <Opacity duration={[250, 250]}>{props.children}</Opacity>
+                        </main>
+                    </div>
+                </Show>
+            </Opacity>
+        </ModalProvider>
     )
 }
 
