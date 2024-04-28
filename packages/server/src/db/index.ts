@@ -1,6 +1,6 @@
-import * as mongoose from 'mongoose'
+import { connect } from 'mongoose'
 
-await mongoose.connect('mongodb://localhost:27017/hello-world')
+await connect('mongodb://localhost:27017/hello-world')
 import world from './world'
 import user from './user'
 export const db = {
