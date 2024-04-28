@@ -2,7 +2,7 @@ import { WorldCardBaseProps, World, WorldList, WorldQueryParams } from '@core/mo
 import { createStore, produce } from 'solid-js/store'
 import { useEmptyResult, useToWorldFn, useUpdateUserFavoriteFn } from '.'
 import { debounce } from 'lodash'
-import { onMount, onCleanup, For, Show, JSXElement, Component } from 'solid-js'
+import { onMount, onCleanup, For, Show, JSXElement, Component, createEffect } from 'solid-js'
 
 export const useEmptyWorldList = (): WorldList => {
     return {
@@ -14,13 +14,11 @@ export const useEmptyWorldList = (): WorldList => {
 
 export const useWorldList = ({
     getter,
-    deleter,
     refresh = true,
     init = true,
     empty = useEmptyResult('暂无世界')
 }: {
     getter: (params?: WorldQueryParams) => Promise<WorldList>
-    deleter?: (target: World) => Promise<void>
     init?: boolean //是否初始获取一次
     empty?: JSXElement //为空时展示
     refresh?:
@@ -49,13 +47,15 @@ export const useWorldList = ({
     //#endregion
 
     //查询参数
-    const initialParams = {
+    //#region
+    const pagination = {
         page: 1,
         pageSize: 10
     }
     const [params, setParams] = createStore({
-        ...initialParams
+        ...pagination
     })
+    //#endregion
 
     //初始化
     //#region
@@ -66,7 +66,7 @@ export const useWorldList = ({
     //#region
     const handleSearch = async (queryParams?: WorldQueryParams) => {
         //!注意搜索前要重置分页
-        setParams({ ...queryParams, ...initialParams })
+        setParams({ ...queryParams, ...pagination })
         setStore(await getter(params))
     }
     //#endregion
@@ -75,7 +75,7 @@ export const useWorldList = ({
     //#region
     const handleRefresh = async () => {
         //!注意刷新前要重置分页
-        setParams({ ...params, ...initialParams })
+        setParams({ ...params, ...pagination })
         setStore(await getter(params))
     }
     //#endregion
@@ -132,18 +132,6 @@ export const useWorldList = ({
 
     //#endregion
 
-    //封装的CRUD
-    //#region
-    const handleDelete = async (target: World) => {
-        deleter && (await deleter(target))
-        setStore(
-            produce((state) => {
-                state.list = state.list.filter((w) => w.id !== target.id)
-            })
-        )
-    }
-    //#endregion
-
     //component
     //#region
     const handleToWorld = useToWorldFn()
@@ -178,14 +166,13 @@ export const useWorldList = ({
 
     return {
         state: store,
+        setStore,
         WorldList,
-        handleDelete,
         handleUpdateFavorite,
         handleSearch,
         handleRefresh,
         handler: {
             search: handleSearch,
-            delete: handleDelete,
             updateFavorite: handleUpdateFavorite,
             refresh: handleRefresh
         }

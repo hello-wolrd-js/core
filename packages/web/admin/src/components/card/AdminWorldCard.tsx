@@ -1,36 +1,18 @@
 import { Show, type Component } from 'solid-js'
 import type { World, WorldCardBaseProps } from '@core/models'
-import { isSuccessResponse } from '@core/shared'
-import toast from 'solid-toast'
-import { useWorldStore } from '@stores/world'
 
 export const AdminWorldCard: Component<
     {
+        onChecked: (target: World) => void
+        onUnchecked: (target: World) => void
         onOpenModal: (world: World) => void
     } & WorldCardBaseProps
 > = (props) => {
-    const worldStore = useWorldStore()
     const handleToWorld = () => {
         props.onToWorld(props.world)
     }
     const handleDelete = () => {
         props.onOpenModal(props.world)
-    }
-    const handleCheck = async () => {
-        const result = await worldStore.checkWorld(props.world.id)
-        if (isSuccessResponse(result)) {
-            toast.success(result.msg)
-        } else {
-            toast.error(result.error)
-        }
-    }
-    const handleUncheck = async () => {
-        const result = await worldStore.uncheckWorld(props.world.id)
-        if (isSuccessResponse(result)) {
-            toast.success(result.msg)
-        } else {
-            toast.error(result.error)
-        }
     }
 
     return (
@@ -59,12 +41,18 @@ export const AdminWorldCard: Component<
                     <Show
                         when={props.world.status === 'checked'}
                         fallback={
-                            <button class="btn btn-warning join-item" onClick={handleCheck}>
+                            <button
+                                class="btn btn-warning join-item"
+                                onClick={() => props.onChecked(props.world)}
+                            >
                                 Check
                             </button>
                         }
                     >
-                        <button class="btn btn-warning  join-item" onClick={handleUncheck}>
+                        <button
+                            class="btn btn-warning  join-item"
+                            onClick={() => props.onUnchecked(props.world)}
+                        >
                             Uncheck
                         </button>
                     </Show>
