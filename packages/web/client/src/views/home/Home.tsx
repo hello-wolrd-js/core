@@ -6,6 +6,7 @@ import { WORLD_API } from '@api/world'
 import { WorldCard } from '@/components/card/WorldCard'
 import { useAwait } from '@hooks/index'
 import { useGlobalStore } from '@stores/global'
+import { debounce } from 'lodash'
 
 export const HomeView: Component = () => {
     const { WorldList, handleUpdateFavorite, handleSearch, handleRefresh } = useWorldList({
@@ -33,22 +34,20 @@ export const HomeView: Component = () => {
 
     //事件
     //#region
-    const {
-        state: { emitter }
-    } = useGlobalStore()
+    const global = useGlobalStore()
     onMount(() => {
-        emitter.on('search-world', async (params) => {
+        global.emitter.on('search-world', async (params) => {
             toast.loading('搜索中', { duration: 1000 })
             await handleSearch(params)
         })
-        emitter.on('refresh-worlds', async () => {
+        global.emitter.on('refresh-worlds', async () => {
             await handleRefresh()
             toast.success('刷新成功', { duration: 1000 })
         })
     })
     onCleanup(() => {
-        emitter.off('search-world')
-        emitter.off('refresh-worlds')
+        global.emitter.off('search-world')
+        global.emitter.off('refresh-worlds')
     })
     //#endregion
 

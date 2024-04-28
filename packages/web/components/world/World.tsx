@@ -2,7 +2,7 @@ import { useGlobalStore } from '@stores/global'
 import { Component, onMount } from 'solid-js'
 
 export const WorldView: Component = () => {
-    const statusStore = useGlobalStore()
+    const global = useGlobalStore()
     let worldContainerRef: HTMLIFrameElement | undefined
     onMount(() => {
         if (!worldContainerRef) return
@@ -25,7 +25,7 @@ export const WorldView: Component = () => {
 
             const _mount = _dom.createElement('script')
             _mount.innerHTML = `
-                import("${statusStore.state.currentWorld!.url}").then((module) => {
+                import("${global.state.current.world!.url}").then((module) => {
                     module.default(window.world);
                     window.world = void 0;
                 });
@@ -37,7 +37,7 @@ export const WorldView: Component = () => {
     return (
         <iframe
             ref={worldContainerRef}
-            style={{ width: '100%', height: `${statusStore.state.contentHeight}px` }}
+            style={{ width: '100%', height: `${global.state.content.height}px` }}
             sandbox="allow-same-origin allow-scripts"
         />
     )

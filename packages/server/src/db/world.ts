@@ -1,4 +1,10 @@
-import { WorldCreateParams, WorldList, WorldQueryParams, WorldUpdateParams } from '@core/models'
+import {
+    World,
+    WorldCreateParams,
+    WorldList,
+    WorldQueryParams,
+    WorldUpdateParams
+} from '@core/models'
 import { WorldModel } from './schema/world'
 import { Types } from 'mongoose'
 import { UserModel } from './schema/user'
@@ -49,6 +55,11 @@ export const getWorld = async (params?: WorldQueryParams): Promise<WorldList> =>
     }
 }
 
+export const getMostStarWorld = async (limit: number): Promise<World[]> => {
+    const worlds = await WorldModel.find().sort({ star: -1 }).limit(limit)
+    return worlds
+}
+
 export const deleteWorld = async (id: string) => {
     return await WorldModel.deleteOne({ _id: id })
 }
@@ -83,5 +94,6 @@ export default {
     deleteWorld,
     updateWorld,
     checkedWorld,
-    uncheckedWorld
+    uncheckedWorld,
+    getMostStarWorld
 }

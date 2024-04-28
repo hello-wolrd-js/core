@@ -8,19 +8,18 @@ import { useGlobalStore } from '@stores/global'
 const App: Component<{ children?: JSX.Element }> = (props) => {
     //监听路由变化
     const userStore = useUserStore()
-    const globalStore = useGlobalStore()
+    const global = useGlobalStore()
     const isEffective = createMemo(() => {
         return userStore.state.loggedIn || userStore.state.token
     })
-
     return (
         <Show when={isEffective()} fallback={Login()}>
             <div class="flex h-full flex-col">
-                <NavBar height={globalStore.state.navHeight} />
+                <NavBar height={global.state.nav.height} />
                 <main
                     style={{
-                        'margin-top': `${globalStore.state.navHeight}px`,
-                        height: `${globalStore.state.contentHeight}px`
+                        'margin-top': `${global.state.nav.height}px`,
+                        height: `${global.state.content.height}px`
                     }}
                 >
                     <Opacity duration={[250, 250]}>{props.children}</Opacity>

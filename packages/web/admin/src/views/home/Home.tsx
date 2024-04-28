@@ -64,9 +64,7 @@ export const HomeView: Component = () => {
 
     //事件
     //#region
-    const {
-        state: { emitter }
-    } = useGlobalStore()
+    const { emitter } = useGlobalStore()
     onMount(() => {
         emitter.on('search-world', async (params) => {
             toast.loading('搜索中', { duration: 1000 })

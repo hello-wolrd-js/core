@@ -9,7 +9,7 @@ import { useGlobalStore } from '@stores/global'
 
 const App: Component<{ children?: JSX.Element }> = (props) => {
     const userStore = useUserStore()
-    const globalStore = useGlobalStore()
+    const global = useGlobalStore()
     const isEffective = createMemo(() => {
         return userStore.state.loggedIn || userStore.state.token
     })
@@ -20,16 +20,15 @@ const App: Component<{ children?: JSX.Element }> = (props) => {
             if (!isSuccessResponse(result)) toast.error('获取个人信息失败: ' + result.error)
         })
     }
-
     return (
         <Opacity duration={[250, 250]}>
             <Show when={isEffective()} fallback={Login()}>
                 <div class="flex flex-col h-full">
-                    <NavBar height={globalStore.state.navHeight}></NavBar>
+                    <NavBar height={global.state.nav.height}></NavBar>
                     <main
                         style={{
-                            'margin-top': `${globalStore.state.navHeight}px`,
-                            height: `${globalStore.state.contentHeight}px`
+                            'margin-top': `${global.state.nav.height}px`,
+                            height: `${global.state.content.height}px`
                         }}
                     >
                         <Opacity duration={[250, 250]}>{props.children}</Opacity>

@@ -5,6 +5,7 @@ import { useEmptyWorldList, useWorldList } from '@hooks/world'
 import { USER_API } from '@api/user'
 import { useAwait, useEmptyResult } from '@hooks/index'
 import { WorldCard } from '@/components/card/WorldCard'
+import { useGlobalStore } from '@stores/global'
 
 export const FavoriteView: Component = () => {
     const { WorldList, handleUpdateFavorite } = useWorldList({

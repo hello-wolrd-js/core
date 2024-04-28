@@ -19,14 +19,12 @@ const NavBar: Component<{ height: number }> = (props) => {
     }
 
     //跨组件事件
-    const {
-        state: { emitter }
-    } = useGlobalStore()
+    const global = useGlobalStore()
     const handleRefreshWorlds = debounce(() => {
-        emitter.emit('refresh-worlds')
+        global.emitter.emit('refresh-worlds')
     }, 250)
     const handleSearchWorld = debounce((e: InputEvent) => {
-        emitter.emit('search-world', {
+        global.emitter.emit('search-world', {
             name: (e.target as HTMLInputElement).value
         })
     }, 250)
@@ -137,6 +135,7 @@ const NavBar: Component<{ height: number }> = (props) => {
             </div>
             {/* 搜索块 */}
             <div class="flex-1 flex justify-center">
+                {/* {global.state.nav.search} */}
                 <label class="input input-bordered flex items-center gap-2 input-sm ">
                     <input
                         type="text"

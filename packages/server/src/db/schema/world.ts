@@ -26,4 +26,6 @@ const WorldSchema = new mongoose.Schema<DB_World>(
     }
 )
 
+WorldSchema.index({ star: -1 })
+
 export const WorldModel = mongoose.model<World>('worlds', WorldSchema)

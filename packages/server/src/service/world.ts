@@ -1,4 +1,4 @@
-import Elysia from 'elysia'
+import Elysia, { t } from 'elysia'
 import { createErrorResponse, createSuccessResponse } from '../util'
 import { db } from '../db'
 import { WorldDTO } from '../model'
@@ -26,6 +26,24 @@ export const WorldService = new Elysia()
                             }
                         },
                         WorldDTO.search
+                    )
+                    //获取最多star的世界
+                    .get(
+                        '/most/star',
+                        async ({ query }) => {
+                            try {
+                                const limit = parseInt(query.limit) || 1
+                                const result = await db.world.getMostStarWorld(limit)
+                                return createSuccessResponse(200, '获取世界成功', result)
+                            } catch (error) {
+                                return createErrorResponse(-1, '获取世界失败: ' + error)
+                            }
+                        },
+                        {
+                            query: t.Object({
+                                limit: t.String()
+                            })
+                        }
                     )
                     //创建世界
                     .post(
