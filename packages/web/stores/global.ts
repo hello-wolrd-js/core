@@ -1,4 +1,4 @@
-import { World, WorldQueryParams } from '@core/models'
+import { World, WorldList, WorldQueryParams } from '@core/models'
 import { createStore } from 'solid-js/store'
 import mitt, { Emitter } from 'mitt'
 import { JSXElement } from 'solid-js'
@@ -8,20 +8,20 @@ interface GlobalStoreState {
     }
     nav: {
         height: number
-        search: JSXElement
+        extra: JSXElement
     }
     content: {
         height: number
     }
 }
 
-const [store, setStore] = createStore<GlobalStoreState>({
+const [global, setGlobal] = createStore<GlobalStoreState>({
     current: {
         world: null
     },
     nav: {
         height: 64,
-        search: null
+        extra: null
     },
     content: {
         height: document.body.clientHeight - 64
@@ -30,10 +30,9 @@ const [store, setStore] = createStore<GlobalStoreState>({
 
 export const useGlobalStore = () => {
     return {
-        state: store,
-        setStore,
+        global,
+        setGlobal,
         emitter: mitt() as Emitter<{
-            'search-world': WorldQueryParams
             'refresh-worlds': void
         }>
     }

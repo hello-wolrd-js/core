@@ -6,10 +6,10 @@ import { WORLD_API } from '@api/world'
 import { WorldCard } from '@/components/card/WorldCard'
 import { useAwait } from '@hooks/index'
 import { useGlobalStore } from '@stores/global'
-import { debounce } from 'lodash'
+import { Search } from '@/components/search/Search'
 
 export const HomeView: Component = () => {
-    const { WorldList, handleUpdateFavorite, handleSearch, handleRefresh } = useWorldList({
+    const { WorldList, handleUpdateFavorite, handleSearch, handleRefresh, state } = useWorldList({
         async getter(params) {
             const result = await WORLD_API.getWorld({ ...params, status: 'checked' })
             //获取失败时才提示
@@ -34,21 +34,28 @@ export const HomeView: Component = () => {
 
     //事件
     //#region
-    const global = useGlobalStore()
+    const { emitter, setGlobal } = useGlobalStore()
     onMount(() => {
-        global.emitter.on('search-world', async (params) => {
-            toast.loading('搜索中', { duration: 1000 })
-            await handleSearch(params)
-        })
-        global.emitter.on('refresh-worlds', async () => {
+        emitter.on('refresh-worlds', async () => {
             await handleRefresh()
             toast.success('刷新成功', { duration: 1000 })
         })
     })
     onCleanup(() => {
-        global.emitter.off('search-world')
-        global.emitter.off('refresh-worlds')
+        emitter.off('refresh-worlds')
     })
+    //#endregion
+
+    //导航栏拓展
+    //#region
+    const handleSearchWorld = async (name: string) => await handleSearch({ name })
+    const NavExtra = (
+        <>
+            <Search onInput={handleSearchWorld} debounce={{ wait: 500 }} placeholder="搜搜看?" />
+            <div class="ml-5">总数: {state.totalItems}</div>
+        </>
+    )
+    setGlobal('nav', 'extra', NavExtra)
     //#endregion
 
     return WorldList((props) => WorldCard({ ...props, onUpdateFavorite: handleUpdateFavorite }))

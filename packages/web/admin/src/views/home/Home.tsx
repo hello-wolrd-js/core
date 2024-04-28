@@ -8,9 +8,10 @@ import { useEmptyWorldList, useWorldList } from '@hooks/world'
 import { WORLD_API } from '@api/world'
 import { useAwait } from '@hooks/index'
 import { useGlobalStore } from '@stores/global'
+import { Search } from '@/components/search/Search'
 
 export const HomeView: Component = () => {
-    const { WorldList, handleDelete, handleSearch, handleRefresh } = useWorldList({
+    const { WorldList, handleDelete, handleSearch, handleRefresh, state } = useWorldList({
         async getter(params) {
             const result = await WORLD_API.getWorld(params)
             //获取失败时才提示
@@ -64,21 +65,28 @@ export const HomeView: Component = () => {
 
     //事件
     //#region
-    const { emitter } = useGlobalStore()
+    const { emitter, setGlobal } = useGlobalStore()
     onMount(() => {
-        emitter.on('search-world', async (params) => {
-            toast.loading('搜索中', { duration: 1000 })
-            await handleSearch(params)
-        })
         emitter.on('refresh-worlds', async () => {
             await handleRefresh()
             toast.success('刷新成功', { duration: 1000 })
         })
     })
     onCleanup(() => {
-        emitter.off('search-world')
         emitter.off('refresh-worlds')
     })
+    //#endregion
+
+    //导航栏拓展
+    //#region
+    const handleSearchWorld = async (name: string) => await handleSearch({ name })
+    const NavExtra = (
+        <>
+            <Search onInput={handleSearchWorld} debounce={{ wait: 500 }} placeholder="搜搜看?" />
+            <div class="ml-5">总数: {state.totalItems}</div>
+        </>
+    )
+    setGlobal('nav', 'extra', NavExtra)
     //#endregion
 
     return (
