@@ -16,7 +16,7 @@ export const NavBar: Component<{ height: number }> = (props) => {
     }
 
     //跨组件事件
-    const { global, emitter } = useGlobalStore()
+    const { state, emitter } = useGlobalStore()
     const handleRefreshWorlds = debounce(() => {
         emitter.emit('refresh-worlds')
     }, 250)
@@ -80,7 +80,7 @@ export const NavBar: Component<{ height: number }> = (props) => {
                 </a>
             </div>
             {/* 搜索块 */}
-            <div class="flex-1 flex justify-center">{global.nav.extra}</div>
+            <div class="flex-1 flex justify-center">{state.nav.extra}</div>
             {/* 文档 */}
             <div class="flex-none">
                 <a class="btn btn-square btn-ghost" href="https://hello-world-js.pages.dev/">

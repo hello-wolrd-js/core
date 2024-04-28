@@ -34,7 +34,7 @@ export const HomeView: Component = () => {
 
     //事件
     //#region
-    const { emitter, setGlobal } = useGlobalStore()
+    const { emitter, setStore } = useGlobalStore()
     onMount(() => {
         emitter.on('refresh-worlds', async () => {
             await handleRefresh()
@@ -55,7 +55,7 @@ export const HomeView: Component = () => {
             <div class="ml-5">总数: {state.totalItems}</div>
         </>
     )
-    setGlobal('nav', 'extra', NavExtra)
+    setStore('nav', 'extra', NavExtra)
     //#endregion
 
     return WorldList((props) => WorldCard({ ...props, onUpdateFavorite: handleUpdateFavorite }))

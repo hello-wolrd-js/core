@@ -15,7 +15,7 @@ interface GlobalStoreState {
     }
 }
 
-const [global, setGlobal] = createStore<GlobalStoreState>({
+const [store, setStore] = createStore<GlobalStoreState>({
     current: {
         world: null
     },
@@ -30,8 +30,8 @@ const [global, setGlobal] = createStore<GlobalStoreState>({
 
 export const useGlobalStore = () => {
     return {
-        global,
-        setGlobal,
+        state: store,
+        setStore,
         emitter: mitt() as Emitter<{
             'refresh-worlds': void
         }>

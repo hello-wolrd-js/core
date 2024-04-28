@@ -19,9 +19,9 @@ const NavBar: Component<{ height: number }> = (props) => {
     }
 
     //跨组件事件
-    const { global, emitter } = useGlobalStore()
+    const global = useGlobalStore()
     const handleRefreshWorlds = debounce(() => {
-        emitter.emit('refresh-worlds')
+        global.emitter.emit('refresh-worlds')
     }, 250)
 
     return (
@@ -129,7 +129,7 @@ const NavBar: Component<{ height: number }> = (props) => {
                 </div>
             </div>
             {/* 导航栏拓展 */}
-            <div class="flex-1 flex justify-center">{global.nav.extra}</div>
+            <div class="flex-1 flex justify-center">{global.state.nav.extra}</div>
             {/* 文档 */}
             <div class="flex-none btn btn-square btn-ghost">
                 <a href="https://hello-world-js.pages.dev/">
