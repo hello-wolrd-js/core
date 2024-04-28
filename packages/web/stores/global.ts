@@ -28,12 +28,14 @@ const [store, setStore] = createStore<GlobalStoreState>({
     }
 })
 
+const emitter = mitt() as Emitter<{
+    'refresh-worlds': void
+}>
+
 export const useGlobalStore = () => {
     return {
         state: store,
         setStore,
-        emitter: mitt() as Emitter<{
-            'refresh-worlds': void
-        }>
+        emitter
     }
 }
