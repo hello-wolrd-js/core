@@ -1,4 +1,4 @@
-import { Component, onCleanup, onMount } from 'solid-js'
+import { Component, onCleanup } from 'solid-js'
 import { isSuccessResponse } from '@core/shared'
 import toast from 'solid-toast'
 import { useEmptyWorldList, useWorldList } from '@hooks/world'
@@ -35,27 +35,24 @@ export const HomeView: Component = () => {
     //事件
     //#region
     const { emitter, setStore } = useGlobalStore()
-    onMount(() => {
-        emitter.on('refresh-worlds', async () => {
-            await handleRefresh()
-            toast.success('刷新成功', { duration: 1000 })
-        })
+    emitter.on('refresh-worlds', async () => {
+        await handleRefresh()
+        toast.success('刷新成功', { duration: 1000 })
     })
-    onCleanup(() => {
-        emitter.off('refresh-worlds')
-    })
+    onCleanup(() => emitter.off('refresh-worlds'))
     //#endregion
 
     //导航栏拓展
     //#region
     const handleSearchWorld = async (name: string) => await handleSearch({ name })
     const NavExtra = (
-        <>
+        <div class="flex justify-center items-center">
             <Search onInput={handleSearchWorld} debounce={{ wait: 500 }} placeholder="搜搜看?" />
             <div class="ml-5">总数: {state.totalItems}</div>
-        </>
+        </div>
     )
     setStore('nav', 'extra', NavExtra)
+    onCleanup(() => setStore('nav', 'extra', void 0))
     //#endregion
 
     return WorldList((props) => WorldCard({ ...props, onUpdateFavorite: handleUpdateFavorite }))
