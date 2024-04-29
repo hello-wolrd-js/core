@@ -1,13 +1,12 @@
-import { Component, onCleanup, useContext } from 'solid-js'
+import { Component, onCleanup } from 'solid-js'
 import { isSuccessResponse } from '@core/shared'
 import toast from 'solid-toast'
 import { useEmptyWorldList, useWorldList } from '@hooks/world'
 import { WORLD_API } from '@api/world'
 import { WorldCard } from '@/components/card/WorldCard'
-import { useAwait, useEmptyResult } from '@hooks/index'
+import { useAwait } from '@hooks/index'
 import { useGlobalStore } from '@stores/global'
 import { Search } from '@/components/search/Search'
-import { ModalContext, useModal } from '@components/modal/Modal'
 
 export const HomeView: Component = () => {
     const { WorldList, handleUpdateFavorite, handleSearch, handleRefresh, state } = useWorldList({

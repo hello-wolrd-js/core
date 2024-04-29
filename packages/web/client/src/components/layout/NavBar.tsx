@@ -24,7 +24,7 @@ const NavBar: Component<{ height: number }> = (props) => {
     const handleRefreshWorlds = debounce(() => {
         global.emitter.emit('refresh-worlds')
     }, 250)
-
+    console.log(global.state.nav.extra)
     return (
         // 导航栏
         <nav
@@ -131,7 +131,7 @@ const NavBar: Component<{ height: number }> = (props) => {
             </div>
             {/* 导航栏拓展 */}
             <div class="flex-1 justify-center">
-                <Opacity duration={[250, 250]}>{global.state.nav.extra}</Opacity>
+                <Opacity duration={[250, 250]} children={global.state.nav.extra}/>
             </div>
             {/* 文档 */}
             <div class="flex-none btn btn-square btn-ghost">

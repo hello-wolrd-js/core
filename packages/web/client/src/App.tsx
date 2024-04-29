@@ -1,7 +1,7 @@
 import { Show, createMemo, type Component, type JSX } from 'solid-js'
 import NavBar from './components/layout/NavBar'
 import { useUserStore } from '@stores/user'
-import Login from './views/login/Login'
+import { GuardView } from './views/guard/Guard'
 import { isSuccessResponse } from '@core/shared'
 import toast from 'solid-toast'
 import { Opacity } from '@components/transition/Opacity'
@@ -25,7 +25,7 @@ const App: Component<{ children?: JSX.Element }> = (props) => {
     return (
         <ModalProvider>
             <Opacity duration={[250, 250]}>
-                <Show when={isEffective()} fallback={Login()}>
+                <Show when={isEffective()} fallback={GuardView()}>
                     <div class="flex flex-col h-full">
                         <NavBar height={global.state.nav.height}></NavBar>
                         <main

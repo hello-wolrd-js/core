@@ -5,7 +5,7 @@ import { useNavigate } from '@solidjs/router'
 import { createSignal } from 'solid-js'
 import toast from 'solid-toast'
 
-const Login = () => {
+export const Login = () => {
     const userStore = useUserStore()
     const navigate = useNavigate()
     const [username, setUsername] = createSignal('')
@@ -24,26 +24,23 @@ const Login = () => {
             password: password()
         })
         if (isSuccessResponse(result)) {
-            toast.success(result.msg)
-            console.log(result.data.user)
-            userStore.login(result.data.user, result.data.token)
-            navigate('/')
+            if (result.data.user.role === 'admin') {
+                toast.success(result.msg)
+                userStore.login(result.data.user, result.data.token)
+                navigate('/')
+            } else {
+                toast.error('用户权限不足!')
+            }
         } else {
             toast.error(result.error)
         }
     }
     return (
         <div class="hero h-full bg-base-200">
-            <div class="hero-content flex-col lg:flex-row-reverse">
-                <div class="text-center lg:text-left">
-                    <h1 class="text-5xl font-bold">Hello-World</h1>
-                    <p class="py-6">
-                        Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi
-                        exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.
-                    </p>
-                </div>
-                <div class="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+            <div class="hero-content flex-col">
+                <div class="card shrink-0 w-full shadow-2xl bg-base-100">
                     <div class="card-body">
+                        <div class="card-title">HW-Admin</div>
                         <div class="form-control">
                             <label class="label">
                                 <span class="label-text">用户名</span>
@@ -81,5 +78,3 @@ const Login = () => {
         </div>
     )
 }
-
-export default Login

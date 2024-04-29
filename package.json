@@ -39,6 +39,7 @@
     "nes.css": "^2.3.0",
     "solid-js": "^1.8.11",
     "solid-toast": "^0.5.0",
-    "solid-transition-group": "^0.2.3"
+    "solid-transition-group": "^0.2.3",
+    "typed.js": "^2.1.0"
   }
 }

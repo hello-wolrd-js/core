@@ -31,8 +31,8 @@ export const ModalProvider: Component<{ children: JSXElement }> = (props) => {
     const [show, setShow] = createSignal(false)
 
     let modalRef: any
-    const onClick = (e: any) => {
-        if (!modalRef.contains(e.target)) {
+    const onClick = (e: Event) => {
+        if (modalRef && !modalRef.contains(e.target)) {
             setShow(false)
         }
     }

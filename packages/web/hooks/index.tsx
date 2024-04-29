@@ -33,7 +33,7 @@ export const useToWorldFn = () => {
     const navigate = useNavigate()
     return (world: World) => {
         navigate('/world')
-        useGlobalStore().setStore('currentWorld', world)
+        useGlobalStore().setStore('current', 'world', world)
     }
 }
 

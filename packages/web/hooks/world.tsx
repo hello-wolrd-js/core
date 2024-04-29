@@ -1,8 +1,8 @@
-import { WorldCardBaseProps, World, WorldList, WorldQueryParams } from '@core/models'
+import { WorldCardBaseProps, WorldList, WorldQueryParams } from '@core/models'
 import { createStore, produce } from 'solid-js/store'
 import { useEmptyResult, useToWorldFn, useUpdateUserFavoriteFn } from '.'
 import { debounce } from 'lodash'
-import { onMount, onCleanup, For, Show, JSXElement, Component, createEffect } from 'solid-js'
+import { onMount, onCleanup, For, Show, JSXElement } from 'solid-js'
 import { Opacity } from '@components/transition/Opacity'
 
 export const useEmptyWorldList = (): WorldList => {
@@ -35,7 +35,7 @@ export const useWorldList = ({
     //默认配置
     //#region
     const _originRefresh = typeof refresh === 'boolean' ? {} : refresh
-    const _refresh = { ..._originRefresh, debounce: 100, distance: 200 }
+    const _refresh = { ..._originRefresh, debounce: 300, distance: 200 }
     //#endregion
 
     //内部状态

@@ -2,7 +2,7 @@ import { Show, createMemo, type Component, type JSX } from 'solid-js'
 import { NavBar } from '@/components/layout/NavBar'
 import { useUserStore } from '@stores/user'
 import { Opacity } from '@components/transition/Opacity'
-import { Login } from '@/views/login/Login'
+import { Login } from '@/views/guard/Guard'
 import { useGlobalStore } from '@stores/global'
 import { ModalProvider } from '@components/modal/Modal'
 
