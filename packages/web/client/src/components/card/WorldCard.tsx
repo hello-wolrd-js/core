@@ -4,7 +4,7 @@ import { useUserStore } from '@stores/user'
 
 export const WorldCard: Component<
     WorldCardBaseProps & {
-        onUpdateFavorite: (world: World, action: 'add' | 'delete') => Promise<void>
+        onUpdateFavorite?: (world: World, action: 'add' | 'delete') => Promise<void>
     }
 > = (props) => {
     const userStore = useUserStore()
@@ -15,7 +15,7 @@ export const WorldCard: Component<
         return userStore.state.user!.favorite_worlds.includes(props.world.id)
     })
     const handleUpdateFavorite = () => {
-        props.onUpdateFavorite(props.world, isStared() ? 'delete' : 'add')
+        props.onUpdateFavorite?.(props.world, isStared() ? 'delete' : 'add')
     }
     //#endregion
 

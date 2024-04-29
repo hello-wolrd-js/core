@@ -15,6 +15,17 @@ export async function getWorld(params?: WorldQueryParams) {
         })
     )
 }
+
+export async function getMostStarWorld(limit: number) {
+    return await handleRequest<World[]>(() =>
+        WORLD_API_INSTANCE.get('/most/star', {
+            params: {
+                limit
+            }
+        })
+    )
+}
+
 export async function deleteWorld(id: string) {
     return await handleRequest<World>(() =>
         WORLD_API_INSTANCE.delete('/', {
@@ -60,5 +71,6 @@ export const WORLD_API = {
     createWorld,
     updateWorld,
     checkWorld,
-    uncheckWorld
+    uncheckWorld,
+    getMostStarWorld
 }

@@ -10,6 +10,7 @@ import { NotFound } from '@components/status/404'
 import { Toaster } from 'solid-toast'
 import { FavoriteView } from './views/favorite/Favorite'
 import { ReleasedView } from './views/released/Released'
+import { HotView } from './views/hot/Hot'
 
 const root = document.getElementById('root')
 
@@ -23,11 +24,12 @@ render(
     () => (
         <>
             <Router root={App}>
-                <Route path="/" component={HomeView}></Route>
-                <Route path="/world" component={WorldView}></Route>
-                <Route path="/publish" component={PublishView}></Route>
-                <Route path="/favorite" component={FavoriteView}></Route>
-                <Route path="/released" component={ReleasedView}></Route>
+                <Route path="/" component={HomeView} />
+                <Route path="/world" component={WorldView} />
+                <Route path="/publish" component={PublishView} />
+                <Route path="/favorite" component={FavoriteView} />
+                <Route path="/released" component={ReleasedView} />
+                <Route path="/hot" component={HotView} />
                 <Route path="*404" component={NotFound} />
             </Router>
             <Toaster position="top-center" gutter={8} />
