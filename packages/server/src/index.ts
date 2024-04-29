@@ -8,8 +8,6 @@ if (!port) {
     console.error('未配置 HWJS_PORT 环境变量')
     process.exit(1)
 }
-new Elysia().use(cors()).use(WorldService).use(UserService).listen(port)
-
-// new Elysia().get('/hello', () => 'hello!').listen(port)
+new Elysia().use(cors()).use(WorldService).use(UserService).listen({ port, hostname: '0.0.0.0' })
 
 console.log(`server listen on ${port}`)
