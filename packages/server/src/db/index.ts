@@ -1,6 +1,7 @@
 import { connect } from 'mongoose'
+import config from '@root/hwjs.config'
 
-await connect('mongodb://localhost:27017/hello-world')
+await connect(config.server.mongodb.host)
 import world from './world'
 import user from './user'
 export const db = {

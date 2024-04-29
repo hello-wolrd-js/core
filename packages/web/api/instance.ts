@@ -1,6 +1,8 @@
 import { useUserStore } from '@stores/user'
 import axios, { AxiosRequestHeaders } from 'axios'
-const baseUrl = 'http://localhost:4000'
+import config from '@root/hwjs.config'
+
+const baseUrl = `${config.server.host}:${config.server.port}`
 
 const createAPI = (url: string) => {
     const _instance = axios.create({

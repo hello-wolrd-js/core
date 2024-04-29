@@ -1,6 +1,6 @@
 {
-    "include": ["env.d.ts", "src/**/*"],
     "extends": "../../../tsconfig.web.json",
+    "include": ["env.d.ts", "src/**/*"],
     "compilerOptions": {
         "baseUrl": ".",
         "paths": {
@@ -8,7 +8,8 @@
             "@stores/*": ["../stores/*"],
             "@components/*": ["../components/*"],
             "@api/*": ["../api/*"],
-            "@hooks/*": ["../hooks/*"]
+            "@hooks/*": ["../hooks/*"],
+            "@root/*": ["./*"]
         }
     }
 }

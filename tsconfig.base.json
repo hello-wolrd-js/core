@@ -16,7 +16,8 @@
         "paths": {
             "@stores/*": ["./packages/web/stores/*"],
             "@components/*": ["./packages/web/components/*"],
-            "@api/*": ["./packages/web/api/*"]
+            "@api/*": ["./packages/web/api/*"],
+            "@root/*": ["./*"]
         }
     },
     "exclude": ["node_modules", "**/node_modules/*"]

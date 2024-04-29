@@ -25,7 +25,8 @@ export default defineConfig({
             '@api': fileURLToPath(new URL('../api', import.meta.url)),
             '@stores': fileURLToPath(new URL('../stores', import.meta.url)),
             '@components': fileURLToPath(new URL('../components', import.meta.url)),
-            '@hooks': fileURLToPath(new URL('../hooks', import.meta.url))
+            '@hooks': fileURLToPath(new URL('../hooks', import.meta.url)),
+            '@root': fileURLToPath(new URL('../../../', import.meta.url))
         }
     }
 })
