@@ -1,0 +1,21 @@
+version: '3'
+services:
+    server:
+        build: './packages/server'
+        environment:
+            - HWJS_PORT=4000
+            - HWJS_MONGODB_HOST=db:27017
+        # network_mode: host
+        networks:
+            - hwjs_network
+        ports:
+            - "4000:4000"
+        depends_on:
+            - db
+    db:
+        image: mongo
+        networks:
+            - hwjs_network
+networks:
+    hwjs_network:
+        driver: bridge
