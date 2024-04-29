@@ -3,6 +3,7 @@ import { createStore, produce } from 'solid-js/store'
 import { useEmptyResult, useToWorldFn, useUpdateUserFavoriteFn } from '.'
 import { debounce } from 'lodash'
 import { onMount, onCleanup, For, Show, JSXElement, Component, createEffect } from 'solid-js'
+import { Opacity } from '@components/transition/Opacity'
 
 export const useEmptyWorldList = (): WorldList => {
     return {
@@ -149,15 +150,17 @@ export const useWorldList = ({
                 }}
             >
                 <Show when={store.list.length} fallback={empty}>
-                    <For each={store.list}>
-                        {/* 包装card */}
-                        {(world) =>
-                            wraper({
-                                world,
-                                onToWorld: handleToWorld
-                            })
-                        }
-                    </For>
+                    <Opacity duration={[500, 250]} group={true}>
+                        <For each={store.list}>
+                            {/* 包装card */}
+                            {(world) =>
+                                wraper({
+                                    world,
+                                    onToWorld: handleToWorld
+                                })
+                            }
+                        </For>
+                    </Opacity>
                 </Show>
             </div>
         )

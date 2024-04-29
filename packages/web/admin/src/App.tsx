@@ -15,19 +15,21 @@ const App: Component<{ children?: JSX.Element }> = (props) => {
     })
     return (
         <ModalProvider>
-            <Show when={isEffective()} fallback={Login()}>
-                <div class="flex h-full flex-col">
-                    <NavBar height={global.state.nav.height} />
-                    <main
-                        style={{
-                            'margin-top': `${global.state.nav.height}px`,
-                            height: `${global.state.content.height}px`
-                        }}
-                    >
-                        <Opacity duration={[250, 250]}>{props.children}</Opacity>
-                    </main>
-                </div>
-            </Show>
+            <Opacity duration={[250, 250]}>
+                <Show when={isEffective()} fallback={Login()}>
+                    <div class="flex h-full flex-col">
+                        <NavBar height={global.state.nav.height} />
+                        <main
+                            style={{
+                                'margin-top': `${global.state.nav.height}px`,
+                                height: `${global.state.content.height}px`
+                            }}
+                        >
+                            {props.children}
+                        </main>
+                    </div>
+                </Show>
+            </Opacity>
         </ModalProvider>
     )
 }

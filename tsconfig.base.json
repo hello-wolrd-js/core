@@ -1,5 +1,5 @@
 {
-    "include": ["packages/**/*.ts"],
+    "include": ["packages/**/*.ts", "packages/config/postcss.js"],
     "compilerOptions": {
         "strict": true,
         "target": "ESNext",
