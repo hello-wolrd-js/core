@@ -5,8 +5,7 @@
     "main": "index.js",
     "scripts": {
         "dev": "vite --host",
-        "build": "vite build",
-        "serve": "vite preview"
+        "build": "vite build --emptyOutDir"
     },
     "keywords": [],
     "author": "",

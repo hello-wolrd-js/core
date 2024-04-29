@@ -5,12 +5,13 @@
     "description": "hello-world-js核心库",
     "license": "AGPL-3.0-only",
     "scripts": {
-        "dev:start": "npm-run-all dev:server dev:admin dev:client",
-        "dev:server": "cd packages/server & npm run dev",
-        "dev:admin": "cd packages/web/admin & npm run dev",
-        "dev:client": "cd packages/web/client & npm run dev",
-        "build:admin": "cd packages/web/admin & npm run build",
-        "build:client": "cd packages/web/client & npm run build"
+        "dev": "npm-run-all dev:server dev:admin dev:client",
+        "dev:server": "cd ./packages/server & npm run dev",
+        "dev:admin": "cd ./packages/web/admin & npm run dev",
+        "dev:client": "cd ./packages/web/client & npm run dev",
+        "build": "npm-run-all build:client build:admin",
+        "build:admin": "cd ./packages/web/admin & npm run build",
+        "build:client": "cd ./packages/web/client & npm run build"
     },
     "workspaces": [
         "packages/*"
