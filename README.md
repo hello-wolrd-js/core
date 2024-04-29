@@ -1,34 +1,17 @@
-## Usage
+## @hello-world-js/core
 
-Those templates dependencies are maintained via [pnpm](https://pnpm.io) via `pnpm up -Lri`.
+核心monorepo库, 使用 bun 作为包管理和后端运行时.
 
-This is the reason you see a `pnpm-lock.yaml`. That being said, any package manager will work. This file can be safely be removed once you clone a template.
+packages:
 
-```bash
-$ npm install # or pnpm install or yarn install
-```
+1. server(后端): bun,elysia,mongoose
+2. web(管理端和客户端): solidjs,tailwind,daisyui
 
-### Learn more on the [Solid Website](https://solidjs.com) and come chat with us on our [Discord](https://discord.com/invite/solidjs)
+## 部署
 
-## Available Scripts
+核心库支持两种部署方式
 
-In the project directory, you can run:
+### 1.使用官方docker镜像(推荐)
 
-### `npm run dev` or `npm start`
+### 2.通过源码构建
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br>
-
-### `npm run build`
-
-Builds the app for production to the `dist` folder.<br>
-It correctly bundles Solid in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-## Deployment
-
-You can deploy the `dist` folder to any static host provider (netlify, surge, now, etc.)
