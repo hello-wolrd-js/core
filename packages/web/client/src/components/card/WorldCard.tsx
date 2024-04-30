@@ -19,8 +19,13 @@ export const WorldCard: Component<
     }
     //#endregion
 
+    const style = {
+        height: props.height ? `${props.height}px` : void 0,
+        width: props.width ? `${props.width}px` : void 0
+    }
+
     return (
-        <div class="card w-96 bg-base-100 h-3/4 shadow-lg m-4">
+        <div class="card w-96 h-3/4 bg-base-100 shadow-lg m-4" style={style}>
             <figure>
                 {props.world.cover && <img src={props.world.cover} alt={props.world.name} />}
             </figure>

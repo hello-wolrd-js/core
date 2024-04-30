@@ -4,4 +4,6 @@ import { World } from './world'
 export interface WorldCardBaseProps<WorldType = World> {
     world: WorldType
     onToWorld: (world: WorldType) => void
+    width?: number
+    height?: number
 }

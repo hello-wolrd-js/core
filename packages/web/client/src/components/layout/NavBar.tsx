@@ -25,7 +25,6 @@ const NavBar: Component<{ height: number }> = (props) => {
     const handleRefreshWorlds = debounce(() => {
         global.emitter.emit('refresh-worlds')
     }, 250)
-    console.log(global.state.nav.extra)
     return (
         // 导航栏
         <nav

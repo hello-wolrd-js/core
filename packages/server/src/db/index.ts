@@ -1,12 +1,7 @@
 import { connect } from 'mongoose'
+import config from '@root/hwjs.config'
 
-const host = process.env['HWJS_MONGODB_HOST']
-if (!host) {
-    console.error('未配置 HWJS_MONGODB_HOST 环境变量')
-    process.exit(1)
-}
-
-await connect(`mongodb://${process.env['HWJS_MONGODB_HOST']}/hello-world?authSource=admin`)
+await connect(config.server.mongodb.host)
 
 import world from './world'
 import user from './user'
