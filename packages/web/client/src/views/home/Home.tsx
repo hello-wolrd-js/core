@@ -1,4 +1,4 @@
-import { Component, onCleanup } from 'solid-js'
+import { Component, onCleanup, onMount } from 'solid-js'
 import { isSuccessResponse } from '@core/shared'
 import toast from 'solid-toast'
 import { useEmptyWorldList, useWorldList } from '@hooks/world'
@@ -45,13 +45,16 @@ export const HomeView: Component = () => {
     //导航栏拓展
     //#region
     const handleSearchWorld = async (name: string) => await handleSearch({ name })
+
     const NavExtra = (
         <div class="flex justify-center items-center">
             <Search onInput={handleSearchWorld} debounce={{ wait: 500 }} placeholder="搜搜看?" />
             <div class="ml-5">总数: {state.totalItems}</div>
         </div>
     )
-    setStore('nav', 'extra', NavExtra)
+    onMount(() => {
+        setStore('nav', 'extra', NavExtra)
+    })
     onCleanup(() => setStore('nav', 'extra', void 0))
     //#endregion
 

@@ -1,4 +1,4 @@
-import { Show, children, createEffect, createMemo, type Component, type JSX } from 'solid-js'
+import { Show,  createMemo, type Component, type JSX } from 'solid-js'
 import NavBar from './components/layout/NavBar'
 import { useUserStore } from '@stores/user'
 import { GuardView } from './views/guard/Guard'
@@ -7,7 +7,6 @@ import toast from 'solid-toast'
 import { Opacity } from '@components/transition/Opacity'
 import { useGlobalStore } from '@stores/global'
 import { ModalProvider } from '@components/modal/Modal'
-import { useLocation, useParams } from '@solidjs/router'
 
 const App: Component<{ children?: JSX.Element }> = (props) => {
     const userStore = useUserStore()
@@ -22,12 +21,10 @@ const App: Component<{ children?: JSX.Element }> = (props) => {
             if (!isSuccessResponse(result)) toast.error('获取个人信息失败: ' + result.error)
         })
     }
-    createEffect(() => {
-        console.log(useLocation().pathname)
-    })
+
     return (
-        <ModalProvider>
-            <Opacity duration={[250, 250]}>
+        <Opacity duration={[250, 250]}>
+            <ModalProvider>
                 <Show when={isEffective()} fallback={GuardView()}>
                     <div class="flex flex-col h-full">
                         <NavBar height={global.state.nav.height}></NavBar>
@@ -37,17 +34,12 @@ const App: Component<{ children?: JSX.Element }> = (props) => {
                                 height: `${global.state.content.height}px`
                             }}
                         >
-                            {props.children}
-                            {/* <Opacity duration={[250, 250]}>
-                                <Show when={props.children} keyed={true}>
-                                    
-                                </Show>
-                            </Opacity> */}
+                            <Opacity duration={[250, 250]}>{props.children}</Opacity>
                         </main>
                     </div>
                 </Show>
-            </Opacity>
-        </ModalProvider>
+            </ModalProvider>
+        </Opacity>
     )
 }
 

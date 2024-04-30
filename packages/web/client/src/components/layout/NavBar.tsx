@@ -3,7 +3,7 @@ import { useNavigate } from '@solidjs/router'
 import { useGlobalStore } from '@stores/global'
 import { useUserStore } from '@stores/user'
 import { debounce } from 'lodash'
-import { Component, Show } from 'solid-js'
+import { Component } from 'solid-js'
 
 const NavBar: Component<{ height: number }> = (props) => {
     //路由导航
@@ -157,7 +157,7 @@ const NavBar: Component<{ height: number }> = (props) => {
             </div>
             {/* 导航栏拓展 */}
             <div class="flex-1 justify-center">
-                <Opacity duration={[250, 250]} children={global.state.nav.extra} />
+                <Opacity onEnter={()=>console.log(1)}>{global.state.nav.extra}</Opacity>
             </div>
             {/* 文档 */}
             <div class="flex-none btn btn-square btn-ghost">
