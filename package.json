@@ -13,9 +13,6 @@
         "build:admin": "cd ./packages/web/admin & npm run build",
         "build:client": "cd ./packages/web/client & npm run build"
     },
-    "workspaces": [
-        "packages/*"
-    ],
     "devDependencies": {
         "@types/node": "^20.12.7",
         "autoprefixer": "^10.4.19",
@@ -33,6 +30,7 @@
     "dependencies": {
         "@core/models": "workspace:^",
         "@core/shared": "workspace:^",
+        "@core/config": "workspace:^",
         "@solidjs/router": "^0.13.2",
         "@types/lodash": "^4.17.0",
         "axios": "^1.6.8",

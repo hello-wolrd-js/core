@@ -1,1 +1,1 @@
-module.exports = require('@core/config/postcss')
+module.exports = require('@core')
