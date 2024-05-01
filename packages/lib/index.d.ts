@@ -9,14 +9,16 @@ export declare const useHWJS: () => {
      */
     getUser: () => User
     /**
-     * 开启模态框
-     * @param content 模态框内容
+     * solidjs-toast消息条实例
      */
-    openModal: (content: string) => void
+    toast: {}
     /**
-     * 关闭模态框
+     * modal实例
      */
-    closeModal: () => void
+    modal: {
+        open: (content: string) => void
+        close: () => void
+    }
 }
 
 declare interface User {

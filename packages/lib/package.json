@@ -1,12 +1,14 @@
 {
-    "name": "@core/lib",
+    "name": "@types/hwjs-lib",
     "version": "1.0.0",
-    "description": "hwjs世界依赖库",
+    "private": false,
+    "description": "hwjs世界依赖库类型声明",
     "main": "index.ts",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
     "keywords": [],
     "author": "",
-    "license": "ISC"
+    "license": "ISC",
+    "files": [
+        "./index.d.ts",
+        "./package.json"
+    ]
 }

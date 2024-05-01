@@ -1,6 +1,7 @@
 import { useModal } from '@components/modal/Modal'
 import { User } from '@core/models'
 import { useUserStore } from '@stores/user'
+import toast from 'solid-toast'
 
 export const useHWJS = () => {
     const modal = useModal()
@@ -10,13 +11,8 @@ export const useHWJS = () => {
         getUser(): User {
             return userStore.state.user!
         },
-        //打开模态框
-        openModal(content: string) {
-            modal.open(content)
-        },
-        //关闭模态框
-        closeModal() {
-            modal.close()
-        }
+        modal,
+        //消息条
+        toast
     }
 }
