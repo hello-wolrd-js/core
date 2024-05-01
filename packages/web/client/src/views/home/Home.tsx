@@ -1,5 +1,5 @@
 import { Component, onCleanup, onMount } from 'solid-js'
-import { isSuccessResponse } from '@core/shared'
+import { isSuccessResponse, HWJS } from '@core/shared'
 import toast from 'solid-toast'
 import { useEmptyWorldList, useWorldList } from '@hooks/world'
 import { WORLD_API } from '@api/world'
@@ -31,6 +31,8 @@ export const HomeView: Component = () => {
             }
         }
     })
+
+
 
     //事件
     //#region

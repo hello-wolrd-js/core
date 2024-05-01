@@ -1,3 +1,4 @@
+import { useHWJS } from '@core/lib'
 import { useGlobalStore } from '@stores/global'
 import { Component, onMount } from 'solid-js'
 
@@ -11,6 +12,11 @@ export const WorldView: Component = () => {
             const _dom = iframe.contentDocument!
             const _window = iframe.contentWindow!
             Object.defineProperty(_window, 'world', { value: _dom.body })
+            Object.defineProperty(_window, 'HWJS', {
+                value: useHWJS(),
+                configurable: false,
+                writable: false
+            })
 
             //安全措施
             //禁用部分属性

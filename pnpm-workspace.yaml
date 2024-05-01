@@ -3,3 +3,4 @@ packages:
     - 'packages/shared'
     - 'packages/models'
     - 'packages/config'
+    - 'packages/lib'
