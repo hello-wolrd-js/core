@@ -5,6 +5,8 @@
     "description": "hello-world-js核心库",
     "license": "AGPL-3.0-only",
     "scripts": {
+        "prepare": "husky",
+        "lint": "lint-staged",
         "dev": "npm-run-all dev:server dev:admin dev:client",
         "dev:server": "cd ./packages/server & npm run dev",
         "dev:admin": "cd ./packages/web/admin & npm run dev",
@@ -13,25 +15,36 @@
         "build:admin": "cd ./packages/web/admin & npm run build",
         "build:client": "cd ./packages/web/client & npm run build"
     },
+    "lint-staged": {
+        "*.tsx": "eslint",
+        "*.ts": "eslint",
+        "*.jsx": "eslint",
+        "*.js": "eslint"
+    },
     "devDependencies": {
         "@types/node": "^20.12.7",
         "autoprefixer": "^10.4.19",
         "bun-types": "latest",
         "daisyui": "^4.10.1",
+        "eslint": "^9.1.1",
+        "eslint-plugin-solid": "^0.14.0",
+        "husky": "^9.0.11",
+        "lint-staged": "^15.2.2",
         "npm-run-all2": "^6.1.2",
         "postcss": "^8.4.38",
         "solid-devtools": "^0.29.2",
         "tailwindcss": "^3.4.3",
         "typescript": "^5.4.5",
+        "typescript-eslint": "^7.8.0",
         "typescript-plugin-css-modules": "^5.1.0",
         "vite": "^5.0.11",
         "vite-plugin-solid": "^2.8.2"
     },
     "dependencies": {
-        "@core/models": "workspace:^",
-        "@core/shared": "workspace:^",
         "@core/config": "workspace:^",
         "@core/lib": "workspace:^",
+        "@core/models": "workspace:^",
+        "@core/shared": "workspace:^",
         "@solidjs/router": "^0.13.2",
         "@types/lodash": "^4.17.0",
         "axios": "^1.6.8",

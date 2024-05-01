@@ -11,7 +11,7 @@ export declare const useHWJS: () => {
     /**
      * solidjs-toast消息条实例
      */
-    toast: {}
+    toast: object
     /**
      * modal实例
      */

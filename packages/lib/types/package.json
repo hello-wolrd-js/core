@@ -1,7 +1,8 @@
 {
-    "name": "@core/lib",
+    "name": "@types/hwjs-lib",
+    "private": "false",
     "version": "1.0.0",
-    "description": "hwjs世界依赖库",
+    "description": "",
     "main": "index.ts",
     "keywords": [],
     "author": "",
