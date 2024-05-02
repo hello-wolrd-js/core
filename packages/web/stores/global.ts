@@ -1,4 +1,4 @@
-import { World, WorldList, WorldQueryParams } from '@core/models'
+import { World } from '@core/models'
 import { createStore } from 'solid-js/store'
 import mitt, { Emitter } from 'mitt'
 import { JSXElement } from 'solid-js'
@@ -15,9 +15,11 @@ interface GlobalStoreState {
     }
 }
 
+//尝试获取currentWorld用于刷新后也能加载出
+const _currWorld = sessionStorage.getItem('current-world')
 const [store, setStore] = createStore<GlobalStoreState>({
     current: {
-        world: null
+        world: _currWorld ? JSON.parse(_currWorld) : null
     },
     nav: {
         height: 64,

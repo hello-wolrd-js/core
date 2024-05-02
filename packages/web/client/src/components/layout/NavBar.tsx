@@ -157,7 +157,7 @@ const NavBar: Component<{ height: number }> = (props) => {
             </div>
             {/* 导航栏拓展 */}
             <div class="flex-1 justify-center">
-                <Opacity onEnter={()=>console.log(1)}>{global.state.nav.extra}</Opacity>
+                <Opacity>{global.state.nav.extra}</Opacity>
             </div>
             {/* 文档 */}
             <div class="flex-none btn btn-square btn-ghost">
