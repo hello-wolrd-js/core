@@ -2,9 +2,13 @@
     "name": "@types/hwjs-lib",
     "private": "false",
     "version": "1.0.0",
-    "description": "",
+    "description": "hwjs世界依赖的类型声明",
     "main": "index.ts",
-    "keywords": [],
-    "author": "",
+    "keywords": [
+        "hwjs",
+        "types",
+        "lib"
+    ],
+    "author": "tyee",
     "license": "ISC"
 }

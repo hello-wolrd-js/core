@@ -21,6 +21,14 @@ export declare const useHWJS: () => {
     }
 }
 
+/**
+ * HWJS
+ */
+export declare type HWJS = ReturnType<typeof useHWJS>
+
+/**
+ * 用户信息
+ */
 declare interface User {
     id: string
     username: string
