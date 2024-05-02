@@ -3,7 +3,6 @@ import { Component } from 'solid-js'
 import { useUserStore } from '@stores/user'
 import { useGlobalStore } from '@stores/global'
 import { debounce } from 'lodash'
-import { Opacity } from '@components/transition/Opacity'
 
 export const NavBar: Component<{ height: number }> = (props) => {
     //导航
@@ -81,9 +80,7 @@ export const NavBar: Component<{ height: number }> = (props) => {
                 </a>
             </div>
             {/* 导航栏拓展 */}
-            <div class="flex-1 justify-center">
-                <Opacity duration={[250, 250]}>{state.nav.extra}</Opacity>
-            </div>
+            <div class="flex-1 justify-center">{state.nav.extra} </div>
             {/* 文档 */}
             <div class="flex-none">
                 <a class="btn btn-square btn-ghost" href="https://hello-world-js.pages.dev/">

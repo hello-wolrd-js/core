@@ -1,4 +1,3 @@
-import { Opacity } from '@components/transition/Opacity'
 import { useNavigate } from '@solidjs/router'
 import { useGlobalStore } from '@stores/global'
 import { useUserStore } from '@stores/user'
@@ -156,9 +155,7 @@ const NavBar: Component<{ height: number }> = (props) => {
                 </div>
             </div>
             {/* 导航栏拓展 */}
-            <div class="flex-1 justify-center">
-                <Opacity>{global.state.nav.extra}</Opacity>
-            </div>
+            <div class="flex-1 justify-center">{global.state.nav.extra}</div>
             {/* 文档 */}
             <div class="flex-none btn btn-square btn-ghost">
                 <a href="https://hello-world-js.pages.dev/">
