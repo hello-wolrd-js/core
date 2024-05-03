@@ -50,6 +50,13 @@ export const NavBar: Component<{ height: number }> = (props) => {
                     >
                         <li>
                             <a onClick={handleLogout}>退出登陆</a>
+                            {/* 移动端 */}
+                            <a class="lg:hidden" href="https://hello-world-js.pages.dev/">
+                                文档
+                            </a>
+                            <a class="lg:hidden" href="https://github.com/hello-wolrd-js">
+                                github
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -82,7 +89,7 @@ export const NavBar: Component<{ height: number }> = (props) => {
             {/* 导航栏拓展 */}
             <div class="flex-1 justify-center">{state.nav.extra} </div>
             {/* 文档 */}
-            <div class="flex-none">
+            <div class="flex-none max-lg:hidden">
                 <a class="btn btn-square btn-ghost" href="https://hello-world-js.pages.dev/">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -101,7 +108,7 @@ export const NavBar: Component<{ height: number }> = (props) => {
                 </a>
             </div>
             {/* github */}
-            <div class="flex-none">
+            <div class="flex-none max-lg:hidden">
                 <a class="btn btn-square btn-ghost" href="https://github.com/hello-wolrd-js">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"

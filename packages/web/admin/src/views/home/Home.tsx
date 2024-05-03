@@ -106,15 +106,18 @@ export const HomeView: Component = () => {
 
     const NavExtra = (
         <div class="flex justify-center items-center">
-            <div class="mx-5">总数: {state.totalItems}</div>
-            <Search
-                onInput={(name) => {
-                    setQuery('name', name)
-                    handleSearch(query)
-                }}
-                debounce={{ wait: 500 }}
-                placeholder="搜搜看?"
-            />
+            <div class="mx-5 max-lg:hidden">总数: {state.totalItems}</div>
+            <div class="max-lg:hidden">
+                <Search
+                    onInput={(name) => {
+                        setQuery('name', name)
+                        handleSearch(query)
+                    }}
+                    debounce={{ wait: 500 }}
+                    placeholder="搜搜看?"
+                />
+            </div>
+
             <div class="mx-4 flex items-center">
                 <span class="mx-2">{query.status === 'checked' ? '已审核' : '待审核'}</span>
                 <input
