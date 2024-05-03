@@ -1,24 +1,34 @@
 import { useHWJS } from '@core/lib'
 import { useGlobalStore } from '@stores/global'
 import { Component, Show, createSignal, onMount } from 'solid-js'
+import { Transition } from 'solid-transition-group'
 
 export const WorldView: Component = () => {
     const global = useGlobalStore()
     let worldContainerRef: HTMLIFrameElement | undefined
-    //会话存储当前wolrd实例
+
+    //存储当前wolrd实例
     sessionStorage.setItem('current-world', JSON.stringify(global.state.current.world))
 
     //加载动画
     //#region
     const [loading, setLoading] = createSignal(true)
-    const LoadingView = <div>加载中捏...</div>
+    const LoadingView = (
+        <div class="w-full h-full fixed top-0 flex justify-center items-center  animate__animated animate__fadeInLeft">
+            <div class="text-5xl">Loading..</div>
+        </div>
+    )
     //#endregion
-    const display = () => (loading() ? 'none' : '')
+
+    //世界加载的逻辑
+    //#region
     onMount(() => {
         if (!worldContainerRef) return
 
         const iframe = worldContainerRef
         const setup = () => {
+            //触发加载界面的打字机效果
+
             const _dom = iframe.contentDocument!
             const _window = iframe.contentWindow!
             Object.defineProperties(_window, {
@@ -26,7 +36,9 @@ export const WorldView: Component = () => {
                     value: _dom.body
                 },
                 endLoading: {
-                    value: () => setLoading(false)
+                    value: () => {
+                        setLoading(false)
+                    }
                 },
                 HWJS: {
                     value: useHWJS(),
@@ -35,8 +47,8 @@ export const WorldView: Component = () => {
                 }
             })
 
-            //安全措施
-            //禁用部分属性
+            //安全措施,禁用部分属性
+            //#region
             const avoids = ['localStorage', 'sessionStorage']
             avoids.forEach((item) => {
                 Object.defineProperty(_window, item, {
@@ -45,19 +57,24 @@ export const WorldView: Component = () => {
                     configurable: false
                 })
             })
+            //#endregion
 
             //模拟挂载脚本
+            //#region
             const _mountScript = _dom.createElement('script')
             _mountScript.innerHTML = `
                 import("${global.state.current.world!.url}").then((module) => {
                     //结束加载状态
-                    window.endLoading();
+                    setTimeout(()=>window.endLoading(),1000)
+                    // window.endLoading()
                     //world挂载
                     module.default(window.world);
                     window.world = void 0;
                     window.endLoading = void 0;
                 });
             `
+            //#endregion
+
             _dom.body.appendChild(_mountScript)
             _dom.body.removeChild(_mountScript)
         }
@@ -71,14 +88,18 @@ export const WorldView: Component = () => {
             iframe.onload = setup
         }
     })
-
+    //#endregion
     return (
-        <div class="w-full" style={{ height: `${global.state.content.height}px` }}>
-            <Show when={loading()}> {LoadingView}</Show>
+        <div class="w-full h-full">
+            {/* 模拟一个遮罩加载层 */}
+            <Transition exitActiveClass="animate__animated animate__fadeOutRight">
+                <Show when={loading()} children={LoadingView} />
+            </Transition>
+            {/* iframe容器 */}
             <iframe
                 ref={worldContainerRef}
                 style={{
-                    display:display(),
+                    display: loading() ? 'none' : '',
                     width: '100%',
                     height: `${global.state.content.height}px`
                 }}

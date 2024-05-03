@@ -50,6 +50,7 @@
         "@core/shared": "workspace:^",
         "@solidjs/router": "^0.13.2",
         "@types/lodash": "^4.17.0",
+        "animate.css": "^4.1.1",
         "axios": "^1.6.8",
         "lodash": "^4.17.21",
         "mitt": "^3.0.1",

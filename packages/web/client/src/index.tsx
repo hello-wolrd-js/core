@@ -11,6 +11,7 @@ import { Toaster } from 'solid-toast'
 import { FavoriteView } from './views/favorite/Favorite'
 import { ReleasedView } from './views/released/Released'
 import { HotView } from './views/hot/Hot'
+import 'animate.css'
 
 const root = document.getElementById('root')
 
