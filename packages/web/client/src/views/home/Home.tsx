@@ -7,6 +7,7 @@ import { WorldCard } from '@/components/card/WorldCard'
 import { useAwait } from '@hooks/index'
 import { useGlobalStore } from '@stores/global'
 import { Search } from '@/components/search/Search'
+import { useWorldLoading } from '@components/world/Load'
 
 export const HomeView: Component = () => {
     const { WorldList, handleUpdateFavorite, handleSearch, handleRefresh, state } = useWorldList({
@@ -56,6 +57,7 @@ export const HomeView: Component = () => {
     )
     onMount(() => {
         setStore('nav', 'extra', NavExtra)
+        useWorldLoading()?.begin()
     })
     onCleanup(() => setStore('nav', 'extra', void 0))
     //#endregion

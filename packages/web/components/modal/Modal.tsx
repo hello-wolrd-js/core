@@ -1,7 +1,6 @@
 import {
     Component,
     JSXElement,
-    createMemo,
     onCleanup,
     createContext,
     createSignal,
@@ -30,9 +29,9 @@ export const useModal = () => {
 export const ModalProvider: Component<{ children: JSXElement }> = (props) => {
     const [show, setShow] = createSignal(false)
 
-    let modalRef: any
+    let modalRef: HTMLDivElement | undefined
     const onClick = (e: Event) => {
-        if (modalRef && !modalRef.contains(e.target)) {
+        if (modalRef && !modalRef.contains(e.target as Node)) {
             setShow(false)
         }
     }
