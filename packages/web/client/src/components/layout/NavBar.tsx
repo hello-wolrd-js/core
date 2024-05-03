@@ -19,7 +19,7 @@ const NavBar: Component<{ height: number }> = (props) => {
         userStore.logout()
     }
 
-    //跨组件事件
+    //全局事件: 其实也可以用导航栏插槽来做
     const global = useGlobalStore()
     const handleRefreshWorlds = debounce(() => {
         global.emitter.emit('refresh-worlds')
@@ -56,6 +56,19 @@ const NavBar: Component<{ height: number }> = (props) => {
                     <li>
                         <a onClick={handleToPublish}>发布</a>
                         <a onClick={handleLogout}>退出登陆</a>
+                        {/* 移动端 */}
+                        <a class="lg:hidden" onClick={handleToFavorite}>
+                            收藏
+                        </a>
+                        <a class="lg:hidden" onClick={handleToReleased}>
+                            已发布
+                        </a>
+                        <a class="lg:hidden" href="https://hello-world-js.pages.dev/">
+                            文档
+                        </a>
+                        <a class="lg:hidden" href="https://github.com/hello-wolrd-js">
+                            github
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -87,7 +100,7 @@ const NavBar: Component<{ height: number }> = (props) => {
                 </div>
             </div>
             {/* 查看收藏的 */}
-            <div class="flex-none" onClick={handleToFavorite}>
+            <div class="flex-none max-sm:hidden" onClick={handleToFavorite}>
                 <div class="tooltip tooltip-bottom" data-tip="收藏">
                     <div class="btn btn-square btn-ghost">
                         <svg
@@ -108,7 +121,7 @@ const NavBar: Component<{ height: number }> = (props) => {
                 </div>
             </div>
             {/* 查看发布的 */}
-            <div class="flex-none" onClick={handleToReleased}>
+            <div class="flex-none max-sm:hidden" onClick={handleToReleased}>
                 <div class="tooltip tooltip-bottom" data-tip="发布的世界">
                     <div class="btn btn-square btn-ghost">
                         <svg
@@ -129,7 +142,7 @@ const NavBar: Component<{ height: number }> = (props) => {
                 </div>
             </div>
             {/* 查看热门 */}
-            <div class="flex-none" onClick={handleToHot}>
+            <div class="flex-none max-sm:hidden" onClick={handleToHot}>
                 <div class="tooltip tooltip-bottom" data-tip="热门">
                     <div class="btn btn-square btn-ghost">
                         <svg
@@ -155,10 +168,10 @@ const NavBar: Component<{ height: number }> = (props) => {
                 </div>
             </div>
             {/* 导航栏拓展 */}
-            <div class="flex-1 justify-center">{global.state.nav.extra}</div>
+            <div class="flex-1 justify-center max-md:hidden">{global.state.nav.extra}</div>
             {/* 文档 */}
-            <div class="flex-none btn btn-square btn-ghost">
-                <a href="https://hello-world-js.pages.dev/">
+            <div class="flex-none max-lg:hidden">
+                <a class="btn btn-square btn-ghost" href="https://hello-world-js.pages.dev/">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -176,7 +189,7 @@ const NavBar: Component<{ height: number }> = (props) => {
                 </a>
             </div>
             {/* github */}
-            <div class="flex-none">
+            <div class="flex-none max-lg:hidden">
                 <a class="btn btn-square btn-ghost" href="https://github.com/hello-wolrd-js">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
