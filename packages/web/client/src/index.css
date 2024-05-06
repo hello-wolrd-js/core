@@ -1,6 +1,4 @@
 @tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 @layer base {
     @font-face {
@@ -33,10 +31,26 @@
         padding: 0;
         box-sizing: border-box;
     }
-}
 
-@layer components {
-    .kancy {
-        @apply flex justify-center items-center;
+    h1 {
+        @apply text-2xl;
+    }
+    h2 {
+        @apply text-xl;
+    }
+    h3 {
+        @apply text-lg;
+    }
+    h4 {
+        @apply text-base;
+    }
+    h5 {
+        @apply text-sm;
+    }
+    h6 {
+        @apply text-xs;
     }
 }
+
+@tailwind components;
+@tailwind utilities;
