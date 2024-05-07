@@ -1,18 +1,12 @@
-import { useModal } from '@components/modal/Modal'
-import { User } from '@core/models'
-import { useUserStore } from '@stores/user'
-import toast from 'solid-toast'
+import { World } from '@core/models'
+import { useStorageLib } from './storage'
+import { useUILib } from './ui'
+import { useUserLib } from './user'
 
-export const useHWJS = () => {
-    const modal = useModal()
-    const userStore = useUserStore()
+export const useHWJS = (world: World) => {
     return {
-        //获取当前用户:返回一个用户信息的只读对象proxy
-        getUser(): User {
-            return userStore.state.user!
-        },
-        modal,
-        //消息条
-        toast
+        ...useUserLib(),
+        ...useUILib(),
+        ...useStorageLib(world)
     }
 }

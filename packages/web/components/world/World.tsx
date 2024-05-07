@@ -6,9 +6,10 @@ import { Transition } from 'solid-transition-group'
 export const WorldView: Component = () => {
     const global = useGlobalStore()
     let worldContainerRef: HTMLIFrameElement | undefined
+    const currentWorld = global.state.current.world!
 
     //存储当前wolrd实例
-    sessionStorage.setItem('current-world', JSON.stringify(global.state.current.world))
+    sessionStorage.setItem('current-world', JSON.stringify(currentWorld))
 
     //加载动画
     //#region
@@ -27,8 +28,7 @@ export const WorldView: Component = () => {
 
         const iframe = worldContainerRef
         const setup = () => {
-            //触发加载界面的打字机效果
-
+            //准备步骤
             const _dom = iframe.contentDocument!
             const _window = iframe.contentWindow!
             Object.defineProperties(_window, {
@@ -41,7 +41,7 @@ export const WorldView: Component = () => {
                     }
                 },
                 HWJS: {
-                    value: useHWJS(),
+                    value: useHWJS(currentWorld),
                     configurable: false,
                     writable: false
                 }
@@ -64,13 +64,21 @@ export const WorldView: Component = () => {
             const _mountScript = _dom.createElement('script')
             _mountScript.innerHTML = `
                 import("${global.state.current.world!.url}").then((module) => {
+
                     //结束加载状态
                     setTimeout(()=>window.endLoading(),1000)
-                    // window.endLoading()
-                    //world挂载
+
+                    //挂载world
                     module.default(window.world);
+
+                    //多余属性undefined掉
                     window.world = void 0;
                     window.endLoading = void 0;
+
+                    //测试操作
+                    // console.log(HWJS)
+                    // console.log(HWJS.sessionStorage.setItem("kancy-joe","joe"))
+                    // console.log(HWJS.sessionStorage.getItem("kancy-joe"))
                 });
             `
             //#endregion
@@ -89,6 +97,7 @@ export const WorldView: Component = () => {
         }
     })
     //#endregion
+
     return (
         <div class="w-full h-full">
             {/* 模拟一个遮罩加载层 */}
