@@ -4,6 +4,8 @@ import { useUserStore } from '@stores/user'
 import { Component, Show, createMemo, createSignal, onCleanup, onMount } from 'solid-js'
 import { Transition } from 'solid-transition-group'
 import { Star } from '@components/icon/Star'
+import { isSuccessResponse } from '@root/packages/shared'
+import toast from 'solid-toast'
 
 export const WorldView: Component = () => {
     const global = useGlobalStore()
@@ -106,6 +108,19 @@ export const WorldView: Component = () => {
     const isStared = createMemo(() => {
         return userStore.state.user!.favorite_worlds.includes(currentWorld.id)
     })
+    const updateUserFavorite = async () => {
+        const result = isStared()
+            ? await userStore.deleteUserFavoriteWorld(currentWorld)
+            : await userStore.addUserFavoriteWorld(currentWorld)
+        if (isSuccessResponse(result)) {
+            toast.success(result.msg)
+        } else {
+            toast.error(result.error)
+        }
+    }
+    // const reportWorld = async () => {
+    //     WORLD_API.reportWorld(currentWorld.id, '神经病')
+    // }
     const NavExtends = (
         <div class="flex">
             {/* 举报 */}
@@ -129,7 +144,7 @@ export const WorldView: Component = () => {
             </div>
             {/* 收藏 */}
             <div class="tooltip tooltip-bottom" data-tip={isStared() ? '取消收藏' : '收藏这个世界'}>
-                <div class="btn btn-square btn-ghost" onClick={()=>{}}>
+                <div class="btn btn-square btn-ghost" onClick={updateUserFavorite}>
                     <Star isStared={isStared()} />
                 </div>
             </div>

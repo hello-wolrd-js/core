@@ -80,5 +80,6 @@ export const WORLD_API = {
     updateWorld,
     checkWorld,
     uncheckWorld,
-    getMostStarWorld
+    getMostStarWorld,
+    reportWorld
 }
