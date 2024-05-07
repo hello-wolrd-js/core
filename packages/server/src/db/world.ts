@@ -31,15 +31,20 @@ export const createWorld = async (world: WorldCreateParams, userId: string) => {
     return newWorld
 }
 
-export const getWorld = async (params?: WorldQueryParams): Promise<WorldList> => {
+export const getWorld = async (
+    params?: Omit<WorldQueryParams, 'page' | 'pageSize' | 'status'> & {
+        page?: string
+        pageSize?: string
+    }
+): Promise<WorldList> => {
     const filter = {
         ...params,
         name: new RegExp(params?.name || ''),
         page: void 0, //这里要shadow掉分页参数
         pageSize: void 0
     }
-    const page = params?.page || 1
-    const pageSize = params?.pageSize || 10
+    const page = parseInt(params?.page || '1') || 1
+    const pageSize = parseInt(params?.pageSize || '10') || 10
     const query = WorldModel.find(filter)
     const totalItems = await query.clone().countDocuments()
     const totalPages = Math.ceil(totalItems / pageSize)
@@ -70,30 +75,19 @@ export const updateWorld = async (id: string, world: WorldUpdateParams) => {
 
 //#endregion
 
-//审核
-//#region
-export const checkedWorld = async (id: string) => {
-    //文档转移
+//修改世界状态: 已审核,未审核,被举报
+export const updateWorldStatus = async (id: string, status: World['status']) => {
     const world = await WorldModel.findById(id)
     if (!world) throw '无效世界id'
-    world.status = 'checked'
+    world.status = status
     return await world.save()
 }
-export const uncheckedWorld = async (id: string) => {
-    //文档转移
-    const world = await WorldModel.findById(id)
-    if (!world) throw '无效世界id'
-    world.status = 'unchecked'
-    return await world.save()
-}
-//#endregion
 
 export default {
     createWorld,
     getWorld,
     deleteWorld,
     updateWorld,
-    checkedWorld,
-    uncheckedWorld,
-    getMostStarWorld
+    getMostStarWorld,
+    updateWorldStatus
 }

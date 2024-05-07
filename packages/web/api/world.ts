@@ -38,15 +38,23 @@ export async function deleteWorld(id: string) {
 
 export async function checkWorld(id: string) {
     return await handleRequest<World>(() =>
-        WORLD_API_INSTANCE.post('/check', {
+        WORLD_API_INSTANCE.put('/check', {
             id
         })
     )
 }
 export async function uncheckWorld(id: string) {
     return await handleRequest<World>(() =>
-        WORLD_API_INSTANCE.post('/uncheck', {
+        WORLD_API_INSTANCE.put('/uncheck', {
             id
+        })
+    )
+}
+export async function reportWorld(id: string, reason: string) {
+    return await handleRequest<World>(() =>
+        WORLD_API_INSTANCE.put('/report', {
+            id,
+            reason
         })
     )
 }

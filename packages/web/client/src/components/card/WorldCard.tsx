@@ -41,7 +41,10 @@ export const WorldCard: Component<
                 </div>
                 {/* 交互栏 */}
                 <div class="card-actions justify-end mt-4">
-                    <button class="btn btn-outline" onClick={handleUpdateFavorite}>
+                    <button
+                        class={isStared() ? 'btn btn-warning' : 'btn btn-outline'}
+                        onClick={handleUpdateFavorite}
+                    >
                         {isStared() ? '取消收藏' : '收藏'}
                         <svg
                             xmlns="http://www.w3.org/2000/svg"

@@ -64,7 +64,7 @@ export const HomeView: Component = () => {
             )
             toast.success(result.msg)
         } else {
-            toast.success(result.error)
+            toast.error(result.error)
         }
     }
     const handleUnchecked = async (target: World) => {
@@ -77,7 +77,7 @@ export const HomeView: Component = () => {
             )
             toast.success(result.msg)
         } else {
-            toast.success(result.error)
+            toast.error(result.error)
         }
     }
     const handleDeleted = async (target: World) => {
@@ -101,7 +101,7 @@ export const HomeView: Component = () => {
     //#region
     const [query, setQuery] = createStore({
         name: '',
-        status: ''
+        status: void 0 as World['status'] | undefined
     })
 
     const NavExtra = (

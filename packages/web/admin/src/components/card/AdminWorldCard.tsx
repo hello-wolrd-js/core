@@ -1,4 +1,4 @@
-import { Show, type Component } from 'solid-js'
+import { type Component } from 'solid-js'
 import type { World, WorldCardBaseProps } from '@core/models'
 import { useModal } from '@components/modal/Modal'
 import { Dialog } from '@components/dialog/Dialog'
@@ -23,6 +23,13 @@ export const AdminWorldCard: Component<
         open(Dialog({ confirm: handleDelete, cancel: close, title: '你确定要删除吗?' }))
     }
 
+    const statusMap: Record<World['status'], string> = {
+        checked: '已审核',
+        unchecked: '未审核',
+        reported: '被举报'
+    }
+    const worldStatus = () => statusMap[props.world.status]
+
     return (
         <div class="card w-96 h-3/4 bg-base-100 shadow-lg m-4">
             <figure>
@@ -37,33 +44,23 @@ export const AdminWorldCard: Component<
                 <div class="stat p-0">
                     <div class="stat-figure text-secondary"></div>
                     <div class="stat-title">审核状态</div>
-                    <div class="stat-value">
-                        {props.world.status === 'checked' ? '已通过' : '待审核'}
-                    </div>
+                    <div class="stat-value">{worldStatus()}</div>
                 </div>
                 {/* 交互栏 */}
                 <div class="card-actions gap-0 justify-end mt-4 join">
                     <button class="btn join-item" onClick={handleToWorld}>
                         Try
                     </button>
-                    <Show
-                        when={props.world.status === 'checked'}
-                        fallback={
-                            <button
-                                class="btn btn-warning join-item"
-                                onClick={() => props.onChecked(props.world)}
-                            >
-                                Check
-                            </button>
-                        }
+                    <button
+                        class="btn btn-warning join-item"
+                        onClick={() => {
+                            props.world.status === 'checked'
+                                ? props.onUnchecked(props.world)
+                                : props.onChecked(props.world)
+                        }}
                     >
-                        <button
-                            class="btn btn-warning  join-item"
-                            onClick={() => props.onUnchecked(props.world)}
-                        >
-                            Uncheck
-                        </button>
-                    </Show>
+                        {props.world.status === 'checked' ? 'uncheck' : 'check'}
+                    </button>
                     <button class="btn btn-error join-item" onClick={handleOpenModal}>
                         Delete
                     </button>

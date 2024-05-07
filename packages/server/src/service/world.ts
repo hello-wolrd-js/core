@@ -19,7 +19,7 @@ export const WorldService = new Elysia()
                         '/',
                         async ({ query }) => {
                             try {
-                                const result = await db.world.getWorld(query as any) //这里因为query必定是字符串所以可以忽略number
+                                const result = await db.world.getWorld(query) //这里因为query必定是字符串所以可以忽略number
                                 return createSuccessResponse(200, '获取世界成功', result)
                             } catch (error) {
                                 return createErrorResponse(-1, '获取世界失败: ' + error)
@@ -88,29 +88,42 @@ export const WorldService = new Elysia()
                         },
                         WorldDTO.update
                     )
+                    //举报世界
+                    .put(
+                        '/report',
+                        async ({ body }) => {
+                            try {
+                                const world = await db.world.updateWorldStatus(body.id, 'reported')
+                                return createSuccessResponse(200, '举报成功', world)
+                            } catch (error) {
+                                return createErrorResponse(-1, '举报失败: ' + error)
+                            }
+                        },
+                        WorldDTO.report
+                    )
             )
             //admin接口
             .guard((app) =>
                 app
                     .use(verifyAdminUser)
-                    .post(
+                    .put(
                         '/check',
                         async ({ body }) => {
                             try {
-                                await db.world.checkedWorld(body.id)
-                                return createSuccessResponse(200, '审核成功', null)
+                                const world = await db.world.updateWorldStatus(body.id, 'checked')
+                                return createSuccessResponse(200, '审核成功', world)
                             } catch (error) {
                                 return createErrorResponse(-1, '审核失败: ' + error)
                             }
                         },
                         WorldDTO.check
                     )
-                    .post(
+                    .put(
                         '/uncheck',
                         async ({ body }) => {
                             try {
-                                await db.world.uncheckedWorld(body.id)
-                                return createSuccessResponse(200, '退回审核成功', null)
+                                const world = await db.world.updateWorldStatus(body.id, 'unchecked')
+                                return createSuccessResponse(200, '退回审核成功', world)
                             } catch (error) {
                                 return createErrorResponse(-1, '退回审核失败: ' + error)
                             }

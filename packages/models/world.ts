@@ -9,7 +9,8 @@ export interface World {
     cover?: string
     url: string
     star: number
-    status: 'checked' | 'unchecked' | string
+    //已审核,未审核,被举报
+    status: 'checked' | 'unchecked' | 'reported'
 }
 
 export interface WorldList extends PaginatedList {

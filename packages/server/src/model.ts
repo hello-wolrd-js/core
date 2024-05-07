@@ -22,7 +22,7 @@ export const WorldDTO = {
     },
     update: {
         query: t.Object({
-            id: t.String(E('需要id参数'))
+            id: t.String(E('需要世界id'))
         }),
         body: t.Object({
             name: t.String(E('需要name参数')),
@@ -34,13 +34,13 @@ export const WorldDTO = {
     },
     delete: {
         query: t.Object({
-            id: t.String(E('需要id参数'))
+            id: t.String(E('需要世界id'))
         })
     },
     check: {
         body: t.Object(
             {
-                id: t.String(E('需要id参数'))
+                id: t.String(E('需要世界id'))
             },
             E('需要请求体')
         )
@@ -48,10 +48,16 @@ export const WorldDTO = {
     uncheck: {
         body: t.Object(
             {
-                id: t.String()
+                id: t.String(E('需要世界id'))
             },
             E('需要请求体')
         )
+    },
+    report: {
+        body: t.Object({
+            id: t.String(E('需要世界id')),
+            reason: t.String(E('需要举报理由reason'))
+        })
     }
 }
 
@@ -59,8 +65,8 @@ export const UserDTO = {
     login: {
         body: t.Object(
             {
-                username: t.String(),
-                password: t.String()
+                username: t.String(E('需要用户名')),
+                password: t.String(E('需要密码'))
             },
             E('需要请求体')
         )
@@ -68,8 +74,8 @@ export const UserDTO = {
     register: {
         body: t.Object(
             {
-                username: t.String(),
-                password: t.String()
+                username: t.String(E('需要用户名')),
+                password: t.String(E('需要密码'))
             },
             E('需要请求体')
         )
