@@ -1,4 +1,4 @@
-import { Show, createMemo, type Component, type JSX } from 'solid-js'
+import { Show, createMemo, createSignal, type Component, type JSX } from 'solid-js'
 import NavBar from './components/layout/NavBar'
 import { useUserStore } from '@stores/user'
 import { GuardView } from './views/guard/Guard'
@@ -16,9 +16,11 @@ const App: Component<{ children?: JSX.Element }> = (props) => {
     })
 
     //获取个人信息
+    const [ready, setReady] = createSignal(false)
     if (isEffective()) {
         userStore.getUserInfo().then((result) => {
             if (!isSuccessResponse(result)) toast.error('获取个人信息失败: ' + result.error)
+            setReady(true)
         })
     }
 
@@ -34,7 +36,9 @@ const App: Component<{ children?: JSX.Element }> = (props) => {
                                 height: `${global.state.content.height}px`
                             }}
                         >
-                            <Opacity duration={[250, 250]}>{props.children}</Opacity>
+                            <Show when={ready()} fallback={'loading'}>
+                                <Opacity duration={[250, 250]}>{props.children}</Opacity>
+                            </Show>
                         </main>
                     </div>
                 </Show>
