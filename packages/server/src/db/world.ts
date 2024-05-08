@@ -14,7 +14,14 @@ import { UserModel } from './schema/user'
 //基本的增删改查
 //#region
 
+//创建世界
 export const createWorld = async (world: WorldCreateParams, userId: string) => {
+    //先查找是否存在同名世界
+    if (await WorldModel.findOne({ name: world.name })) {
+        throw '存在同名世界'
+    }
+
+    //创建新世界
     const newWorld = new WorldModel({
         ...world,
         star: 0,
@@ -23,6 +30,7 @@ export const createWorld = async (world: WorldCreateParams, userId: string) => {
     })
     await newWorld.save()
 
+    //更新用户发布列表
     const user = await UserModel.findById(userId)
     if (!user) throw '该用户不存在!'
     user.released_worlds.push(newWorld._id)
@@ -31,6 +39,7 @@ export const createWorld = async (world: WorldCreateParams, userId: string) => {
     return newWorld
 }
 
+//获取世界
 export const getWorld = async (
     params?: Omit<WorldQueryParams, 'page' | 'pageSize' | 'status'> & {
         page?: string
@@ -60,15 +69,18 @@ export const getWorld = async (
     }
 }
 
+//获取最多star的世界
 export const getMostStarWorld = async (limit: number): Promise<World[]> => {
     const worlds = await WorldModel.find().sort({ star: -1 }).limit(limit)
     return worlds
 }
 
+//删除世界
 export const deleteWorld = async (id: string) => {
     return await WorldModel.deleteOne({ _id: id })
 }
 
+//更新世界
 export const updateWorld = async (id: string, world: WorldUpdateParams) => {
     return await WorldModel.findByIdAndUpdate(id, world)
 }
