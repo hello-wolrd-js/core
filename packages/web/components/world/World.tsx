@@ -34,6 +34,8 @@ export const WorldView: Component = () => {
         const setup = () => {
             //准备步骤
             const _dom = iframe.contentDocument!
+            //设置body高度让其铺满iframe
+            _dom.body.style.height = global.state.content.height + 'px'
             const _window = iframe.contentWindow!
             Object.defineProperties(_window, {
                 world: {
