@@ -105,7 +105,7 @@ export const NavBar: Component<{ height: number }> = (props) => {
             {/* 刷新 */}
             <div class="flex-none" onClick={handleRefreshWorlds}>
                 <div class="tooltip tooltip-bottom" data-tip="刷新">
-                    <div class="btn btn-square btn-ghost">
+                    <div class="btn btn-ghost">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
