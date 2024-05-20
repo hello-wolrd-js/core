@@ -3,7 +3,9 @@ export interface SuccessResponse<T> {
     msg: string
     data: T
 }
-export interface ErrorResponse {
+export interface ErrorResponse<U = string> {
     code: number
-    error: string
+    error: U
 }
+
+export type Response<T, U = string> = SuccessResponse<T> | ErrorResponse<U>

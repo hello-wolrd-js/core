@@ -7,7 +7,7 @@ import { useAwait, useEmptyResult } from '@hooks/index'
 import { WorldCard } from '@/components/card/WorldCard'
 
 export const ReleasedView: Component = () => {
-    const { WorldList, handleUpdateFavorite } = useWorldList({
+    const { WorldList, handleUpdateFavorite, handleDelete } = useWorldList({
         async getter(params) {
             const result = await USER_API.getUserReleasedWorlds(params)
             if (isSuccessResponse(result)) {
@@ -29,5 +29,7 @@ export const ReleasedView: Component = () => {
         }
     })
 
-    return WorldList((props) => WorldCard({ ...props, onUpdateFavorite: handleUpdateFavorite }))
+    return WorldList((props) =>
+        WorldCard({ ...props, onUpdateFavorite: handleUpdateFavorite, onDelete: handleDelete })
+    )
 }

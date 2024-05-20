@@ -78,9 +78,12 @@ export const getMostStarWorld = async (limit: number): Promise<World[]> => {
 //删除世界
 export const deleteWorld = async (worldId: string, userId: string) => {
     //删除world集合中的
-    const world = await WorldModel.findByIdAndDelete({ _id: worldId })
+    const world = await WorldModel.findById({ _id: worldId }).populate('owner', 'id username role')
     if (!world) throw '无效世界id'
 
+    //二级鉴权
+    if (world.owner.id !== userId && world.owner.role !== 'admin') throw '目标用户非发布者,无权删除'
+    
     //更新用户released
     const user = await UserModel.findById(userId)
     if (!user) throw '无效用户id'

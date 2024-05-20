@@ -4,6 +4,8 @@ import { useEmptyResult, useToWorldFn, useUpdateUserFavoriteFn } from '.'
 import { debounce } from 'lodash'
 import { onMount, onCleanup, For, Show, JSXElement } from 'solid-js'
 import { Opacity } from '@components/transition/Opacity'
+import { useUserStore } from '@stores/user'
+import { isSuccessResponse } from '@root/packages/shared'
 
 export const useEmptyWorldList = (): WorldList => {
     return {
@@ -137,6 +139,14 @@ export const useWorldList = ({
     //#region
     const handleToWorld = useToWorldFn()
     const handleUpdateFavorite = useUpdateUserFavoriteFn(setStore)
+    const handleDelete = async (id: string) => {
+        const userStore = useUserStore()
+        const result = await userStore.deleteUserReleasedWorld(id)
+        if (isSuccessResponse(result)) {
+            setStore(produce((state) => (state.list = state.list.filter((w) => w.id !== id))))
+        }
+        return result
+    }
     const WorldList = (wraper: (props: WorldCardBaseProps) => JSXElement): JSXElement => {
         return (
             <div
@@ -174,10 +184,12 @@ export const useWorldList = ({
         handleUpdateFavorite,
         handleSearch,
         handleRefresh,
+        handleDelete,
         handler: {
             search: handleSearch,
             updateFavorite: handleUpdateFavorite,
-            refresh: handleRefresh
+            refresh: handleRefresh,
+            delete: handleDelete
         }
     }
 }

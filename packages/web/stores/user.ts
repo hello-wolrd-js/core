@@ -94,7 +94,20 @@ const deleteUserFavoriteWorld = async (world: World) => {
 }
 
 const deleteUserReleasedWorld = async (worldId: string) => {
-    await WORLD_API.deleteWorld(worldId)
+    const result = await WORLD_API.deleteWorld(worldId)
+    if (isSuccessResponse(result)) {
+        setStore(
+            produce((state) => {
+                state.released_worlds.list = state.released_worlds.list.filter(
+                    (w) => w.id !== worldId
+                )
+                state.favorite_worlds.list = state.favorite_worlds.list.filter(
+                    (w) => w.id !== worldId
+                )
+            })
+        )
+    }
+    return result
 }
 
 const getUserFavoriteWorlds = async (params?: WorldQueryParams) => {
