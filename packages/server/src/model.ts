@@ -34,7 +34,7 @@ export const WorldDTO = {
     },
     delete: {
         query: t.Object({
-            id: t.String(E('需要世界id'))
+            id: t.String(E('需要世界id')),
         })
     },
     check: {

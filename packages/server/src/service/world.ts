@@ -65,9 +65,9 @@ export const WorldService = new Elysia()
                     //删除世界
                     .delete(
                         '/',
-                        async ({ query }) => {
+                        async ({ query, store }) => {
                             try {
-                                await db.world.deleteWorld(query.id)
+                                await db.world.deleteWorld(query.id, store.user.id)
                                 return createSuccessResponse(200, '删除世界成功', null)
                             } catch (error) {
                                 return createErrorResponse(-1, '删除世界失败: ' + error)

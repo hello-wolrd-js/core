@@ -76,8 +76,18 @@ export const getMostStarWorld = async (limit: number): Promise<World[]> => {
 }
 
 //删除世界
-export const deleteWorld = async (id: string) => {
-    return await WorldModel.deleteOne({ _id: id })
+export const deleteWorld = async (worldId: string, userId: string) => {
+    //删除world集合中的
+    const world = await WorldModel.findByIdAndDelete({ _id: worldId })
+    if (!world) throw '无效世界id'
+
+    //更新用户released
+    const user = await UserModel.findById(userId)
+    if (!user) throw '无效用户id'
+
+    user.released_worlds = user.released_worlds.filter((w) => w.toString() !== worldId)
+    user.favorite_worlds = user.favorite_worlds.filter((w) => w.toString() !== worldId)
+    await user.save()
 }
 
 //更新世界
