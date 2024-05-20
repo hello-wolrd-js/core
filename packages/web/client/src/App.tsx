@@ -1,5 +1,5 @@
 import { Show, createMemo, createSignal, type Component, type JSX } from 'solid-js'
-import NavBar from './components/layout/NavBar'
+import { NavBar } from './components/layout/Nav'
 import { useUserStore } from '@stores/user'
 import { GuardView } from './views/guard/Guard'
 import { isSuccessResponse } from '@core/shared'
