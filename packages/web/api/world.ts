@@ -8,6 +8,10 @@ import {
 import { WORLD_API_INSTANCE } from './instance'
 import { handleRequest } from './handle'
 
+//common级接口
+//#region
+
+//获取世界
 export async function getWorld(params?: WorldQueryParams) {
     return await handleRequest<WorldList>(() =>
         WORLD_API_INSTANCE.get('/', {
@@ -16,6 +20,7 @@ export async function getWorld(params?: WorldQueryParams) {
     )
 }
 
+//获取star最多的世界
 export async function getMostStarWorld(limit: number) {
     return await handleRequest<World[]>(() =>
         WORLD_API_INSTANCE.get('/most/star', {
@@ -26,6 +31,7 @@ export async function getMostStarWorld(limit: number) {
     )
 }
 
+//删除世界
 export async function deleteWorld(id: string) {
     return await handleRequest<World>(() =>
         WORLD_API_INSTANCE.delete('/', {
@@ -36,6 +42,35 @@ export async function deleteWorld(id: string) {
     )
 }
 
+//举报世界
+export async function reportWorld(id: string, reason: string) {
+    return await handleRequest<World>(() =>
+        WORLD_API_INSTANCE.put('/report', {
+            id,
+            reason
+        })
+    )
+}
+
+//创建世界
+export async function createWorld(world: WorldCreateParams) {
+    return await handleRequest<World>(() => WORLD_API_INSTANCE.post('/', world))
+}
+
+//更新世界信息
+export async function updateWorld(newWorld: WorldUpdateParams, id: World['id']) {
+    return await handleRequest<World>(() =>
+        WORLD_API_INSTANCE.put('/', newWorld, {
+            params: {
+                id
+            }
+        })
+    )
+}
+//#endregion
+
+//admin级接口
+//#region
 export async function checkWorld(id: string) {
     return await handleRequest<World>(() =>
         WORLD_API_INSTANCE.put('/check', {
@@ -50,28 +85,7 @@ export async function uncheckWorld(id: string) {
         })
     )
 }
-export async function reportWorld(id: string, reason: string) {
-    return await handleRequest<World>(() =>
-        WORLD_API_INSTANCE.put('/report', {
-            id,
-            reason
-        })
-    )
-}
-
-export async function createWorld(world: WorldCreateParams) {
-    return await handleRequest<World>(() => WORLD_API_INSTANCE.post('/', world))
-}
-
-export async function updateWorld(newWorld: WorldUpdateParams, id: World['id']) {
-    return await handleRequest<World>(() =>
-        WORLD_API_INSTANCE.put('/', newWorld, {
-            params: {
-                id
-            }
-        })
-    )
-}
+//#endregion
 
 export const WORLD_API = {
     getWorld,
