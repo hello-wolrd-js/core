@@ -7,6 +7,7 @@ import toast from 'solid-toast'
 import { Opacity } from '@components/transition/Opacity'
 import { useGlobalStore } from '@stores/global'
 import { ModalProvider } from '@components/modal/Modal'
+import { Loading } from '@/components/loading/Loading'
 
 const App: Component<{ children?: JSX.Element }> = (props) => {
     const userStore = useUserStore()
@@ -36,7 +37,7 @@ const App: Component<{ children?: JSX.Element }> = (props) => {
                                 height: `${global.state.content.height}px`
                             }}
                         >
-                            <Show when={ready()} fallback={'loading'}>
+                            <Show when={ready()} fallback={<Loading></Loading>}>
                                 <Opacity duration={[250, 250]}>{props.children}</Opacity>
                             </Show>
                         </main>
