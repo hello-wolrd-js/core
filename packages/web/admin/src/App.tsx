@@ -1,5 +1,5 @@
 import { Show, createMemo, type Component, type JSX } from 'solid-js'
-import { NavBar } from '@/components/layout/NavBar'
+import { NavBar } from '@/components/layout/Nav'
 import { useUserStore } from '@stores/user'
 import { Opacity } from '@components/transition/Opacity'
 import { Login } from '@/views/guard/Guard'
