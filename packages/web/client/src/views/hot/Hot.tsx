@@ -15,7 +15,7 @@ export const HotView: Component = () => {
         if (isSuccessResponse(result)) {
             setStore('world', result.data[0])
         } else {
-            toast.error('获取失败')
+            toast.error(result.error)
         }
     })
 

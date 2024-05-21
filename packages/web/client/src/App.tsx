@@ -20,7 +20,7 @@ const App: Component<{ children?: JSX.Element }> = (props) => {
     const [ready, setReady] = createSignal(false)
     if (isEffective()) {
         userStore.getUserInfo().then((result) => {
-            if (!isSuccessResponse(result)) toast.error('获取个人信息失败: ' + result.error)
+            if (!isSuccessResponse(result)) toast.error(result.error)
             setReady(true)
         })
     }

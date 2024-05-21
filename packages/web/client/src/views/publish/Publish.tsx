@@ -24,16 +24,11 @@ export const PublishView: Component = () => {
             return toast.error('世界url不能为空')
         }
 
-        try {
-            const result = await WORLD_API.createWorld({ ...world() })
-            if (isSuccessResponse(result)) {
-                toast.success(result.msg)
-            } else {
-                toast.error(result.error)
-            }
-        } catch (error) {
-            toast.error('创建失败!')
-            console.error(error)
+        const result = await WORLD_API.createWorld({ ...world() })
+        if (isSuccessResponse(result)) {
+            toast.success(result.msg)
+        } else {
+            toast.error(result.error)
         }
     }
     const handleReset = () => setWorld({ ...origin })
