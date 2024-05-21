@@ -34,7 +34,7 @@ export const WorldDTO = {
     },
     delete: {
         query: t.Object({
-            id: t.String(E('需要世界id')),
+            id: t.String(E('需要世界id'))
         })
     },
     check: {
@@ -79,6 +79,11 @@ export const UserDTO = {
             },
             E('需要请求体')
         )
+    },
+    search: {
+        query: t.Object({
+            username: t.Optional(t.String(E('需要用户名')))
+        })
     },
     updateFavoriteWorld: {
         query: t.Object(

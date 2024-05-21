@@ -20,10 +20,15 @@ export const createUser = async ({ username, password }: UserLoginParams) => {
     return (await UserModel.create({ username, password, role: 'common', avatar: '' })).getInfo()
 }
 
-export const getUser = async (id: string) => {
+export const getUserById = async (id: string) => {
     const user = await UserModel.findById(id)
     if (!user) throw '该用户不存在!'
     return user.getInfo()
+}
+
+export const getUser = async (params: { username?: string }) => {
+    const users = await UserModel.find(params)
+    return users.map((u) => ({ username: u.username, avatar: u.avatar, id: u.id }))
 }
 
 export const updateUserFavoriteWorld = async (
@@ -114,6 +119,7 @@ export const getUserReleasedWorlds = async (
 export default {
     login,
     createUser,
+    getUserById,
     getUser,
     updateUserFavoriteWorld,
     getUserFavoriteWorlds,

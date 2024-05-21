@@ -55,6 +55,22 @@ export const UserService = new Elysia()
                         },
                         UserDTO.register
                     )
+                    //获取用户列表
+                    .get(
+                        '/',
+                        async ({ query }) => {
+                            try {
+                                return createSuccessResponse(
+                                    200,
+                                    '获取用户成功',
+                                    await db.user.getUser(query)
+                                )
+                            } catch (error) {
+                                return createErrorResponse(-1, '获取用户失败: ' + error)
+                            }
+                        },
+                        UserDTO.search
+                    )
             )
             //需要鉴权的接口
             .guard((app) =>
@@ -66,7 +82,7 @@ export const UserService = new Elysia()
                             return createSuccessResponse(
                                 200,
                                 '获取用户信息成功',
-                                await db.user.getUser(store.user.id)
+                                await db.user.getUserById(store.user.id)
                             )
                         } catch (error) {
                             set.status = 400
