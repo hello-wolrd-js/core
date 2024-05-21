@@ -12,10 +12,10 @@ type DB_User = Omit<User, 'favorite_worlds' | 'released_worlds'> &
 
 const UserSchema = new mongoose.Schema<DB_User>(
     {
-        id: Types.ObjectId,
-        username: String,
-        password: String,
-        role: String,
+        username: { type: String, required: true },
+        password: { type: String, required: true },
+        avatar: String,
+        role: { type: String, required: true },
         released_worlds: [{ type: Types.ObjectId, ref: 'worlds' }],
         favorite_worlds: [{ type: Types.ObjectId, ref: 'worlds' }]
     },
@@ -26,6 +26,7 @@ const UserSchema = new mongoose.Schema<DB_User>(
                 return {
                     id: this._id,
                     username: this.username,
+                    avatar: this.avatar,
                     role: this.role,
                     released_worlds: this.released_worlds,
                     favorite_worlds: this.favorite_worlds

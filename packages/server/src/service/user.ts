@@ -1,4 +1,4 @@
-import Elysia, { t } from 'elysia'
+import Elysia from 'elysia'
 import { createErrorResponse, createSuccessResponse } from '../util'
 import { UserDTO } from '../model'
 import { db } from '../db'
@@ -18,13 +18,14 @@ export const UserService = new Elysia()
                         async ({ body, jwt }) => {
                             try {
                                 const user = await db.user.login(body)
+                                const token = await jwt.sign({
+                                    username: user.username,
+                                    role: user.role,
+                                    id: user.id
+                                })
                                 return createSuccessResponse(200, '登陆成功', {
-                                    user: user,
-                                    token: await jwt.sign({
-                                        username: user.username,
-                                        role: user.role,
-                                        id: user.id
-                                    })
+                                    user,
+                                    token
                                 })
                             } catch (error) {
                                 return createErrorResponse(-1, '登陆失败: ' + error)
@@ -35,13 +36,19 @@ export const UserService = new Elysia()
                     //注册
                     .post(
                         '/register',
-                        async ({ body }) => {
+                        async ({ body, jwt }) => {
                             try {
-                                return createSuccessResponse(
-                                    200,
-                                    '注册成功',
-                                    await db.user.createUser(body)
-                                )
+                                //注册完也要返回token
+                                const user = await db.user.createUser(body)
+                                const token = await jwt.sign({
+                                    username: user.username,
+                                    role: user.role,
+                                    id: user.id
+                                })
+                                return createSuccessResponse(200, '注册成功', {
+                                    user,
+                                    token
+                                })
                             } catch (error) {
                                 return createErrorResponse(-1, '注册失败: ' + error)
                             }

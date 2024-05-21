@@ -3,23 +3,25 @@ import { useGlobalStore } from '@stores/global'
 import { useUserStore } from '@stores/user'
 import { debounce } from 'lodash'
 import { useLocation } from '@solidjs/router'
-import { Component, JSXElement } from 'solid-js'
+import { Component, JSXElement, Show } from 'solid-js'
 
 const NavTrigger: Component<{
     active: string
-    tip: string
+    tip?: string
     extra?: string
     children: JSXElement
 }> = (props) => {
     const location = useLocation()
-    const baseClass = 'btn btn-ghost ' + (props.extra || '')
+    const baseClass = ' btn btn-ghost ' + (props.extra || '')
     const dynamicClass = () =>
         location.pathname === props.active ? baseClass + ' btn-active ' : baseClass
 
-    return (
+    return props.tip ? (
         <div class="tooltip tooltip-bottom" data-tip={props.tip}>
             <div class={dynamicClass()}>{props.children}</div>
         </div>
+    ) : (
+        <div class={dynamicClass()}>{props.children}</div>
     )
 }
 
@@ -32,6 +34,7 @@ export const NavBar: Component<{ height: number }> = (props) => {
     const handleToFavorite = () => navigate('/favorite')
     const handleToReleased = () => navigate('/released')
     const handleToHot = () => navigate('/hot')
+    const handleToUser = () => navigate('/user')
 
     //#endregion
     //用户操作: 退出登陆
@@ -105,7 +108,7 @@ export const NavBar: Component<{ height: number }> = (props) => {
             {/* 刷新 */}
             <div class="flex-none" onClick={handleRefreshWorlds}>
                 <div class="tooltip tooltip-bottom" data-tip="刷新">
-                    <div class="btn btn-ghost">
+                    <div class="btn btn-ghost btn-square">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
@@ -125,7 +128,7 @@ export const NavBar: Component<{ height: number }> = (props) => {
             </div>
             {/* 查看收藏的 */}
             <div class="flex-none max-sm:hidden" onClick={handleToFavorite}>
-                <NavTrigger active="/favorite" tip="我的收藏">
+                <NavTrigger active="/favorite" tip="我的收藏" extra="btn-square">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -144,7 +147,7 @@ export const NavBar: Component<{ height: number }> = (props) => {
             </div>
             {/* 查看发布的 */}
             <div class="flex-none max-sm:hidden" onClick={handleToReleased}>
-                <NavTrigger active="/released" tip="我的发布">
+                <NavTrigger active="/released" tip="我的发布" extra="btn-square">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -163,7 +166,7 @@ export const NavBar: Component<{ height: number }> = (props) => {
             </div>
             {/* 查看热门 */}
             <div class="flex-none max-sm:hidden" onClick={handleToHot}>
-                <NavTrigger active="/hot" tip="热门">
+                <NavTrigger active="/hot" tip="热门" extra="btn-square">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -187,6 +190,28 @@ export const NavBar: Component<{ height: number }> = (props) => {
             </div>
             {/* 导航栏拓展 */}
             <div class="flex-1 justify-center max-md:hidden">{global.state.nav.extra}</div>
+            {/* 用户头像 */}
+            <div class="flex-none" onClick={handleToUser}>
+                <NavTrigger active="/user" extra="btn-square">
+                    <Show
+                        when={userStore.state.user?.avatar}
+                        fallback={
+                            <div class="avatar placeholder">
+                                <div class="bg-neutral text-neutral-content rounded w-9">
+                                    {/* 只展示前两个字符 */}
+                                    <span>{userStore.state.user?.username.slice(0, 2)}</span>
+                                </div>
+                            </div>
+                        }
+                    >
+                        <div class="avatar">
+                            <div class="w-9 rounded">
+                                <img src={userStore.state.user?.avatar} />
+                            </div>
+                        </div>
+                    </Show>
+                </NavTrigger>
+            </div>
             {/* 文档 */}
             <div class="flex-none max-lg:hidden">
                 <a class="btn btn-square btn-ghost" href="https://hello-world-js.pages.dev/">
