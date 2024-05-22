@@ -1,8 +1,9 @@
 import _jwt from '@elysiajs/jwt'
 import { bearer as _bearer } from '@elysiajs/bearer'
 import Elysia from 'elysia'
-import { createErrorResponse } from './util'
+import { createErrorResponse } from '../util'
 import { User } from '@core/models'
+import config from '@root/hwjs.config'
 
 export interface JwtPayload {
     username: string
@@ -10,7 +11,7 @@ export interface JwtPayload {
     role: string
 }
 //这里secret应该配置成读取环境变量
-export const jwt = _jwt({ name: 'jwt', secret: 'hello-world-j' })
+export const jwt = _jwt({ name: 'jwt', secret: config.server.jwt.secret })
 export const bearer = _bearer()
 
 const verifyBase = new Elysia()

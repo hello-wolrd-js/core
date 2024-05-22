@@ -1,13 +1,14 @@
 import Elysia, { t } from 'elysia'
 import { createErrorResponse, createSuccessResponse } from '../util'
 import { db } from '../db'
-import { WorldDTO } from '../model'
-import { verifyAdminUser, verifyCommonUser } from '../plugin'
+import { verifyAdminUser, verifyCommonUser } from '../plugin/jwt'
+import { worldModel } from '../model/world.model'
 
 export const WorldService = new Elysia()
     .onError(({ code, error }) => {
         if (code === 'VALIDATION') return createErrorResponse(-1, error.message)
     }) //部分接口得进行鉴权
+    .use(worldModel)
     .group('/world', (app) =>
         app
             //common接口
@@ -25,7 +26,9 @@ export const WorldService = new Elysia()
                                 return createErrorResponse(-1, '获取世界失败: ' + error)
                             }
                         },
-                        WorldDTO.search
+                        {
+                            query: 'query-world'
+                        }
                     )
                     //获取最多star的世界
                     .get(
@@ -60,7 +63,9 @@ export const WorldService = new Elysia()
                                 return createErrorResponse(-1, '创建世界失败: ' + error)
                             }
                         },
-                        WorldDTO.create
+                        {
+                            body: 'create-world'
+                        }
                     )
                     //删除世界
                     .delete(
@@ -73,7 +78,9 @@ export const WorldService = new Elysia()
                                 return createErrorResponse(-1, '删除世界失败: ' + error)
                             }
                         },
-                        WorldDTO.delete
+                        {
+                            query: 'mark-world'
+                        }
                     )
                     //更新世界信息
                     .put(
@@ -86,7 +93,10 @@ export const WorldService = new Elysia()
                                 return createErrorResponse(-1, '更新世界失败: ' + error)
                             }
                         },
-                        WorldDTO.update
+                        {
+                            query: 'mark-world',
+                            body: 'update-world'
+                        }
                     )
                     //举报世界
                     .put(
@@ -99,7 +109,9 @@ export const WorldService = new Elysia()
                                 return createErrorResponse(-1, '举报失败: ' + error)
                             }
                         },
-                        WorldDTO.report
+                        {
+                            body: 'report-world'
+                        }
                     )
             )
             //admin接口
@@ -116,7 +128,9 @@ export const WorldService = new Elysia()
                                 return createErrorResponse(-1, '审核失败: ' + error)
                             }
                         },
-                        WorldDTO.check
+                        {
+                            body: 'mark-world'
+                        }
                     )
                     .put(
                         '/uncheck',
@@ -128,7 +142,9 @@ export const WorldService = new Elysia()
                                 return createErrorResponse(-1, '退回审核失败: ' + error)
                             }
                         },
-                        WorldDTO.uncheck
+                        {
+                            body: 'mark-world'
+                        }
                     )
             )
     )

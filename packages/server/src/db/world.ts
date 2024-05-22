@@ -40,20 +40,15 @@ export const createWorld = async (world: WorldCreateParams, userId: string) => {
 }
 
 //获取世界
-export const getWorld = async (
-    params?: Omit<WorldQueryParams, 'page' | 'pageSize' | 'status'> & {
-        page?: string
-        pageSize?: string
-    }
-): Promise<WorldList> => {
+export const getWorld = async (params?: Omit<WorldQueryParams, 'status'>): Promise<WorldList> => {
     const filter = {
         ...params,
         name: new RegExp(params?.name || ''),
         page: void 0, //这里要shadow掉分页参数
         pageSize: void 0
     }
-    const page = parseInt(params?.page || '1') || 1
-    const pageSize = parseInt(params?.pageSize || '10') || 10
+    const page = params?.page || 1
+    const pageSize = params?.pageSize || 10
     const query = WorldModel.find(filter)
     const totalItems = await query.clone().countDocuments()
     const totalPages = Math.ceil(totalItems / pageSize)
@@ -83,7 +78,7 @@ export const deleteWorld = async (worldId: string, userId: string) => {
 
     //二级鉴权
     if (world.owner.id !== userId && world.owner.role !== 'admin') throw '目标用户非发布者,无权删除'
-    
+
     //更新用户released
     const user = await UserModel.findById(userId)
     if (!user) throw '无效用户id'

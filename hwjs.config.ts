@@ -4,6 +4,9 @@ export default {
         port: 4000,
         mongodb: {
             host: 'mongodb://localhost:27017/hello-world'
+        },
+        jwt: {
+            secret: 'hello-world-j'
         }
     }
 }

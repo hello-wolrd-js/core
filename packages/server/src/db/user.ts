@@ -1,4 +1,10 @@
-import { UserLoginParams, World, WorldList, WorldQueryParams } from '@core/models'
+import {
+    PaginationQueryParams,
+    UserLoginParams,
+    World,
+    WorldList,
+    WorldQueryParams
+} from '@core/models'
 import { UserModel } from './schema/user'
 import { WorldModel } from './schema/world'
 import { Types } from 'mongoose'
@@ -26,7 +32,7 @@ export const getUserById = async (id: string) => {
     return user.getInfo()
 }
 
-export const getUser = async (params: { username?: string }) => {
+export const getUser = async (params: { username?: string } & Partial<PaginationQueryParams>) => {
     const users = await UserModel.find(params)
     return users.map((u) => ({ username: u.username, avatar: u.avatar, id: u.id }))
 }

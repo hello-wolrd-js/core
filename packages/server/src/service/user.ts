@@ -1,18 +1,19 @@
 import Elysia from 'elysia'
 import { createErrorResponse, createSuccessResponse } from '../util'
-import { UserDTO } from '../model'
 import { db } from '../db'
-import { bearer, jwt, verifyCommonUser } from '../plugin'
+import { bearer, jwt, verifyCommonUser } from '../plugin/jwt'
+import { userModel } from '../model/user.model'
 
 export const UserService = new Elysia()
     .use(bearer)
     .use(jwt)
+    .use(userModel)
     .group('/user', (app) =>
         app
             //不需要鉴权的接口
             .guard((app) =>
                 app
-                    //登陆
+                    //登入
                     .post(
                         '/login',
                         async ({ body, jwt }) => {
@@ -31,7 +32,9 @@ export const UserService = new Elysia()
                                 return createErrorResponse(-1, '登陆失败: ' + error)
                             }
                         },
-                        UserDTO.login
+                        {
+                            body: 'auth-info'
+                        }
                     )
                     //注册
                     .post(
@@ -53,7 +56,9 @@ export const UserService = new Elysia()
                                 return createErrorResponse(-1, '注册失败: ' + error)
                             }
                         },
-                        UserDTO.register
+                        {
+                            body: 'auth-info'
+                        }
                     )
                     //获取用户列表
                     .get(
@@ -69,7 +74,9 @@ export const UserService = new Elysia()
                                 return createErrorResponse(-1, '获取用户失败: ' + error)
                             }
                         },
-                        UserDTO.search
+                        {
+                            query: 'user-query'
+                        }
                     )
             )
             //需要鉴权的接口
@@ -134,7 +141,9 @@ export const UserService = new Elysia()
                                 return createErrorResponse(-1, '更新收藏失败: ' + error)
                             }
                         },
-                        UserDTO.updateFavoriteWorld
+                        {
+                            query: 'update-favorite-query'
+                        }
                     )
             )
     )
