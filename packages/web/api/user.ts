@@ -1,4 +1,11 @@
-import { UserLoginParams, User, WorldList, WorldQueryParams } from '@core/models'
+import type {
+    UserLoginParams,
+    User,
+    WorldList,
+    WorldQueryParams,
+    UserQueryParams,
+    SimpleUserInfo
+} from '@core/models'
 import { handleRequest } from './handle'
 import { USER_API_INSTANCE } from './instance'
 
@@ -13,6 +20,14 @@ export const login = async (params: UserLoginParams) => {
 export const register = async (params: UserLoginParams) => {
     return await handleRequest<{ user: User; token: string }>(() =>
         USER_API_INSTANCE.post('/register', params)
+    )
+}
+
+export const getUser = async (params?: UserQueryParams) => {
+    return await handleRequest<SimpleUserInfo>(() =>
+        USER_API_INSTANCE.get('/', {
+            params
+        })
     )
 }
 //#endregion
@@ -59,6 +74,7 @@ export const getUserReleasedWorlds = async (params?: WorldQueryParams) => {
 export const USER_API = {
     login,
     register,
+    getUser,
     getUserInfo,
     updateUserFavoriteWorld,
     getUserFavoriteWorlds,

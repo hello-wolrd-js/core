@@ -34,7 +34,7 @@ export const getUserById = async (id: string) => {
 
 export const getUser = async (params: { username?: string } & Partial<PaginationQueryParams>) => {
     const users = await UserModel.find(params)
-    return users.map((u) => ({ username: u.username, avatar: u.avatar, id: u.id }))
+    return users.map((u) => ({ username: u.username, avatar: u.avatar, id: u.id, role: u.role }))
 }
 
 export const updateUserFavoriteWorld = async (

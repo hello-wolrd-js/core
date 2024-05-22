@@ -8,7 +8,8 @@ export const DocumentIcon: Component = () => {
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            class="w-8 h-8"
+            width={32}
+            height={32}
         >
             <path
                 stroke-linecap="round"
