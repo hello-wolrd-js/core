@@ -1,4 +1,4 @@
-import { User } from '@core/models'
+import { SimpleUserInfo, User } from '@core/models'
 import * as mongoose from 'mongoose'
 import { Types } from 'mongoose'
 
@@ -7,7 +7,8 @@ type DB_User = Omit<User, 'favorite_worlds' | 'released_worlds'> &
         password: string
         favorite_worlds: Types.ObjectId[] //填充时是Wolrd[]
         released_worlds: Types.ObjectId[] //填充时是Wolrd[]
-        getInfo: () => Omit<User, 'password'>
+        getInfo: () => User
+        getSimpleInfo: () => SimpleUserInfo
     }
 
 const UserSchema = new mongoose.Schema<DB_User>(
@@ -30,6 +31,14 @@ const UserSchema = new mongoose.Schema<DB_User>(
                     role: this.role,
                     released_worlds: this.released_worlds,
                     favorite_worlds: this.favorite_worlds
+                }
+            },
+            getSimpleInfo(): SimpleUserInfo {
+                return {
+                    id: this._id,
+                    username: this.username,
+                    avatar: this.avatar,
+                    role: this.role
                 }
             }
         },

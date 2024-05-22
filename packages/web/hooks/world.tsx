@@ -161,15 +161,15 @@ export const useWorldList = ({
             >
                 <Show when={store.list.length} fallback={empty}>
                     <Opacity duration={[500, 250]} group={true}>
-                        <For each={store.list}>
-                            {/* 包装card */}
-                            {(world) =>
+                        <For
+                            each={store.list}
+                            children={(world) =>
                                 wraper({
                                     world,
                                     onToWorld: handleToWorld
                                 })
                             }
-                        </For>
+                        />
                     </Opacity>
                 </Show>
             </div>

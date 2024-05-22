@@ -42,7 +42,7 @@ export const UserService = new Elysia()
                         async ({ body, jwt }) => {
                             try {
                                 //注册完也要返回token
-                                const user = await db.user.createUser(body)
+                                const user = await db.user.register(body)
                                 const token = await jwt.sign({
                                     username: user.username,
                                     role: user.role,
@@ -143,6 +143,28 @@ export const UserService = new Elysia()
                         },
                         {
                             query: 'update-favorite-query'
+                        }
+                    )
+                    //更新用户信息
+                    .put(
+                        '/info',
+                        async ({ store, query, body }) => {
+                            if (store.user.id !== query.id && store.user.role !== 'admin') {
+                                return createErrorResponse(-1, '权限不足')
+                            }
+                            try {
+                                return createSuccessResponse(
+                                    200,
+                                    '更新用户信息成功',
+                                    await db.user.updateUserInfo(query.id, body)
+                                )
+                            } catch (error) {
+                                return createErrorResponse(-1, '更新用户信息失败: ' + error)
+                            }
+                        },
+                        {
+                            query: 'mark-user',
+                            body: 'update-user'
                         }
                     )
             )

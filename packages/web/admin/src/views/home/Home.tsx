@@ -9,6 +9,7 @@ import { useAwait } from '@hooks/index'
 import { useGlobalStore } from '@stores/global'
 import { Search } from '@/components/search/Search'
 import { createStore, produce } from 'solid-js/store'
+import { useUserStore } from '@stores/user'
 
 export const HomeView: Component = () => {
     const {
@@ -19,9 +20,7 @@ export const HomeView: Component = () => {
         setStore: setList
     } = useWorldList({
         async getter(params) {
-            console.log(params)
             const result = await WORLD_API.getWorld(params)
-            console.log(result)
             //获取失败时才提示
             if (isSuccessResponse(result)) {
                 return result.data
@@ -40,6 +39,8 @@ export const HomeView: Component = () => {
             }
         }
     })
+
+    console.log(useUserStore().state)
 
     //事件
     //#region
@@ -131,7 +132,8 @@ export const HomeView: Component = () => {
             </div>
         </div>
     )
-    setGlobal('nav', 'extra', NavExtra)
+    onMount(() => setGlobal('nav', 'extra', NavExtra))
+    onCleanup(() => setGlobal('nav', 'extra', null))
     //#endregion
 
     return WorldList((props) =>

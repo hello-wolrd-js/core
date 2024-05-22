@@ -1,5 +1,6 @@
 import {
     PaginationQueryParams,
+    User,
     UserLoginParams,
     World,
     WorldList,
@@ -9,6 +10,7 @@ import { UserModel } from './schemas/user'
 import { WorldModel } from './schemas/world'
 import { Types } from 'mongoose'
 
+//登录
 export const login = async ({ username, password }: UserLoginParams) => {
     const user = await UserModel.findOne({ username }).populate([
         'released_worlds',
@@ -19,11 +21,23 @@ export const login = async ({ username, password }: UserLoginParams) => {
     return user.getInfo()
 }
 
-export const createUser = async ({ username, password }: UserLoginParams) => {
+//注册
+export const register = async ({ username, password }: UserLoginParams) => {
     const user = await UserModel.findOne({ username })
     if (user) throw '存在同名用户!'
     //通过接口创建的用户只能是common, 管理员必须手动改
     return (await UserModel.create({ username, password, role: 'common', avatar: '' })).getInfo()
+}
+
+//更新用户信息
+export const updateUserInfo = async (id: string, params: Pick<User, 'username' | 'avatar'>) => {
+    const user = await UserModel.findById(id)
+    if (!user) throw '用户不存在'
+
+    user.username = params.username
+    user.avatar = params.avatar
+    await user.save()
+    return user.getSimpleInfo()
 }
 
 export const getUserById = async (id: string) => {
@@ -34,7 +48,7 @@ export const getUserById = async (id: string) => {
 
 export const getUser = async (params: { username?: string } & Partial<PaginationQueryParams>) => {
     const users = await UserModel.find(params)
-    return users.map((u) => ({ username: u.username, avatar: u.avatar, id: u.id, role: u.role }))
+    return users.map((u) => u.getSimpleInfo())
 }
 
 export const updateUserFavoriteWorld = async (
@@ -124,9 +138,10 @@ export const getUserReleasedWorlds = async (
 
 export default {
     login,
-    createUser,
+    register,
     getUserById,
     getUser,
+    updateUserInfo,
     updateUserFavoriteWorld,
     getUserFavoriteWorlds,
     getUserReleasedWorlds

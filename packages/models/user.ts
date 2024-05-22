@@ -20,3 +20,5 @@ export interface UserLoginParams extends UserAuthParams {}
 export interface UserRegisterParams extends UserAuthParams {}
 
 export interface UserQueryParams extends Pick<User, 'username'>, PaginationQueryParams {}
+
+export interface UserUpdateParams extends Pick<User, 'avatar' | 'username'> {}

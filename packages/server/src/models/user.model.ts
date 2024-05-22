@@ -20,5 +20,12 @@ export const userModel = new Elysia().model({
             action: t.String(E('需要action: add or delete'))
         },
         E('需要query')
-    )
+    ),
+    'mark-user': t.Object({
+        id: t.String(E('需要id'))
+    }),
+    'update-user': t.Object({
+        username: t.String(E('需要用户名')),
+        avatar: t.String(E('需要用户头像'))
+    })
 })

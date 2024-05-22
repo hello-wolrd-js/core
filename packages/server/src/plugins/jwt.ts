@@ -8,7 +8,7 @@ import config from '@root/hwjs.config'
 export interface JwtPayload {
     username: string
     id: string
-    role: string
+    role: User['role']
 }
 //这里secret应该配置成读取环境变量
 export const jwt = _jwt({ name: 'jwt', secret: config.server.jwt.secret })
@@ -17,7 +17,7 @@ export const bearer = _bearer()
 const verifyBase = new Elysia()
     .use(bearer)
     .use(jwt)
-    .state('user', { username: '', id: '', role: '' } as JwtPayload)
+    .state('user', { username: '', id: '', role: 'common' } as JwtPayload)
 
 export const verifyCommonUser = new Elysia()
     .use(verifyBase)

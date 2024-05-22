@@ -4,7 +4,8 @@ import type {
     WorldList,
     WorldQueryParams,
     UserQueryParams,
-    SimpleUserInfo
+    SimpleUserInfo,
+    UserUpdateParams
 } from '@core/models'
 import { handleRequest } from './handle'
 import { USER_API_INSTANCE } from './instance'
@@ -24,7 +25,7 @@ export const register = async (params: UserLoginParams) => {
 }
 
 export const getUser = async (params?: UserQueryParams) => {
-    return await handleRequest<SimpleUserInfo>(() =>
+    return await handleRequest<SimpleUserInfo[]>(() =>
         USER_API_INSTANCE.get('/', {
             params
         })
@@ -38,6 +39,15 @@ export const getUser = async (params?: UserQueryParams) => {
 //获取用户信息
 export const getUserInfo = async () => {
     return await handleRequest<User>(() => USER_API_INSTANCE.get('/info'))
+}
+
+//更新用户信息
+export const updateUserInfo = async (id: string, params: UserUpdateParams) => {
+    return await handleRequest<SimpleUserInfo>(() =>
+        USER_API_INSTANCE.put('/info', params, {
+            params: { id }
+        })
+    )
 }
 
 //更新用户的收藏: 增加/删除
@@ -76,6 +86,7 @@ export const USER_API = {
     register,
     getUser,
     getUserInfo,
+    updateUserInfo,
     updateUserFavoriteWorld,
     getUserFavoriteWorlds,
     getUserReleasedWorlds
