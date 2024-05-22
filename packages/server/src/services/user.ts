@@ -1,8 +1,8 @@
 import Elysia from 'elysia'
 import { createErrorResponse, createSuccessResponse } from '../util'
 import { db } from '../db'
-import { bearer, jwt, verifyCommonUser } from '../plugin/jwt'
-import { userModel } from '../model/user.model'
+import { bearer, jwt, verifyCommonUser } from '../plugins/jwt'
+import { userModel } from '../models/user.model'
 
 export const UserService = new Elysia()
     .use(bearer)

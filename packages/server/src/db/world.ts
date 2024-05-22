@@ -5,9 +5,9 @@ import {
     WorldQueryParams,
     WorldUpdateParams
 } from '@core/models'
-import { WorldModel } from './schema/world'
+import { WorldModel } from './schemas/world'
 import { Types } from 'mongoose'
-import { UserModel } from './schema/user'
+import { UserModel } from './schemas/user'
 
 //敏感字段
 

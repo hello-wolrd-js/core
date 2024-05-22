@@ -1,8 +1,8 @@
 import Elysia, { t } from 'elysia'
 import { createErrorResponse, createSuccessResponse } from '../util'
 import { db } from '../db'
-import { verifyAdminUser, verifyCommonUser } from '../plugin/jwt'
-import { worldModel } from '../model/world.model'
+import { verifyAdminUser, verifyCommonUser } from '../plugins/jwt'
+import { worldModel } from '../models/world.model'
 
 export const WorldService = new Elysia()
     .onError(({ code, error }) => {

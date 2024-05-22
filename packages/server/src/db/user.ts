@@ -5,8 +5,8 @@ import {
     WorldList,
     WorldQueryParams
 } from '@core/models'
-import { UserModel } from './schema/user'
-import { WorldModel } from './schema/world'
+import { UserModel } from './schemas/user'
+import { WorldModel } from './schemas/world'
 import { Types } from 'mongoose'
 
 export const login = async ({ username, password }: UserLoginParams) => {
